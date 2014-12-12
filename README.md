@@ -50,22 +50,20 @@ Installatie van de applicatie:
 Gebruik van de applicatie:
 
 * deploy de applicatie:
-** rechter muisklik op project, "run as", "run on server"
-** check de console log op excepties
-** STS start automatisch een web browser op binnen STS
-** andere browser? Gebruik: http://localhost:8080/hartigehapspring/
+    * rechter muisklik op project, "run as", "run on server"
+    * check de console log op excepties
+    * STS start automatisch een web browser op binnen STS
+    * andere browser? Gebruik: http://localhost:8080/hartigehapspring/
 * log in met gebruikersnaam "employee" en password "employee"
 * klik op het restaurant naar keuze
-** subsysteem bestelling: kies een tafel naar keuze, kies je gerechten, doe een of meer bestellingen, vraag om afrekenen
-** subsysteem keuken: plan bestelling, meld bestelling gereed
-** subsysteem bediening: meld bestelling geserveerd, meld rekening betaald
-** klanten subsysteem: CRUD op klanten
+    * subsysteem bestelling: kies een tafel naar keuze, kies je gerechten, doe een of meer bestellingen, vraag om afrekenen
+    * subsysteem keuken: plan bestelling, meld bestelling gereed
+    * subsysteem bediening: meld bestelling geserveerd, meld rekening betaald
+    * klanten subsysteem: CRUD op klanten
 * geïmplementeerde business rules:
-** een lege bestelling kan niet gedaan worden
-** een lege rekening kan niet afgerekend worden
-** een rekening met nog niet bestelde bestelling mag niet afgerekend worden
+    * een lege bestelling kan niet gedaan worden
+    * een lege rekening kan niet afgerekend worden
+    * een rekening met nog niet bestelde bestelling mag niet afgerekend worden
 * autorisatie en personalisatie:
-** er is ook een gebruiker "customer" met password "customer". Deze gebruiker heeft minder rechten
-** als je in het geheel niet bent ingelogd, mag je wel alles zien, maar mag je geen acties ondernemen
-
-
+    * er is ook een gebruiker "customer" met password "customer". Deze gebruiker heeft minder rechten
+    * als je in het geheel niet bent ingelogd, mag je wel alles zien, maar mag je geen acties ondernemen
