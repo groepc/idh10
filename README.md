@@ -28,13 +28,6 @@ Open eindjes:
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
 Installatie van de applicatie:
 
 * De applicatie maakt gebruik van een MySQL database met de naam "hartigehapspring".
