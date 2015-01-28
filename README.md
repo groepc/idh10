@@ -30,7 +30,7 @@ Open eindjes:
 
 Installatie van de applicatie:
 
-* De applicatie maakt gebruik van een MySQL database met de naam "hartigehapspring".
+* De applicatie maakt gebruik van een MySQL database met de naam "hh".
 * De database moet aanwezig zijn om de applicatie te laten werken, maar tabellen hoeven niet handmatig te worden aangemaakt. Dat doet Hibernate voor je.
 * Mocht je een eerdere versie van de Hartige Hap webapplicatie geïnstalleerd hebben gehad, dan de oude database volledig weggooien en een nieuwe, lege database creëren, aangezien de tabellenstructuur anders is. 
 * In het bestand src/main/resources/datasource-jpa-tx.xml staat de configuratie om de database te benaderen, die je indien nodig kunt aanpassen, met name username, password en URL. 
@@ -46,7 +46,7 @@ Gebruik van de applicatie:
     * rechter muisklik op project, "run as", "run on server"
     * check de console log op excepties
     * STS start automatisch een web browser op binnen STS
-    * andere browser? Gebruik: http://localhost:8080/hartigehapspring/
+    * andere browser? Gebruik: http://localhost:8080/hh/
 * log in met gebruikersnaam "employee" en password "employee"
 * klik op het restaurant naar keuze
     * subsysteem bestelling: kies een tafel naar keuze, kies je gerechten, doe een of meer bestellingen, vraag om afrekenen
