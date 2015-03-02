@@ -112,7 +112,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		}
 	}
 	
-	private void populateRestaurant(Restaurant restaurant) {
+	private Restaurant populateRestaurant(Restaurant restaurant) {
 				
 		// will save everything that is reachable by cascading
 		// even if it is linked to the restaurant after the save
@@ -145,6 +145,8 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 			restaurant.getCustomers().add(customer);
 		}
 		
+		return restaurant;
+		
 	}
 
 	
@@ -153,12 +155,12 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createCommonEntities();
 
 		Restaurant restaurant = new Restaurant(HARTIGEHAP_RESTAURANT_NAME, "deHartigeHap.jpg");
-		populateRestaurant(restaurant);
+		restaurant = populateRestaurant(restaurant);
 		
 		restaurant = new Restaurant(PITTIGEPANNEKOEK_RESTAURANT_NAME, "dePittigePannekoek.jpg");
-		populateRestaurant(restaurant);
+		restaurant = populateRestaurant(restaurant);
 		
 		restaurant = new Restaurant(HMMMBURGER_RESTAURANT_NAME, "deHmmmBurger.jpg");
-		populateRestaurant(restaurant);
+		restaurant = populateRestaurant(restaurant);
 	}	
 }

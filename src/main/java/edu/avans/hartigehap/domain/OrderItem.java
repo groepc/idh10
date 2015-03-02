@@ -1,7 +1,7 @@
 package edu.avans.hartigehap.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,9 +26,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class OrderItem extends DomainObject {
 	private static final long serialVersionUID = 1L;
 
-	// unidirectional one-to-one
-	// deliberate: no cascade!!
-	@OneToOne()
+	// unidirectional many-to-one; deliberately no cascade
+	@ManyToOne
 	private MenuItem menuItem;
 	
 	private int quantity = 0;
