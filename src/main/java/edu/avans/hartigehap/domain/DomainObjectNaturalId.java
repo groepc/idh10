@@ -51,7 +51,6 @@ public abstract class DomainObjectNaturalId implements Serializable {
 	@Override
 	public int hashCode() {
 		int result = 1;
-		Object id = getId();
 		result = result * PRIME + (id == null ? 0 : id.hashCode());
 		return result;
 	}
@@ -78,8 +77,8 @@ public abstract class DomainObjectNaturalId implements Serializable {
 		if (!other.canEqual(this)) {
 			return false;
 		}
-		Object thisId = getId();
-		Object otherId = other.getId();
+		Object thisId = id;
+		Object otherId = other.id;
 		return thisId == null ? otherId == null : thisId.equals(otherId);
 	}
 

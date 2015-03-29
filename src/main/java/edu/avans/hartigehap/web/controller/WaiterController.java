@@ -112,7 +112,7 @@ public class WaiterController {
 	
 	@RequestMapping(value = "/waiter/orders/{orderId}", method = RequestMethod.PUT)
 	public String receiveOrderEvent(@PathVariable("orderId") String orderId,
-			@RequestParam String event, Model uiModel, Locale locale) {
+			@RequestParam String event, Model uiModel) {
 
 		switch (event) {
 		case "orderHasBeenServed":
