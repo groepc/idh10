@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 @Repository
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
-	final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -63,11 +63,11 @@ public class CustomerServiceImpl implements CustomerService {
 						Arrays.asList(new Restaurant[]{restaurant}),
 						new Sort(Sort.Direction.ASC, "lastName"));
 
-		logger.info("findCustomersForRestaurant using query created using repository method name");
+		LOGGER.info("findCustomersForRestaurant using query created using repository method name");
 		ListIterator<Customer>	it = customersForRestaurants.listIterator();
 		while(it.hasNext()) {
 			Customer customer = it.next();
-			logger.info("customer = " + customer);
+			LOGGER.info("customer = " + customer);
 		}
 		
 		return customersForRestaurants;
@@ -84,11 +84,11 @@ public class CustomerServiceImpl implements CustomerService {
 		Page<Customer> customersForRestaurants = customerRepository.
 				findByRestaurants((Collection<Restaurant>)Arrays.asList(new Restaurant[]{restaurant}), pageable);
 
-		logger.info("findCustomersForRestaurant using query created using repository method name");
+		LOGGER.info("findCustomersForRestaurant using query created using repository method name");
 		Iterator<Customer>	it = customersForRestaurants.iterator();
 		while(it.hasNext()) {
 			Customer customer = it.next();
-			logger.info("customer = " + customer);
+			LOGGER.info("customer = " + customer);
 		}
 		
 		return customersForRestaurants;

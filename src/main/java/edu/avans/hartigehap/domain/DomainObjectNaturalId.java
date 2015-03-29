@@ -51,8 +51,8 @@ public abstract class DomainObjectNaturalId implements Serializable {
 	@Override
 	public int hashCode() {
 		int result = 1;
-		Object _id = getId();
-		result = result * PRIME + (_id == null ? 0 : _id.hashCode());
+		Object id = getId();
+		result = result * PRIME + (id == null ? 0 : id.hashCode());
 		return result;
 	}
 

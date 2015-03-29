@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class DiningTableServiceImpl implements DiningTableService {
-	final Logger logger = LoggerFactory.getLogger(DiningTableServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DiningTableServiceImpl.class);
 	
 	@Autowired
 	private DiningTableRepository diningTableRepository;
@@ -54,13 +54,13 @@ public class DiningTableServiceImpl implements DiningTableService {
 	// prefetch the associated entities by traversing the associations
 	@Transactional(readOnly=true)
 	public DiningTable fetchWarmedUp(Long id) {
-		logger.info("(fetchWarmedUp) diningTable id: " + id);
+		LOGGER.info("(fetchWarmedUp) diningTable id: " + id);
 
 		// finding an item using find
 		DiningTable diningTable = diningTableRepository.findOne(id);
 		
 		// the following code will deliberately cause a null pointer exception, if something is wrong
-		logger.info("diningTable = " + diningTable.getId());
+		LOGGER.info("diningTable = " + diningTable.getId());
 		
 		diningTable.warmup();
 				

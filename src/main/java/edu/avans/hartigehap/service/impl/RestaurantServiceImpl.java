@@ -2,8 +2,6 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
@@ -18,7 +16,6 @@ import com.google.common.collect.Lists;
 @Repository
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService {
-	final Logger logger = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 	
 	@Autowired
 	private RestaurantRepository restaurantRepository;

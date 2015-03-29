@@ -2,8 +2,6 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import org.joda.time.DateTime;
 @Repository
 @Transactional
 public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorService {
-	final Logger logger = LoggerFactory.getLogger(RestaurantPopulatorServiceImpl.class);
 	
 	@Autowired
 	private RestaurantRepository restaurantRepository;
@@ -71,7 +68,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
 		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
 		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-
+		
 	}
 
 	private void createFoodCategory(String tag) {

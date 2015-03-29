@@ -4,14 +4,14 @@ public class Message {
 
 	private String type;
 	
-	private String message;
+	private String body;
 	
 	public Message() {
 	}
 	
-	public Message(String type, String message) {
+	public Message(String type, String body) {
 		this.type = type;
-		this.message = message;
+		this.body = body;
 	}
 
 	public String getType() {
@@ -23,11 +23,11 @@ public class Message {
 	}
 
 	public String getMessage() {
-		return message;
+		return body;
 	}
 
 	public void setMessage(String message) {
-		this.message = message;
+		this.body = message;
 	}	
 	
 }

@@ -21,7 +21,7 @@ import edu.avans.hartigehap.web.form.Message;
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 public class KitchenController {
 
-	final Logger logger = LoggerFactory.getLogger(KitchenController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KitchenController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -88,28 +88,28 @@ public class KitchenController {
 
 		switch (event) {
 		case "planOrder":
-			return planOrder(orderId, uiModel, locale);
+			return planOrder(orderId, uiModel);
 			// break unreachable
 
 		case "orderHasBeenPrepared":
-			return orderHasBeenPrepared(orderId, uiModel, locale);
+			return orderHasBeenPrepared(orderId, uiModel);
 			// break unreachable
 
 		default:
-			logger.error("Internal error: event " + event + " not recognized");
+			LOGGER.error("Internal error: event " + event + " not recognized");
 			Order order = orderService.findById(Long.valueOf(orderId));
 			Restaurant restaurant = warmupRestaurant(order, uiModel);
 			return "redirect:/restaurants/" + restaurant.getId();
 		}
 	}
 
-	private String planOrder(String orderId, Model uiModel, Locale locale) {
+	private String planOrder(String orderId, Model uiModel) {
 		Order order = orderService.findById(Long.valueOf(orderId));
 		Restaurant restaurant = warmupRestaurant(order, uiModel);
 		try {
 			orderService.planOrder(order);
 		} catch (StateException e) {
-			logger.error(
+			LOGGER.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to planned state!", e);
@@ -123,14 +123,13 @@ public class KitchenController {
 		return "redirect:/restaurants/" + restaurant.getId() + "/kitchen";
 	}
 
-	private String orderHasBeenPrepared(String orderId, Model uiModel,
-			Locale locale) {
+	private String orderHasBeenPrepared(String orderId, Model uiModel) {
 		Order order = orderService.findById(Long.valueOf(orderId));
 		Restaurant restaurant = warmupRestaurant(order, uiModel);
 		try {
 			orderService.orderPrepared(order);
 		} catch (StateException e) {
-			logger.error(
+			LOGGER.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to prepared state!", e);

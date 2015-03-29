@@ -2,8 +2,6 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -18,7 +16,6 @@ import edu.avans.hartigehap.domain.*;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class BillServiceImpl implements BillService {
-	final Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
 
 	@Autowired
 	private OrderRepository orderRepository;

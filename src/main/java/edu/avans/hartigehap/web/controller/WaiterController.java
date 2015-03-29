@@ -22,7 +22,7 @@ import edu.avans.hartigehap.web.form.Message;
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 public class WaiterController {
 
-	final Logger logger = LoggerFactory.getLogger(WaiterController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WaiterController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -116,11 +116,11 @@ public class WaiterController {
 
 		switch (event) {
 		case "orderHasBeenServed":
-			return orderHasBeenServed(orderId, uiModel, locale);
+			return orderHasBeenServed(orderId, uiModel);
 			// break unreachable
 
 		default:
-			logger.error("Internal error: event " + event + " not recognized");
+			LOGGER.error("Internal error: event " + event + " not recognized");
 			Order order = orderService.findById(Long.valueOf(orderId));
 			Restaurant restaurant = warmupRestaurant(order, uiModel);
 			return "redirect:/restaurants/" + restaurant.getId();
@@ -128,14 +128,13 @@ public class WaiterController {
 	}
 
 	
-	private String orderHasBeenServed(String orderId, Model uiModel,
-			Locale locale) {
+	private String orderHasBeenServed(String orderId, Model uiModel) {
 		Order order = orderService.findById(Long.valueOf(orderId));
 		Restaurant restaurant = warmupRestaurant(order, uiModel);
 		try {
 			orderService.orderServed(order);
 		} catch (StateException e) {
-			logger.error(
+			LOGGER.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to served state!", e);
@@ -154,7 +153,7 @@ public class WaiterController {
 	public String receiveBillEvent(
 			@PathVariable("billId") String billId, 
 			@RequestParam String event, 
-			Model uiModel, Locale locale) {
+			Model uiModel) {
 
 		Bill bill = billService.findById(Long.valueOf(billId));
 		Restaurant restaurant = warmupRestaurant(bill, uiModel);
@@ -164,9 +163,9 @@ public class WaiterController {
 			try {
 				billService.billHasBeenPaid(bill);
 			} catch (StateException e) {
-				logger.error("Internal error has occurred! Order " + Long.valueOf(billId) 
+				LOGGER.error("Internal error has occurred! Order " + Long.valueOf(billId) 
 						+ "has not been changed to served state!", e);
-				// StateException triggers a rollback; consequently all Entities are invalidated by Hibernate
+				// StateException triggers a rollback; consequently all entities are invalidated by Hibernate
 				// So new warmup needed
 				warmupRestaurant(bill, uiModel);
 				return "hartigehap/waiter";
@@ -174,7 +173,7 @@ public class WaiterController {
 			break;
 			
 		default:
-			logger.error("Internal error: event " + event + " not recognized");
+			LOGGER.error("Internal error: event " + event + " not recognized");
 			break;
 		}
 		

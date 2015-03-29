@@ -18,7 +18,7 @@ import edu.avans.hartigehap.repository.OrderRepository;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class OrderServiceImpl implements OrderService {
-	final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -42,11 +42,11 @@ public class OrderServiceImpl implements OrderService {
 		// invoked using an entityManager
 		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
 		
-		logger.info("findSubmittedOrdersForRestaurant using named query");
+		LOGGER.info("findSubmittedOrdersForRestaurant using named query");
 		ListIterator<Order>	it = submittedOrdersList.listIterator();
 		while(it.hasNext()) {
 			Order order = it.next();
-			logger.info("submittedOrder = " + order.getId() 
+			LOGGER.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}
@@ -58,11 +58,11 @@ public class OrderServiceImpl implements OrderService {
 						restaurant,
 						new Sort(Sort.Direction.ASC, "submittedTime"));
 		
-		logger.info("findSubmittedOrdersForRestaurant using query created using repository method name");
+		LOGGER.info("findSubmittedOrdersForRestaurant using query created using repository method name");
 		ListIterator<Order>	italt = submittedOrdersListAlternative.listIterator();
 		while(italt.hasNext()) {
 			Order order = italt.next();
-			logger.info("submittedOrder = " + order.getId() 
+			LOGGER.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}
