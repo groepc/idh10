@@ -32,11 +32,11 @@ import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.RestaurantService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { RestaurantControllerTest.class })
+@ContextConfiguration(classes = { RestaurantControllerMockMvcTest.class })
 @WebAppConfiguration
 @ImportResource({ "classpath:/test-root-context.xml","classpath:*servlet-context.xml" })
 @Slf4j
-public class RestaurantControllerTest {
+public class RestaurantControllerMockMvcTest {
 
   private static final String RESTAURANT_ID = "De Plak";
 

@@ -50,6 +50,13 @@ public class DiningTableControllerTest extends AbstractTransactionRollbackTest {
 		System.out.println("menu meals = " + restaurant.getMenu().getMeals());
 		System.out.println("menu drinks = " + restaurant.getMenu().getDrinks());
 	}
+	
+	@Test
+	public void addMenuItem() {
+		String diningTableId = "1";
+		ExtendedModelMap uiModel = new ExtendedModelMap();
+		diningTableController.addMenuItem(diningTableId, "spaghetti", uiModel);
+	}
 
 }
 
