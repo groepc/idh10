@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Collection;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
-import com.google.common.collect.Lists;
 
+import com.google.common.collect.Lists;
 
 
 @Service("customerService")
 @Repository
 @Transactional
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -63,11 +61,11 @@ public class CustomerServiceImpl implements CustomerService {
 						Arrays.asList(new Restaurant[]{restaurant}),
 						new Sort(Sort.Direction.ASC, "lastName"));
 
-		LOGGER.info("findCustomersForRestaurant using query created using repository method name");
+		log.info("findCustomersForRestaurant using query created using repository method name");
 		ListIterator<Customer>	it = customersForRestaurants.listIterator();
 		while(it.hasNext()) {
 			Customer customer = it.next();
-			LOGGER.info("customer = " + customer);
+			log.info("customer = " + customer);
 		}
 		
 		return customersForRestaurants;
@@ -84,11 +82,11 @@ public class CustomerServiceImpl implements CustomerService {
 		Page<Customer> customersForRestaurants = customerRepository.
 				findByRestaurants((Collection<Restaurant>)Arrays.asList(new Restaurant[]{restaurant}), pageable);
 
-		LOGGER.info("findCustomersForRestaurant using query created using repository method name");
+		log.info("findCustomersForRestaurant using query created using repository method name");
 		Iterator<Customer>	it = customersForRestaurants.iterator();
 		while(it.hasNext()) {
 			Customer customer = it.next();
-			LOGGER.info("customer = " + customer);
+			log.info("customer = " + customer);
 		}
 		
 		return customersForRestaurants;

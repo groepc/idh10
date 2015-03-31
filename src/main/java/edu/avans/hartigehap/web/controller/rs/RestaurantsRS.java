@@ -1,11 +1,8 @@
 package edu.avans.hartigehap.web.controller.rs;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,14 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
-
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.RestaurantService;
 
 // http://briansjavablog.blogspot.nl/2012/08/rest-services-with-spring.html
 @Controller
+@Slf4j
 public class RestaurantsRS {
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantsRS.class);
 
 	@Autowired
 	private RestaurantService restaurantService;
@@ -47,7 +43,7 @@ public class RestaurantsRS {
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Restaurant> restaurants() {
-		LOGGER.debug("");
+		log.debug("");
 		return restaurantService.findAll();
 	}
 
@@ -58,7 +54,7 @@ public class RestaurantsRS {
 	@ResponseBody
 	public ModelAndView createRestaurantJson(@RequestBody Restaurant restaurant, HttpServletResponse httpResponse,
 	        WebRequest httpRequest) {
-		LOGGER.debug("body: {}", restaurant);
+		log.debug("body: {}", restaurant);
 
 		try {
 			Restaurant savedRestaurant = restaurantService.save(restaurant);
@@ -67,7 +63,7 @@ public class RestaurantsRS {
 			        .setHeader("Location", httpRequest.getContextPath() + "/restaurants/" + savedRestaurant.getId());
 			return new ModelAndView(jsonView, DATA_FIELD, savedRestaurant);
 		} catch (Exception e) {
-			LOGGER.error("Error creating new restaurant", e);
+			log.error("Error creating new restaurant", e);
 			String message = "Error creating new restaurant. [%1$s]";
 			return createErrorResponse(String.format(message, e.toString()));
 		}
@@ -79,7 +75,7 @@ public class RestaurantsRS {
 	        @PathVariable String restaurantId,
 	        HttpServletResponse httpResponse,
 	        WebRequest httpRequest) {
-		LOGGER.debug("restaurantId: {}", restaurantId);
+		log.debug("restaurantId: {}", restaurantId);
 		return restaurantService.findById(restaurantId);
 	}
 

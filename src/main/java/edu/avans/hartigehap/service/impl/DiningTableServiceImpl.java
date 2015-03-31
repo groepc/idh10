@@ -1,9 +1,7 @@
 package edu.avans.hartigehap.service.impl;
 
 import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +17,8 @@ import com.google.common.collect.Lists;
 @Service("diningTableService")
 @Repository
 @Transactional(rollbackFor = StateException.class)
+@Slf4j
 public class DiningTableServiceImpl implements DiningTableService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DiningTableServiceImpl.class);
 	
 	@Autowired
 	private DiningTableRepository diningTableRepository;
@@ -54,13 +52,13 @@ public class DiningTableServiceImpl implements DiningTableService {
 	// prefetch the associated entities by traversing the associations
 	@Transactional(readOnly=true)
 	public DiningTable fetchWarmedUp(Long id) {
-		LOGGER.info("(fetchWarmedUp) diningTable id: " + id);
+		log.info("(fetchWarmedUp) diningTable id: " + id);
 
 		// finding an item using find
 		DiningTable diningTable = diningTableRepository.findOne(id);
 		
 		// the following code will deliberately cause a null pointer exception, if something is wrong
-		LOGGER.info("diningTable = " + diningTable.getId());
+		log.info("diningTable = " + diningTable.getId());
 		
 		diningTable.warmup();
 				

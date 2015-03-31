@@ -1,17 +1,14 @@
 package edu.avans.hartigehap.web.util;
 
 import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
+@Slf4j
 public class UrlUtil {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UrlUtil.class);
 	private UrlUtil() {
 		
 	}
@@ -24,7 +21,7 @@ public class UrlUtil {
         try {
             pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
         } catch (UnsupportedEncodingException uee) {
-        	LOGGER.error("UnsupportedEncodingException", uee);
+        	log.error("UnsupportedEncodingException", uee);
         	}
         return pathSegment;
     }	

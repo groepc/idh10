@@ -3,25 +3,22 @@ package edu.avans.hartigehap.web.controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
 import edu.avans.hartigehap.web.form.Message;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+@Slf4j
 public class KitchenController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KitchenController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -96,7 +93,7 @@ public class KitchenController {
 			// break unreachable
 
 		default:
-			LOGGER.error("Internal error: event " + event + " not recognized");
+			log.error("Internal error: event " + event + " not recognized");
 			Order order = orderService.findById(Long.valueOf(orderId));
 			Restaurant restaurant = warmupRestaurant(order, uiModel);
 			return "redirect:/restaurants/" + restaurant.getId();
@@ -109,7 +106,7 @@ public class KitchenController {
 		try {
 			orderService.planOrder(order);
 		} catch (StateException e) {
-			LOGGER.error(
+			log.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to planned state!", e);
@@ -129,7 +126,7 @@ public class KitchenController {
 		try {
 			orderService.orderPrepared(order);
 		} catch (StateException e) {
-			LOGGER.error(
+			log.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to prepared state!", e);

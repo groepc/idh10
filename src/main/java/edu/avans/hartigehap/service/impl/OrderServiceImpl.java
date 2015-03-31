@@ -2,9 +2,7 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.List;
 import java.util.ListIterator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -17,8 +15,8 @@ import edu.avans.hartigehap.repository.OrderRepository;
 @Service("orderService")
 @Repository
 @Transactional(rollbackFor = StateException.class)
+@Slf4j
 public class OrderServiceImpl implements OrderService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -42,11 +40,11 @@ public class OrderServiceImpl implements OrderService {
 		// invoked using an entityManager
 		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
 		
-		LOGGER.info("findSubmittedOrdersForRestaurant using named query");
+		log.info("findSubmittedOrdersForRestaurant using named query");
 		ListIterator<Order>	it = submittedOrdersList.listIterator();
 		while(it.hasNext()) {
 			Order order = it.next();
-			LOGGER.info("submittedOrder = " + order.getId() 
+			log.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}
@@ -58,11 +56,11 @@ public class OrderServiceImpl implements OrderService {
 						restaurant,
 						new Sort(Sort.Direction.ASC, "submittedTime"));
 		
-		LOGGER.info("findSubmittedOrdersForRestaurant using query created using repository method name");
+		log.info("findSubmittedOrdersForRestaurant using query created using repository method name");
 		ListIterator<Order>	italt = submittedOrdersListAlternative.listIterator();
 		while(italt.hasNext()) {
 			Order order = italt.next();
-			LOGGER.info("submittedOrder = " + order.getId() 
+			log.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}

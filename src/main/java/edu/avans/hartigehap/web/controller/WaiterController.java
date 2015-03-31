@@ -3,16 +3,13 @@ package edu.avans.hartigehap.web.controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
 import edu.avans.hartigehap.web.form.Message;
@@ -20,9 +17,9 @@ import edu.avans.hartigehap.web.form.Message;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+@Slf4j
 public class WaiterController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(WaiterController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -120,7 +117,7 @@ public class WaiterController {
 			// break unreachable
 
 		default:
-			LOGGER.error("Internal error: event " + event + " not recognized");
+			log.error("Internal error: event " + event + " not recognized");
 			Order order = orderService.findById(Long.valueOf(orderId));
 			Restaurant restaurant = warmupRestaurant(order, uiModel);
 			return "redirect:/restaurants/" + restaurant.getId();
@@ -134,7 +131,7 @@ public class WaiterController {
 		try {
 			orderService.orderServed(order);
 		} catch (StateException e) {
-			LOGGER.error(
+			log.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to served state!", e);
@@ -163,7 +160,7 @@ public class WaiterController {
 			try {
 				billService.billHasBeenPaid(bill);
 			} catch (StateException e) {
-				LOGGER.error("Internal error has occurred! Order " + Long.valueOf(billId) 
+				log.error("Internal error has occurred! Order " + Long.valueOf(billId) 
 						+ "has not been changed to served state!", e);
 				// StateException triggers a rollback; consequently all entities are invalidated by Hibernate
 				// So new warmup needed
@@ -173,7 +170,7 @@ public class WaiterController {
 			break;
 			
 		default:
-			LOGGER.error("Internal error: event " + event + " not recognized");
+			log.error("Internal error: event " + event + " not recognized");
 			break;
 		}
 		

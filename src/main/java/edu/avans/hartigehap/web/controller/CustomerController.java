@@ -1,9 +1,6 @@
 package edu.avans.hartigehap.web.controller;
 
 import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,17 +19,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import com.google.common.collect.Lists;
 import edu.avans.hartigehap.web.util.*;
-
+import lombok.extern.slf4j.Slf4j;
 import java.util.*;
-
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
 import javax.servlet.http.*;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+@Slf4j
 public class CustomerController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -46,10 +42,10 @@ public class CustomerController {
 		
 		Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
 		
-		LOGGER.info("Listing customers");
+		log.info("Listing customers");
 		List<Customer> customers = customerService.findCustomersForRestaurant(restaurant);
 		uiModel.addAttribute("customers", customers);
-		LOGGER.info("No. of customers: " + customers.size());
+		log.info("No. of customers: " + customers.size());
 		
 		return "hartigehap/listcustomers";
 	}
@@ -59,7 +55,7 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		LOGGER.info("Show customer: " + id);
+		log.info("Show customer: " + id);
 		
 		Customer customer = customerService.findById(id);
 		uiModel.addAttribute("customer", customer);
@@ -71,11 +67,11 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		LOGGER.info("Customer update form for customer: " + id);
+		log.info("Customer update form for customer: " + id);
 		
 		Customer customer = customerService.findById(id);
 		uiModel.addAttribute("customer", customer);
-		LOGGER.info("updatingCustomerForm(" + customer.getFirstName() + ", " + customer.getLastName() + ")");
+		log.info("updatingCustomerForm(" + customer.getFirstName() + ", " + customer.getLastName() + ")");
 		return "hartigehap/editcustomer";
 	}
 
@@ -108,19 +104,19 @@ public class CustomerController {
 
 		// Process upload file
         if(file != null) {
-			LOGGER.info("File name: " + file.getName());
-			LOGGER.info("File size: " + file.getSize());
-			LOGGER.info("File content type: " + file.getContentType());
+			log.info("File name: " + file.getName());
+			log.info("File size: " + file.getSize());
+			log.info("File content type: " + file.getContentType());
 			byte[] fileContent = null;
 			try {
 				InputStream inputStream = file.getInputStream();
 				if(inputStream == null) {
-					LOGGER.info("File inputstream is null");
+					log.info("File inputstream is null");
 				}
 				fileContent = IOUtils.toByteArray(inputStream);
 				customer.setPhoto(fileContent);
 			} catch (IOException ex) {
-				LOGGER.error("Error saving uploaded file", ex);
+				log.error("Error saving uploaded file", ex);
 			}
 			customer.setPhoto(fileContent);
 		}
@@ -142,7 +138,7 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		LOGGER.info("Create customer form");
+		log.info("Create customer form");
 		
 		Customer customer = new Customer();
 		uiModel.addAttribute("customer", customer);
@@ -156,9 +152,9 @@ public class CustomerController {
 		RedirectAttributes redirectAttributes, Locale locale,
 		@RequestParam(value = "file", required = false) Part file) {
 
-		LOGGER.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());	
-		LOGGER.info("Binding Result target: " + (Customer) bindingResult.getTarget()); 
-		LOGGER.info("Binding Result: " + bindingResult);
+		log.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());	
+		log.info("Binding Result target: " + (Customer) bindingResult.getTarget()); 
+		log.info("Binding Result: " + bindingResult);
 		
 		if(bindingResult.hasErrors()) {
 			uiModel.addAttribute(
@@ -176,19 +172,19 @@ public class CustomerController {
 		
 		// Process upload file
 		if(file != null) {
-			LOGGER.info("File name: " + file.getName());
-			LOGGER.info("File size: " + file.getSize());
-			LOGGER.info("File content type: " + file.getContentType());
+			log.info("File name: " + file.getName());
+			log.info("File size: " + file.getSize());
+			log.info("File content type: " + file.getContentType());
 			byte[] fileContent = null;
 			try {
 				InputStream inputStream = file.getInputStream();
 				if(inputStream == null) {
-					LOGGER.info("File inputstream is null");
+					log.info("File inputstream is null");
 				}
 				fileContent = IOUtils.toByteArray(inputStream);
 				customer.setPhoto(fileContent);
 			} catch (IOException ex) {
-				LOGGER.error("Error saving uploaded file", ex);
+				log.error("Error saving uploaded file", ex);
 			}
 			customer.setPhoto(fileContent);
 		}
@@ -210,7 +206,7 @@ public class CustomerController {
 	public byte[] downloadPhoto(@PathVariable("id") Long id) {
 		Customer customer = customerService.findById(id);
 		if(customer.getPhoto() != null) {
-			LOGGER.info("Downloading photo for id: {} with size: {}",
+			log.info("Downloading photo for id: {} with size: {}",
 					customer.getId(), customer.getPhoto().length);
 		}
 		return customer.getPhoto();
@@ -220,7 +216,7 @@ public class CustomerController {
 	@RequestMapping(value = "/restaurants/{restaurantName}/customers/{id}", params = "delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("restaurantName") String restaurantName, @PathVariable("id") Long id) {
 
-		LOGGER.info("Deleting customer: " + id);
+		log.info("Deleting customer: " + id);
 		customerService.delete(id);
 		return "redirect:/restaurants/" + restaurantName + "/customers/";
 	}
@@ -234,9 +230,9 @@ public class CustomerController {
 			@RequestParam(value = "rows", required = false) Integer rows,
 			@RequestParam(value = "sidx", required = false) String sortBy,
 			@RequestParam(value = "sord", required = false) String order) {
-		LOGGER.info("Listing customers for grid with page: {}, rows: {}", page,
+		log.info("Listing customers for grid with page: {}, rows: {}", page,
 				rows);
-		LOGGER.info("Listing customers for grid with sort: {}, order: {}",
+		log.info("Listing customers for grid with sort: {}, order: {}",
 				sortBy, order);
 		// Process order by
 		Sort sort = null;
