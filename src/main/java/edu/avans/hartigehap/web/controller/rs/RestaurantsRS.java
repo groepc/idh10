@@ -26,18 +26,17 @@ public class RestaurantsRS {
 	@Autowired
 	private RestaurantService restaurantService;
 
-// TODO: reason to comment out that it gives a problem in unit test of DiningTableController	
-//	orig:_@Autowired
-//	orig:_private_View_jsonView;
-// new: 
-	private View jsonView = null;
-
+	@Autowired
+	private View jsonView;
+	
 	private static final String DATA_FIELD = "data";
 	private static final String ERROR_FIELD = "error";
 
 	/**
 	 * list all restaurants.
 	 * 
+	 * This method can be tested by:
+	 * curl -i -X GET -H "Accept:application/json" http://localhost:8080/hh/rest/v1/restaurants
 	 * @return
 	 */
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,6 +48,14 @@ public class RestaurantsRS {
 
 	/**
 	 * create a new restaurant.
+	 * 
+	 * This method can be tested by:
+	 * curl -i -X POST -H "Content-Type:application/json" -d @restaurantsimple.json http://localhost:8080/hh/rest/v1/restaurants
+	 * 
+	 * where restaurantsimple.json is a file with content:
+	 * {"id":"Braadworstelaars","version":0,"imageFileName":"deHartigeHap.jpg"}
+	 * 
+	 * In the GUI, the new restaurant Braadworstelaars will appear.
 	 */
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

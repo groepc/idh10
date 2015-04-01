@@ -13,4 +13,26 @@
     <context:component-scan base-package="edu.avans.hartigehap.service.impl, edu.avans.hartigehap.web.controller"/>    
     <!-- context:component-scan base-package="edu.avans.hartigehap.service.impl" /-->    
  		
+
+
+     <!-- Configures view for returning JSON to the client -->
+  <bean id="jsonView"
+    class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+  </bean>
+  <bean id="jsonMessageConverter"
+    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+
+  <bean id="xmlView"
+    class="org.springframework.web.servlet.view.xml.MarshallingView">
+    <property name="marshaller" ref="castorMarshaller" />
+  </bean>
+
+  <bean id="marshallingHttpMessageConverter"
+    class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+    <property name="marshaller" ref="castorMarshaller" />
+    <property name="unmarshaller" ref="castorMarshaller" />
+  </bean>
+  <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" />
+
+
 </beans>
