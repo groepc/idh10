@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div xmlns:jsp="http://java.sun.com/JSP/Page"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:spring="http://www.springframework.org/tags"
-	xmlns:form="http://www.springframework.org/tags/form"
-	xmlns:joda="http://www.joda.org/joda/time/tags" 
-	xmlns:sec="http://www.springframework.org/security/tags"
-	version="2.0">
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:joda="http://www.joda.org/joda/time/tags"
+	 xmlns:sec="http://www.springframework.org/security/tags"
+	 version="2.0">
+
+	<!-- Add elvariables to help our IDE for code completion -->
+	<!--@elvariable id="message" type="edu.avans.hartigehap.web.form.Message"-->
+	<!--@elvariable id="customer" type="edu.avans.hartigehap.domain.Customer"-->
+	<!--@elvariable id="restaurant" type="edu.avans.hartigehap.domain.Restaurant"-->
+
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
 	<spring:message code="label_restaurant" var="labelRestaurant" />
 	<spring:message code="label_customer_subsystem" var="labelCustomerSubsystem" />
 	<spring:message code="label_customer_info" var="labelCustomerInfo" />
-	<spring:message code="label_customer_first_name"
-		var="labelCustomerFirstName" />
-	<spring:message code="label_customer_last_name"
-		var="labelCustomerLastName" />
-	<spring:message code="label_customer_birth_date"
-		var="labelCustomerBirthDate" />
-	<spring:message code="label_customer_description"
-		var="labelCustomerDescription" />
+	<spring:message code="label_customer_first_name" var="labelCustomerFirstName" />
+	<spring:message code="label_customer_last_name" var="labelCustomerLastName" />
+	<spring:message code="label_customer_birth_date" var="labelCustomerBirthDate" />
+	<spring:message code="label_customer_description" var="labelCustomerDescription" />
 	<spring:message code="label_customer_update" var="labelCustomerUpdate" />
 	<spring:message code="label_customer_delete" var="labelCustomerDelete" />
 	<spring:message code="date_format_pattern" var="dateFormatPattern" />
@@ -29,44 +30,76 @@
 	<spring:url value="/restaurants/${restaurant.id}/customers" var="editCustomerUrl" />
 	<spring:url value="/restaurants/${restaurant.id}/customers" var="deleteCustomerUrl" />
 	<spring:url value="/restaurants/${restaurant.id}/customers" var="customerPhotoUrl" />
+	<spring:url value="/restaurants/${restaurant.id}" var="showRestaurant" />
 
- 	<h1>${labelCustomerSubsystem} (${labelRestaurant} <a href="${showRestaurant}">${restaurant.id}</a>)</h1>
- 
-	<h3>${labelCustomerInfo}</h3>
 
-	<div id="customerInfo">
+	<joda:format var="birthDate" value="${customer.birthDate}" pattern="${dateFormatPattern}" />
+
+	<div class="row">
+		<h1>${labelCustomerSubsystem}</h1>
+		<h2 class="restaurant muted">${labelRestaurant} <a href="${showRestaurant}">${restaurant.id}</a></h2>
 
 		<c:if test="${not empty message}">
-			<div id="message" class="${message.type}">${message.message}</div>
+			<div id="message" class="alert alert-info ${message.type}">${message.message}</div>
 		</c:if>
+	</div>
 
-		<table>
-			<tr>
-				<td>${labelCustomerFirstName}</td>
-				<td>${customer.firstName}</td>
-			</tr>
-			<tr>
-				<td>${labelCustomerLastName}</td>
-				<td>${customer.lastName}</td>
-			</tr>
-			<tr>
-				<td>${labelCustomerBirthDate}</td>
-				<td><joda:format value="${customer.birthDate}"
-						pattern="${dateFormatPattern}" /></td>
-			</tr>
-			<tr>
-				<td>${labelCustomerDescription}</td>
-				<td>${customer.description}</td>
-			</tr>
-			<tr>
-				<td>${labelCustomerPhoto}</td>
-				<td><img src="${customerPhotoUrl}/${customer.id}/photo"></img></td>
-			</tr>
-		</table>
-		<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
-			<a href="${editCustomerUrl}/${customer.id}?form">${labelCustomerUpdate}</a> |
-        	<a href="${deleteCustomerUrl}/${customer.id}?delete">${labelCustomerDelete}</a>
-		</sec:authorize>
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">${labelCustomerInfo}</h3>
+				<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+					<span class="pull-right" style="height: 10px;">
+						<ul class="nav panel-tabs">
+							<li>
+								<form action="${editCustomerUrl}/${customer.id}" method="get">
+									<input type="hidden" name="form" />
+									<button type="submit" class="btn btn-warning">${labelCustomerUpdate}</button>
+								</form>
+							</li>
+							<li>
+								<form action="${deleteCustomerUrl}/${customer.id}" method="get">
+									<input type="hidden" name="delete" />
+									<button type="submit" class="btn btn-danger">${labelCustomerDelete}</button>
+								</form>
+							</li>
+						</ul>
+					</span>
+				</sec:authorize>
+			</div>
+			<div class="panel-body">
+				<div class="fb-profile">
+					<img align="left" class="fb-image-profile thumbnail" src="${customerPhotoUrl}/${customer.id}/photo" onerror="this.src='http://lorempixel.com/180/180/people/9/'" alt="Profile image"/>
+				</div>
 
+				<div class="input-group">
+					<span class="input-group-addon" id="description" path="description">${labelCustomerFirstName}</span>
+					<input type="text" class="form-control capitalise" id="customerDescription" value="${customer.firstName}" readonly="true" />
+				</div>
+
+				<p />
+
+				<div class="input-group">
+					<span class="input-group-addon" id="description" path="description">${labelCustomerLastName}</span>
+					<input type="text" class="form-control capitalise" id="customerDescription" value="${customer.lastName}" readonly="true" />
+				</div>
+
+				<p />
+
+				<!-- <joda:format value="${customer.birthDate}" pattern="${dateFormatPattern}" />-->
+
+				<div class="input-group">
+					<span class="input-group-addon" id="description" path="description">${labelCustomerBirthDate}</span>
+					<input type="text" class="form-control capitalise" id="customerDescription" value="${birthDate}" readonly="true" />
+				</div>
+
+				<p />
+
+				<div class="input-group">
+					<span class="input-group-addon" id="description" path="description">${labelCustomerDescription}</span>
+					<textarea cols="60" rows="8" path="description" class="form-control custom-control" id="customerDescription" readonly="true">${customer.description}</textarea>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

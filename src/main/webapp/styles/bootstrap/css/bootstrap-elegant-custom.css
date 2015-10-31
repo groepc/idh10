@@ -1,0 +1,11 @@
+@import url("bootstrap-custom-global.css");
+
+#footer {
+    background-color: #3c3c3c;
+}
+
+.btn {
+    line-height: 0.9 !important;
+}
+
+.agenda-time {background: rgba(20, 20, 20, 0.92);}

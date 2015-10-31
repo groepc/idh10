@@ -30,24 +30,22 @@ public class Restaurant extends DomainObjectNaturalId {
 	private String imageFileName;
 
 	// unidirectional one-to-one
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Menu menu = new Menu();
 	
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "restaurant")
-	private Collection<DiningTable> diningTables = new ArrayList<DiningTable>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
+	private Collection<DiningTable> diningTables = new ArrayList<>();
 		
 	// no cascading
 	@ManyToMany(mappedBy = "restaurants")
-	private Collection<Customer> customers = new ArrayList<Customer>();
-	
+	private Collection<Customer> customers = new ArrayList<>();
+
 	public Restaurant(String name, String imageFileName) {
 		super(name);
 		this.imageFileName = imageFileName;
 	}
 
-
 	// business methods
-
 	public void warmup() {
 		Iterator<DiningTable> diningTableIterator = diningTables.iterator();
 		while(diningTableIterator.hasNext()) {

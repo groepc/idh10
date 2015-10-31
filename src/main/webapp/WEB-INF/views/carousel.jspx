@@ -1,0 +1,33 @@
+<div id="carroussel-wrapper" xmlns:jsp="http://java.sun.com/JSP/Page"
+     xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:spring="http://www.springframework.org/tags"
+     xmlns:sec="http://www.springframework.org/security/tags"
+     version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <div class="carousel fade-carousel slide" data-ride="carousel" data-interval="5000" id="bs-carousel">
+        <!-- Overlay -->
+        <div class="overlay"><jsp:text /></div>
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#bs-carousel" data-slide-to="0" class="active"><jsp:text /></li>
+            <li data-target="#bs-carousel" data-slide-to="1"><jsp:text /></li>
+            <li data-target="#bs-carousel" data-slide-to="2"><jsp:text /></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item slides active">
+                <div class="slide-1"><jsp:text /></div>
+            </div>
+            <div class="item slides">
+                <div class="slide-2"><jsp:text /></div>
+            </div>
+            <div class="item slides">
+                <div class="slide-3"><jsp:text /></div>
+            </div>
+        </div>
+    </div>
+</div>

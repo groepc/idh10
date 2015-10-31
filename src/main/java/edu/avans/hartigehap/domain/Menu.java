@@ -32,14 +32,14 @@ public class Menu extends DomainObject {
 	// there are two relations between Menu and MenuItem. In order to
 	// distinguish these, they must be mapped to separate join tables
 	@ManyToMany
-	@JoinTable(name="menus_meals")
+	@JoinTable(name="MENUS_MEALS")
 	private Collection<MenuItem> meals = new ArrayList<MenuItem>();
 	
 	// unidirectional many-to-many relationship + no cascade
 	// there are two relations between Menu and MenuItem. In order to
 	// distinguish these, they must be mapped to separate join tables
 	@ManyToMany
-	@JoinTable(name="menus_drinks")
+	@JoinTable(name="MENUS_DRINKS")
 	private Collection<MenuItem> drinks = new ArrayList<MenuItem>();
 
 

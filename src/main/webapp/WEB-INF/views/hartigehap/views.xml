@@ -2,6 +2,12 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration
 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
+	<definition extends="default" name="404">
+		<put-attribute name="body" value="/WEB-INF/views/errors/404.jspx" />
+	</definition>
+	<definition extends="default" name="400">
+		<put-attribute name="body" value="/WEB-INF/views/errors/400.jspx" />
+	</definition>
 	<definition extends="default" name="hartigehap/listrestaurants">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/listrestaurants.jspx" />
 	</definition>

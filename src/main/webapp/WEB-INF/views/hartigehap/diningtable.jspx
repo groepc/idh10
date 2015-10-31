@@ -1,143 +1,197 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div id="body" xmlns:jsp="http://java.sun.com/JSP/Page"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:joda="http://www.joda.org/joda/time/tags"
-	xmlns:spring="http://www.springframework.org/tags"
-	xmlns:form="http://www.springframework.org/tags/form"
-	xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:joda="http://www.joda.org/joda/time/tags"
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:form="http://www.springframework.org/tags/form"
+	 xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
 	<spring:message code="label_dining_menu" var="labelDiningMenu" />
 	<spring:message code="label_restaurant" var="labelRestaurant" />
 	<spring:message code="label_current_order" var="labelCurrentOrder" />
-	<spring:message code="label_submit_order_button"
-		var="labelSubmitOrderButton" />
+	<spring:message code="label_submit_order_button" var="labelSubmitOrderButton" />
 	<spring:message code="label_current_bill" var="labelCurrentBill" />
-	<spring:message code="label_submit_bill_button"
-		var="labelSubmitBillButton" />
-	<spring:message code="label_price_current_order"
-		var="labelPriceCurrentOrder" />
-	<spring:message code="label_total_price_prev_orders"
-		var="labelTotalPricePrevOrders" />
+	<spring:message code="label_submit_bill_button" var="labelSubmitBillButton" />
+	<spring:message code="label_price_current_order" var="labelPriceCurrentOrder" />
+	<spring:message code="label_total_price_prev_orders" var="labelTotalPricePrevOrders" />
 	<spring:message code="label_menu_item" var="labelMenuItem" />
 	<spring:message code="label_food_category" var="labelFoodCategory" />
 	<spring:message code="label_price" var="labelPrice" />
 	<spring:message code="label_add_button" var="labelAddButton" />
 	<spring:message code="label_remove_button" var="labelRemoveButton" />
 	<spring:message code="label_currency" var="labelCurrency" />
+	<spring:message code="label_menu" var="labelMenu" />
+	<spring:message code="label_categorie" var="labelCategorie" />
+	<spring:message code="label_categorie_tab_text" var="labelCategorieTabText" />
+	<spring:message code="label_welcome_word" var="labelWelcomeWord" />
+	<spring:message code="label_pick_from_menu" var="labelPickFromMenu" />
+	<spring:message code="table_item" var="tableItem" />
+	<spring:message code="table_image" var="tableImage" />
+	<spring:message code="table_price" var="tablePrice" />
+	<spring:message code="table_actions" var="tableActions" />
+	<spring:message code="table_quantity" var="tableQuantity" />
 	<spring:url var="showRestaurant" value="/restaurants/${restaurant.id}" />
 
-	<h1>
-		${labelDiningMenu} ${diningTable.tableNr} (${labelRestaurant} <a
-			href="${showRestaurant}">${restaurant.id}</a>)
-	</h1>
+	<div class="row">
+		<h1>${labelDiningMenu} ${diningTable.tableNr}</h1>
+		<h2 class="restaurant muted">${labelRestaurant} <a href="${showRestaurant}">${restaurant.id}</a></h2>
 
+		<c:if test="${not empty message}">
+			<div id="message" class="alert alert-info ${message.type}">${message.message}</div>
+		</c:if>
+	</div>
 
-
-	<c:if test="${not empty message}">
-		<div id="message" class="${message.type}">${message.message}</div>
+	<c:if test="${empty diningTable.currentBill.currentOrder.orderItems}">
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading">${labelWelcomeWord}</div>
+				<div class="panel-body">
+					${labelPickFromMenu}
+				</div>
+			</div>
+		</div>
 	</c:if>
 
-	<table>
-		<thead>
-			<tr>
-				<th>${labelCurrentOrder}</th>
-				<th><spring:url var="submitOrderUrl"
-						value="/diningTables/${diningTable.id}" /> <form:form
-						name="submitOrderForm" action="${submitOrderUrl}" method="put">
-						<input type="hidden" name="event" value="submitOrder" />
-						<table>
+	<c:if test="${not empty diningTable.currentBill.currentOrder.orderItems}">
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">${labelCurrentOrder}</h3>
+					<span class="pull-right">
+						<!-- Tabs -->
+						<ul class="nav panel-tabs">
+							<li>
+								<spring:url var="submitOrderUrl" value="/diningTables/${diningTable.id}" />
+								<form:form name="submitOrderForm" action="${submitOrderUrl}" method="put">
+									<input type="hidden" name="event" value="submitOrder" />
+									<button type="submit" class="btn btn-default">${labelSubmitOrderButton}</button>
+								</form:form>
+							</li>
+						</ul>
+					</span>
+				</div>
+				<div class="tab-content">
+					<table class="table">
+						<thead>
 							<tr>
-								<td><input type="submit" value="${labelSubmitOrderButton}" /></td>
+								<th>${tableItem}</th>
+								<th>${tableQuantity}</th>
 							</tr>
-						</table>
-					</form:form></th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${diningTable.currentBill.currentOrder.orderItems}"
-				var="orderItem">
-				<tr>
-					<td>${orderItem.menuItem.id} (${orderItem.quantity}x)</td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+						</thead>
+						<tbody>
+							<c:forEach items="${diningTable.currentBill.currentOrder.orderItems}" var="orderItem">
+								<tr>
+									<td class="capitalise">${orderItem.menuItem.id}</td>
+									<td>${orderItem.quantity}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</c:if>
 
-
-	<table>
-		<thead>
-			<tr>
-				<th>${labelCurrentBill}</th>
-				<th><spring:url var="submitBillUrl"
-						value="/diningTables/${diningTable.id}" /> <form:form
-						name="submitBillForm" action="${submitBillUrl}" method="put">
-						<input type="hidden" name="event" value="submitBill" />
-						<table>
+	<c:if test="${diningTable.currentBill.priceSubmittedOrSuccessiveStateOrders ne '0'}">
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">${labelCurrentBill}</h3>
+					<span class="pull-right">
+						<!-- Tabs -->
+						<ul class="nav panel-tabs">
+							<li>
+								<spring:url var="submitBillUrl" value="/diningTables/${diningTable.id}" />
+								<form:form name="submitBillForm" action="${submitBillUrl}" method="put">
+									<input type="hidden" name="event" value="submitBill" />
+									<button type="submit" class="btn btn-success">${labelSubmitBillButton}</button>
+								</form:form>
+							</li>
+						</ul>
+					</span>
+				</div>
+				<div class="tab-content">
+					<table class="table">
+						<thead>
 							<tr>
-								<td><input type="submit" value="${labelSubmitBillButton}" /></td>
+								<th>${labelPriceCurrentOrder}</th>
+								<th>${labelTotalPricePrevOrders}</th>
 							</tr>
-						</table>
-					</form:form></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>${labelPriceCurrentOrder}:
-					${diningTable.currentBill.currentOrder.price}</td>
-			</tr>
-			<tr>
-				<td>${labelTotalPricePrevOrders}:
-					${diningTable.currentBill.priceSubmittedOrSuccessiveStateOrders}</td>
-			</tr>
-		</tbody>
-	</table>
+						</thead>
+						<tbody>
+							<tr>
+								<td>${labelCurrency} ${diningTable.currentBill.currentOrder.price}</td>
+								<td>${labelCurrency} ${diningTable.currentBill.priceSubmittedOrSuccessiveStateOrders}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</c:if>
 
-	<div id="tabs">
-		<ul>
-			<c:forEach items="${restaurant.menu.foodCategories}"
-				var="foodCategory">
-				<li><a href="#tabs-${foodCategory.id}">${foodCategory.tag}</a></li>
-			</c:forEach>
-		</ul>
-		<c:forEach items="${restaurant.menu.foodCategories}"
-			var="foodCategory">
-			<div id="tabs-${foodCategory.id}">
-				<c:forEach items="${foodCategory.menuItems}" var="menuItem">
-					<spring:url var="imageUrl"
-						value="/resources/images/${menuItem.imageFileName}" />
-					<div id="menuitem">
-						<div>${menuItem.id}</div>
-						<div>
-							<img id="menuitemimg" src="${imageUrl}" />
-						</div>
-						${labelPrice} ${menuItem.price} ${labelCurrency}
-						<spring:url var="addOrderItemUrl"
-							value="/diningTables/${diningTable.id}/menuItems" />
-						<form:form name="addOrderItemForm" action="${addOrderItemUrl}"
-							method="post">
-							<input type="hidden" name="menuItemName" value="${menuItem.id}" />
-							<table>
+	<!--
+		Show order system with food categories
+	-->
+	<div class="row">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">${labelMenu}</h3>
+				<span class="pull-right">
+					<ul class="nav panel-tabs">
+						<li class="active"><a href="#tab1" data-toggle="tab" class="capitalise">${labelCategorie}</a></li>
+						<c:forEach items="${restaurant.menu.foodCategories}" var="foodCategory">
+							<c:if test="${not empty foodCategory.menuItems}">
+								<li><a href="#tabs-${foodCategory.id}" class="capitalise" data-toggle="tab">${foodCategory.tag}</a></li>
+							</c:if>
+						</c:forEach>
+					</ul>
+				</span>
+			</div>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<div class="panel-body">${labelCategorieTabText}</div>
+				</div>
+				<c:forEach items="${restaurant.menu.foodCategories}" var="foodCategory">
+					<div class="tab-pane" id="tabs-${foodCategory.id}">
+						<table class="table">
+							<thead>
 								<tr>
-									<td><input type="submit" value="${labelAddButton}" /></td>
+									<th>${tableItem}</th>
+									<th>${tableImage}</th>
+									<th>${tablePrice}</th>
+									<th>${tableActions}</th>
 								</tr>
-							</table>
-						</form:form>
-						<spring:url var="deleteOrderItemUrl"
-							value="/diningTables/${diningTable.id}/menuItems/${menuItem.id}" />
-						<form:form name="deleteOrderItemForm"
-							action="${deleteOrderItemUrl}" method="delete">
-							<table>
-								<tr>
-									<td><input type="submit" value="${labelRemoveButton}" /></td>
-								</tr>
-							</table>
-						</form:form>
+							</thead>
+							<tbody>
+								<c:if test="${not empty foodCategory.menuItems}">
+									<c:forEach items="${foodCategory.menuItems}" var="menuItem">
+										<spring:url var="imageUrl" value="/resources/images/${menuItem.imageFileName}" />
+										<tr>
+											<td class="capitalise">${menuItem.id}</td>
+											<td><img id="menuitemimg" src="${imageUrl}" width="150px" /></td>
+											<td>${labelCurrency} ${menuItem.price}</td>
+											<td>
+												<spring:url var="addOrderItemUrl" value="/diningTables/${diningTable.id}/menuItems" />
+												<form:form name="addOrderItemForm" action="${addOrderItemUrl}" method="post">
+													<input type="hidden" name="menuItemName" value="${menuItem.id}" />
+													<button type="submit" class="btn btn-success btn-float-left-margin-right" value="${labelAddButton}"><span class="glyphicon glyphicon-plus-sign glyphicon-padding-right"><jsp:text /></span> ${labelAddButton}</button>
+												</form:form>
+												<spring:url var="deleteOrderItemUrl" value="/diningTables/${diningTable.id}/menuItems/${menuItem.id}" />
+												<form:form name="deleteOrderItemForm" action="${deleteOrderItemUrl}" method="delete">
+													<button type="submit" class="btn btn-danger btn-float-left-margin-right" value="${labelRemoveButton}"><span class="glyphicon glyphicon-remove-sign glyphicon-padding-right"><jsp:text /></span> ${labelRemoveButton}</button>
+												</form:form>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
 					</div>
 				</c:forEach>
-
 			</div>
-		</c:forEach>
+		</div>
 	</div>
 </div>

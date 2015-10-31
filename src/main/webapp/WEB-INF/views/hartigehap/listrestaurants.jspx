@@ -16,25 +16,25 @@
 	<spring:message code="label_create_huilendehamburger" var="labelCreateHuilendeHamburger" />
 	<spring:message code="label_create_button" var="labelCreateButton" />
 
-	<h1>${labelRestaurantOverview}</h1>
+	<div class="row">
+		<h1>${labelRestaurantOverview}</h1>
 
-	<c:if test="${not empty message}">
-		<div id="message" class="${message.type}">${message.message}</div>
-	</c:if>
+		<c:if test="${not empty message}">
+			<div id="message" class="alert alert-info ${message.type}">${message.message}</div>
+		</c:if>
+	</div>
 
-	<table>
-		<thead>
-			<tr>
-				<th>${labelRestaurants}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${restaurants}" var="restaurant">
-				<spring:url var="showRestaurant" value="/restaurants/${restaurant.id}" />					
-				<tr>
-					<td><a href="${showRestaurant}">${restaurant.id}</a></td>							
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+	<div class="row">
+		<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">${labelRestaurants}</h3>
+				</div>
+				<ul class="list-group">
+					<c:forEach items="${restaurants}" var="restaurant">
+						<spring:url var="showRestaurant" value="/restaurants/${restaurant.id}" />
+						<a href="${showRestaurant}" class="list-group-item">${restaurant.id}</a>
+					</c:forEach>
+				</ul>
+			</div>
+	</div>
 </div>
