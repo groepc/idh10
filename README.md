@@ -21,9 +21,7 @@ De applicatie demonstreert de volgende niet-functionele aspecten:
 
 
 Open eindjes:
-
-* basic css en GUI (dit is geen hoofddoel, maar ik ben het met je eens als je vindt dat het er niet uit ziet!)
-* voldoende tests
+* onvoldoende tests
 
 
 ### How do I get set up? ###
