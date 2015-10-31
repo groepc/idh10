@@ -28,7 +28,7 @@ Open eindjes:
 
 ### How do I get set up? ###
 
-Installatie van de ontwikkelomgeving "Spring Tool Suite":
+#### Installatie van de ontwikkelomgeving "Spring Tool Suite": ####
 
 * Zorg dat je (de laatste versie) van JDK 8 geïnstalleerd hebt van http://www.oracle.com/technetwork/java/javase/downloads/index.html. Kies duidelijk of je de 32-bit of 64-bit versie wilt gebruiken.
 * De Spring bibliotheken kun je het beste downloaden door de bijhorende IDE te installeren die Spring Tool Suite (STS) heet. STS is gebaseerd op de Eclipse IDE. Als je STS installeert, blijft je eventuele andere Eclipse installatie behouden. Je hebt dan twee Eclipse installaties naast elkaar staan. STS kun je vinden op http://spring.io/tools/sts. 
@@ -40,13 +40,13 @@ Installatie van de ontwikkelomgeving "Spring Tool Suite":
 * In STS, Ga menu "Run"/"Run Configurations..." en dubbelklik op "Pivotal tc Server". Ga naar tabblad "Arguments" en zet bij "VM Arguments" de opties "-Xmx1024m -Xss192k -XX:MaxPermSize=256m -Dinsight-max-frames=6000" (zonder de quotes) erbij. Met het vergroten van de heap size en perm heap size naar de gegeven waarden voorkom je de foutmelding "java.lang.ClassNotFoundException: org.springframework.web.context.ConfigurableWebEnvironment". Met het vergroten van insight-max-frames naar 6000 voorkom je mogelijk de foutmelding "Imbalanced frame stack! (exit() called too many times)". Echter deze foutmelding wijst meestal op een fout in het JPA-deel van de applicatie.
 * Als je een langzame computer hebt, is 120 seconden soms niet genoeg voor het bouwen en deployen van de applicatie. Als je het dan nogmaals probeert, lukt het wel, maar toch irritant. Je kunt de timeout van 120 seconden groter zetten door: in STS, dubbelklik op "VMware vFabric tc Server ..." die je vindt in de "Servers" tab linksonder. Er komt dan een schermpje op waarbij er een "Timeouts" tab is. Als je Start (in seconds) op 240 zet, ben je van het probleem af. Zo niet, dan wordt het echt tijd voor een nieuwe computer.
 
-Importeren van een bestaande applicatie in STS (als Maven project):
+#### Importeren van een bestaande applicatie in STS (als Maven project): ####
 
 * Als het goed is, bestaat de applicatie uit een src/ map en een pom.xml bestand.
 * In STS, File/Import/Maven/Existing Maven Projects en kies de map waar pom.xml staat.
 
 
-Installatie van de database waar de applicatie gebruik van maakt:
+#### Installatie van de database waar de applicatie gebruik van maakt: ####
 
 * De applicatie maakt gebruik van een MySQL database met de naam "hh".
 * De database moet aanwezig zijn om de applicatie te laten werken, maar tabellen hoeven niet handmatig te worden aangemaakt. Dat doet Hibernate, het object-relational-mapping tool voor je.
@@ -55,8 +55,7 @@ Installatie van de database waar de applicatie gebruik van maakt:
 * In het bestand datasource-jpa-tx.xml staat de property <prop key="hibernate.hbm2ddl.auto">create</prop>. Met deze property worden de tabellen telkens weggegooid en opnieuw gecreëerd, als de applicatie wordt gedeployed. Als je dit niet wilt, verwijder dan deze property uit het bestand.
 
 
-
-Gebruik van de applicatie:
+#### Gebruik van de applicatie: ####
 
 * deploy de applicatie:
     * rechter muisklik op project, "run as", "run on server"
