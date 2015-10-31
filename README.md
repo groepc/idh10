@@ -28,17 +28,34 @@ Open eindjes:
 
 ### How do I get set up? ###
 
-Installatie van de applicatie:
+Installatie van de ontwikkelomgeving "Spring Tool Suite":
+
+* Zorg dat je (de laatste versie) van JDK 8 geïnstalleerd hebt van http://www.oracle.com/technetwork/java/javase/downloads/index.html. Kies duidelijk of je de 32-bit of 64-bit versie wilt gebruiken.
+* De Spring bibliotheken kun je het beste downloaden door de bijhorende IDE te installeren die Spring Tool Suite (STS) heet. STS is gebaseerd op de Eclipse IDE. Als je STS installeert, blijft je eventuele andere Eclipse installatie behouden. Je hebt dan twee Eclipse installaties naast elkaar staan. STS kun je vinden op http://spring.io/tools/sts. 
+* De Hartige Hap applicatie maakt gebruik van Lombok. Lombok is een bibliotheek die de hoeveelheid benodigde boiler plate code vermindert, bijvoorbeeld getters/setters, waardoor je minder hoeft te typen. Hiervoor moet STS worden aangepast, anders begrijpt STS de broncode niet en geeft foutieve foutmeldingen. Om dit te doen:
+    1. download lombok.jar van http://projectlombok.org/
+    2. dubbelklik op lombok.jar
+    3. klik op install/update
+    Lombok doet nu het volgende: (1) zet lombok.jar in de map C:\sts-bundle\sts-3.7.1.RELEASE, (2) past het bestand STS.INI aan wat te vinden is in dezelfde map.
+    4. het toevoegen van lombok aan de applicatie heb ik al gedaan, zoals je kunt zien in pom.xml. Verifeer wel of de versie van lombok zoals genoemd in pom.xml gelijk is aan de versie die je hebt gedownload. Zo niet, pas de versie in pom.xml aan.
+* In STS, Ga menu "Run"/"Run Configurations..." en dubbelklik op "Pivotal tc Server". Ga naar tabblad "Arguments" en zet bij "VM Arguments" de opties "-Xmx1024m -Xss192k -XX:MaxPermSize=256m -Dinsight-max-frames=6000" (zonder de quotes) erbij. Met het vergroten van de heap size en perm heap size naar de gegeven waarden voorkom je de foutmelding "java.lang.ClassNotFoundException: org.springframework.web.context.ConfigurableWebEnvironment". Met het vergroten van insight-max-frames naar 6000 voorkom je mogelijk de foutmelding "Imbalanced frame stack! (exit() called too many times)". Echter deze foutmelding wijst meestal op een fout in het JPA-deel van de applicatie.
+* Als je een langzame computer hebt, is 120 seconden soms niet genoeg voor het bouwen en deployen van de applicatie. Als je het dan nogmaals probeert, lukt het wel, maar toch irritant. Je kunt de timeout van 120 seconden groter zetten door: in STS, dubbelklik op "VMware vFabric tc Server ..." die je vindt in de "Servers" tab linksonder. Er komt dan een schermpje op waarbij er een "Timeouts" tab is. Als je Start (in seconds) op 240 zet, ben je van het probleem af. Zo niet, dan wordt het echt tijd voor een nieuwe computer.
+
+Importeren van een bestaande applicatie in STS (als Maven project):
+
+* Als het goed is, bestaat de applicatie uit een src/ map en een pom.xml bestand.
+* In STS, File/Import/Maven/Existing Maven Projects en kies de map waar pom.xml staat.
+
+
+Installatie van de database waar de applicatie gebruik van maakt:
 
 * De applicatie maakt gebruik van een MySQL database met de naam "hh".
-* De database moet aanwezig zijn om de applicatie te laten werken, maar tabellen hoeven niet handmatig te worden aangemaakt. Dat doet Hibernate voor je.
-* Mocht je een eerdere versie van de Hartige Hap webapplicatie geïnstalleerd hebben gehad, dan de oude database volledig weggooien en een nieuwe, lege database creëren, aangezien de tabellenstructuur anders is. 
+* De database moet aanwezig zijn om de applicatie te laten werken, maar tabellen hoeven niet handmatig te worden aangemaakt. Dat doet Hibernate, het object-relational-mapping tool voor je.
+* Mocht je een eerdere versie van de Hartige Hap webapplicatie geïnstalleerd hebben gehad, dan de oude database volledig weggooien en een nieuwe, lege database creëren, aangezien de tabellenstructuur mogelijk anders is. 
 * In het bestand src/main/resources/datasource-jpa-tx.xml staat de configuratie om de database te benaderen, die je indien nodig kunt aanpassen, met name username, password en URL. 
 * In het bestand datasource-jpa-tx.xml staat de property <prop key="hibernate.hbm2ddl.auto">create</prop>. Met deze property worden de tabellen telkens weggegooid en opnieuw gecreëerd, als de applicatie wordt gedeployed. Als je dit niet wilt, verwijder dan deze property uit het bestand.
-* In het tips & tricks document staat hoe je een bestaande applicatie importeert in STS. STS is de Spring ontwikkelomgeving.
-* Deze applicatie maakt gebruik van Lombok. Hiervoor moet STS worden aangepast, anders begrijpt STS de broncode niet en geeft foutieve foutmeldingen. Om dit te doen, (1) download lombok.jar van http://projectlombok.org/, (2) dubbelklik op lombok.jar, (3) bevestig dat STS aangepast mag worden door Lombok.
-* In STS, Ga menu "Run"/"Run Configurations...". Ga naar tabblad "Arguments" en zet bij "VM Arguments" de opties "-Xmx1024m -Xss192k -XX:MaxPermSize=256m -Dinsight-max-frames=6000" (zonder de quotes) erbij. Met het vergroten van de heap size en perm heap size naar de gegeven waarden voorkom je de foutmelding "java.lang.ClassNotFoundException: org.springframework.web.context.ConfigurableWebEnvironment". Met het vergroten van insight-max-frames naar 6000 voorkom je mogelijk de foutmelding "Imbalanced frame stack! (exit() called too many times)". Echter deze foutmelding wijst meestal op een fout in het JPA-deel van de applicatie.
-* Als je een langzame computer hebt, is 120 seconden soms niet genoeg voor het bouwen en deployen van de applicatie. Als je het dan nogmaals probeert, lukt het wel, maar toch irritant. Je kunt de timeout van 120 seconden groter zetten door: in STS, dubbelklik op "VMware vFabric tc Server ..." die je vindt in de "Servers" tab linksonder. Er komt dan een schermpje op waarbij er een "Timouts" tab is. Als je Start (in seconds) op 240 zet, ben je van het probleem af. Zo niet, dan wordt het echt tijd voor een nieuwe computer.
+
+
 
 Gebruik van de applicatie:
 
