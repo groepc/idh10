@@ -1,10 +1,10 @@
 # README #
 
-Deze Hartige Hap webapplicatie is gemaakt met Spring MVC.
+Deze Hartige Hap webapplicatie is gemaakt met het Spring MVC framework.
 
 ### What is this repository for? ###
 
-De applicatie bevat de volgende niet-funtionele aspecten:
+De applicatie demonstreert de volgende niet-functionele aspecten:
 
 * architectuur (gelaagde architectuur met MVC in de presentatielaag)
 * persistentie in de data access laag met behulp van het object-relation mapping tool JPA 
