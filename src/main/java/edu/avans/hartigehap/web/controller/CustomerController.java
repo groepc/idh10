@@ -39,7 +39,6 @@ public class CustomerController {
 	
 	@RequestMapping(value = "/restaurants/{restaurantName}/customers", method = RequestMethod.GET)
 	public String listCustomers(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
-		
 		Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
 		
 		log.info("Listing customers");
@@ -221,69 +220,6 @@ public class CustomerController {
 		return "redirect:/restaurants/" + restaurantName + "/customers/";
 	}
 
-
-	@RequestMapping(value = "/restaurants/{restaurantName}/customers/listgrid", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public CustomerGrid listGrid(
-			@PathVariable("restaurantName") String restaurantName,
-			@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "rows", required = false) Integer rows,
-			@RequestParam(value = "sidx", required = false) String sortBy,
-			@RequestParam(value = "sord", required = false) String order) {
-		log.info("Listing customers for grid with page: {}, rows: {}", page,
-				rows);
-		log.info("Listing customers for grid with sort: {}, order: {}",
-				sortBy, order);
-		// Process order by
-		Sort sort = null;
-		String orderBy = sortBy;
-		if(orderBy != null && "birthDateString".equals(orderBy)) {
-			orderBy = "birthDate";
-		}
-		if(orderBy != null && order != null) {
-			if ("desc".equals(order)) {
-				sort = new Sort(Sort.Direction.DESC, orderBy);
-			} else {
-				sort = new Sort(Sort.Direction.ASC, orderBy);
-			}
-		}
-
-		// Constructs page request for current page
-		// Note: page number for Spring Data JPA starts with 0, while jqGrid
-		// starts with 1
-		PageRequest pageRequest = null;
-		if(sort != null) {
-			pageRequest = new PageRequest(page - 1, rows, sort);
-		} else {
-			pageRequest = new PageRequest(page - 1, rows);
-		}
-
-		// no need to warmup, as is ajax
-		Restaurant restaurant = restaurantService.findById(restaurantName);
-		
-		Page<Customer> customerPage = customerService.findCustomersForRestaurantByPage(restaurant, pageRequest);
-		
-		// Construct the grid data that will return as JSON data
-		CustomerGrid customerGrid = new CustomerGrid();
-		customerGrid.setCurrentPage(customerPage.getNumber() + 1);
-		customerGrid.setTotalPages(customerPage.getTotalPages());
-		customerGrid.setTotalRecords(customerPage.getTotalElements());
-		
-		List<Customer> customers = Lists.newArrayList(customerPage.iterator());
-
-		// customer has relations to Restaurants and Bills. The current JQGrid
-		// cannot handle a JSON response with all information about restaurants
-		// and bills in it. So temporary solution:
-		Iterator<Customer> custIt = customers.iterator();
-		while(custIt.hasNext()) {
-			Customer c = custIt.next();
-			c.setRestaurants(null);
-			c.setBills(null);
-		}
-		
-		customerGrid.setCustomerData(customers);
-		return customerGrid;
-	}
 
 	private Restaurant warmupRestaurant(String restaurantName, Model uiModel) {
 		Collection<Restaurant> restaurants = restaurantService.findAll();
