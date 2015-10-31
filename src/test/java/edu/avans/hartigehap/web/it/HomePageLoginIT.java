@@ -32,7 +32,7 @@ public class HomePageLoginIT {
     }
 
     if(loggedIn) {
-//      js.executeScript("document.getElementById('btn-logout').click();");
+      js.executeScript("document.getElementById('btn-logout').click();");
     }
 
     log.info("Timeout of 10 seconds");
