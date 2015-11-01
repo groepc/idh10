@@ -23,28 +23,28 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "MENUS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"meals", "drinks", "foodCategories"})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = { "meals", "drinks", "foodCategories" })
 public class Menu extends DomainObject {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// unidirectional many-to-many relationship + no cascade
-	// there are two relations between Menu and MenuItem. In order to
-	// distinguish these, they must be mapped to separate join tables
-	@ManyToMany
-	@JoinTable(name="MENUS_MEALS")
-	private Collection<MenuItem> meals = new ArrayList<MenuItem>();
-	
-	// unidirectional many-to-many relationship + no cascade
-	// there are two relations between Menu and MenuItem. In order to
-	// distinguish these, they must be mapped to separate join tables
-	@ManyToMany
-	@JoinTable(name="MENUS_DRINKS")
-	private Collection<MenuItem> drinks = new ArrayList<MenuItem>();
+    // unidirectional many-to-many relationship + no cascade
+    // there are two relations between Menu and MenuItem. In order to
+    // distinguish these, they must be mapped to separate join tables
+    @ManyToMany
+    @JoinTable(name = "MENUS_MEALS")
+    private Collection<MenuItem> meals = new ArrayList<MenuItem>();
 
+    // unidirectional many-to-many relationship + no cascade
+    // there are two relations between Menu and MenuItem. In order to
+    // distinguish these, they must be mapped to separate join tables
+    @ManyToMany
+    @JoinTable(name = "MENUS_DRINKS")
+    private Collection<MenuItem> drinks = new ArrayList<MenuItem>();
 
-	// unidirectional many-to-many relationship + no cascade
-	@ManyToMany
-	private List<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
+    // unidirectional many-to-many relationship + no cascade
+    @ManyToMany
+    private List<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
 
 }

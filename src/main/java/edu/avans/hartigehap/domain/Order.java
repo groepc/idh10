@@ -23,168 +23,165 @@ import lombok.ToString;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-
 /**
  * 
  * @author Erco
  */
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
-		+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
-		+ "AND o.bill.diningTable.restaurant = :restaurant "
-		+ "ORDER BY o.submittedTime")
+        + "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
+        + "AND o.bill.diningTable.restaurant = :restaurant " + "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"orderStatus", "orderItems"})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
 public class Order extends DomainObject {
-	private static final long serialVersionUID = 1L;
-	
-	public enum OrderStatus {
-		CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Enumerated(EnumType.ORDINAL)
-	// represented in database as integer
-	private OrderStatus orderStatus;
+    public enum OrderStatus {
+        CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date submittedTime;
+    @Enumerated(EnumType.ORDINAL)
+    // represented in database as integer
+    private OrderStatus orderStatus;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date plannedTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date submittedTime;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date preparedTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date plannedTime;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date servedTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date preparedTime;
 
-	// unidirectional one-to-many relationship.
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL)
-	private Collection<OrderItem> orderItems = new ArrayList<OrderItem>();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date servedTime;
 
-	@ManyToOne()
-	private Bill bill;
+    // unidirectional one-to-many relationship.
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL)
+    private Collection<OrderItem> orderItems = new ArrayList<OrderItem>();
 
-	public Order() {
-		orderStatus = OrderStatus.CREATED;
-	}
+    @ManyToOne()
+    private Bill bill;
 
-	/* business logic */
+    public Order() {
+        orderStatus = OrderStatus.CREATED;
+    }
 
-	@Transient
-	public boolean isSubmittedOrSuccessiveState() {
-		return orderStatus != OrderStatus.CREATED;
-	}
+    /* business logic */
 
-	// transient annotation, because methods starting with are recognized by JPA as properties
-	@Transient
-	public boolean isEmpty() {
-		return orderItems.isEmpty();
-	}
+    @Transient
+    public boolean isSubmittedOrSuccessiveState() {
+        return orderStatus != OrderStatus.CREATED;
+    }
 
-	public void addOrderItem(MenuItem menuItem) {
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
-		boolean found = false;
-		while (orderItemIterator.hasNext()) {
-			OrderItem orderItem = orderItemIterator.next();
-			if (orderItem.getMenuItem().equals(menuItem)) {
-				orderItem.incrementQuantity();
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			OrderItem orderItem = new OrderItem(menuItem, 1);
-			orderItems.add(orderItem);
-		}
-	}
+    // transient annotation, because methods starting with are recognized by JPA
+    // as properties
+    @Transient
+    public boolean isEmpty() {
+        return orderItems.isEmpty();
+    }
 
-	public void deleteOrderItem(MenuItem menuItem) {
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
-		boolean found = false;
-		while (orderItemIterator.hasNext()) {
-			OrderItem orderItem = orderItemIterator.next();
-			if (orderItem.getMenuItem().equals(menuItem)) {
-				found = true;
-				if (orderItem.getQuantity() > 1) {
-					orderItem.decrementQuantity();
-				} else {
-					// orderItem.getQuantity() == 1
-					orderItemIterator.remove();
-				}
-				break;
-			}
-		}
-		if (!found) {
-			// do nothing
-		}
-	}
+    public void addOrderItem(MenuItem menuItem) {
+        Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+        boolean found = false;
+        while (orderItemIterator.hasNext()) {
+            OrderItem orderItem = orderItemIterator.next();
+            if (orderItem.getMenuItem().equals(menuItem)) {
+                orderItem.incrementQuantity();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            OrderItem orderItem = new OrderItem(menuItem, 1);
+            orderItems.add(orderItem);
+        }
+    }
 
-	public void submit() throws StateException {
-		if (isEmpty()) {
-			throw new StateException("not allowed to submit an empty order");
-		}
+    public void deleteOrderItem(MenuItem menuItem) {
+        Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+        boolean found = false;
+        while (orderItemIterator.hasNext()) {
+            OrderItem orderItem = orderItemIterator.next();
+            if (orderItem.getMenuItem().equals(menuItem)) {
+                found = true;
+                if (orderItem.getQuantity() > 1) {
+                    orderItem.decrementQuantity();
+                } else {
+                    // orderItem.getQuantity() == 1
+                    orderItemIterator.remove();
+                }
+                break;
+            }
+        }
+        if (!found) {
+            // do nothing
+        }
+    }
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.CREATED) {
-			throw new StateException(
-					"not allowed to submit an already submitted order");
-		}
-		submittedTime = new Date();
-		orderStatus = OrderStatus.SUBMITTED;
-	}
+    public void submit() throws StateException {
+        if (isEmpty()) {
+            throw new StateException("not allowed to submit an empty order");
+        }
 
-	public void plan() throws StateException {
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        if (orderStatus != OrderStatus.CREATED) {
+            throw new StateException("not allowed to submit an already submitted order");
+        }
+        submittedTime = new Date();
+        orderStatus = OrderStatus.SUBMITTED;
+    }
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.SUBMITTED) {
-			throw new StateException(
-					"not allowed to plan an order that is not in the submitted state");
-		}
+    public void plan() throws StateException {
 
-		plannedTime = new Date();
-		orderStatus = OrderStatus.PLANNED;
-	}
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        if (orderStatus != OrderStatus.SUBMITTED) {
+            throw new StateException("not allowed to plan an order that is not in the submitted state");
+        }
 
-	public void prepared() throws StateException {
+        plannedTime = new Date();
+        orderStatus = OrderStatus.PLANNED;
+    }
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PLANNED) {
-			throw new StateException(
-					"not allowed to change order state to prepared, if it is not in the planned state");
-		}
+    public void prepared() throws StateException {
 
-		preparedTime = new Date();
-		orderStatus = OrderStatus.PREPARED;
-	}
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        if (orderStatus != OrderStatus.PLANNED) {
+            throw new StateException(
+                    "not allowed to change order state to prepared, if it is not in the planned state");
+        }
 
-	public void served() throws StateException {
+        preparedTime = new Date();
+        orderStatus = OrderStatus.PREPARED;
+    }
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PREPARED) {
-			throw new StateException(
-					"not allowed to change order state to served, if it is not in the prepared state");
-		}
+    public void served() throws StateException {
 
-		servedTime = new Date();
-		orderStatus = OrderStatus.SERVED;
-	}
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        if (orderStatus != OrderStatus.PREPARED) {
+            throw new StateException("not allowed to change order state to served, if it is not in the prepared state");
+        }
 
-	@Transient
-	public int getPrice() {
-		int price = 0;
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
-		while (orderItemIterator.hasNext()) {
-			price += orderItemIterator.next().getPrice();
-		}
-		return price;
-	}
+        servedTime = new Date();
+        orderStatus = OrderStatus.SERVED;
+    }
+
+    @Transient
+    public int getPrice() {
+        int price = 0;
+        Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+        while (orderItemIterator.hasNext()) {
+            price += orderItemIterator.next().getPrice();
+        }
+        return price;
+    }
 
 }

@@ -25,65 +25,65 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "DININGTABLES")
 // optional
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"bills", "currentBill"})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = { "bills", "currentBill" })
 public class DiningTable extends DomainObject {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int tableNr;
-	
-	// example of an *unidirectional* one-to-one relationship, mapped on
-	// database by diningTable side
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
-	private Bill currentBill;
+    private int tableNr;
 
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "diningTable")
-	private Collection<Bill> bills = new ArrayList<Bill>();
+    // example of an *unidirectional* one-to-one relationship, mapped on
+    // database by diningTable side
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL)
+    private Bill currentBill;
 
-	@ManyToOne()
-	private Restaurant restaurant;
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "diningTable")
+    private Collection<Bill> bills = new ArrayList<Bill>();
 
-	public DiningTable() {
-		// when the system resets, the c'tor is executed and a new Bill object
-		// is created (which in its turn creates a new order object. However, 
-		// when the dining table becomes managed, the currentBill as was 
-		// stored in the database is retrieved, and the new Bill and new Order
-		// object, which were not managed yet are discarded.
-		currentBill = new Bill();
-		currentBill.setDiningTable(this);
-		bills.add(currentBill);
-	}
+    @ManyToOne()
+    private Restaurant restaurant;
 
-	public DiningTable(int tableNr) {
-		this.tableNr = tableNr;
-		// when the system resets, the c'tor is executed and a new Bill object
-		// is created (which in its turn creates a new order object. However, 
-		// when the dining table becomes managed, the currentBill as was 
-		// stored in the database is retrieved, and the new Bill and new Order
-		// object, which were not managed yet are discarded.
-		currentBill = new Bill();
-		currentBill.setDiningTable(this);
-		bills.add(currentBill);
-	}
+    public DiningTable() {
+        // when the system resets, the c'tor is executed and a new Bill object
+        // is created (which in its turn creates a new order object. However,
+        // when the dining table becomes managed, the currentBill as was
+        // stored in the database is retrieved, and the new Bill and new Order
+        // object, which were not managed yet are discarded.
+        currentBill = new Bill();
+        currentBill.setDiningTable(this);
+        bills.add(currentBill);
+    }
 
-	/* business logic */
+    public DiningTable(int tableNr) {
+        this.tableNr = tableNr;
+        // when the system resets, the c'tor is executed and a new Bill object
+        // is created (which in its turn creates a new order object. However,
+        // when the dining table becomes managed, the currentBill as was
+        // stored in the database is retrieved, and the new Bill and new Order
+        // object, which were not managed yet are discarded.
+        currentBill = new Bill();
+        currentBill.setDiningTable(this);
+        bills.add(currentBill);
+    }
 
-	public void warmup() {
-		Iterator<OrderItem> orderItemIterator = currentBill.getCurrentOrder()
-				.getOrderItems().iterator();
-		while (orderItemIterator.hasNext()) {
-			orderItemIterator.next().getId();
-			// note: menu items have been warmed up via the restaurant->menu
-			// relation; therefore it
-			// is not needed to warm these objects via this relation
-		}
-	}
+    /* business logic */
 
-	public void submitBill() throws StateException, EmptyBillException {
-		currentBill.submit();
-		currentBill = new Bill();
-		currentBill.setDiningTable(this);
-		bills.add(currentBill);
-	}
+    public void warmup() {
+        Iterator<OrderItem> orderItemIterator = currentBill.getCurrentOrder().getOrderItems().iterator();
+        while (orderItemIterator.hasNext()) {
+            orderItemIterator.next().getId();
+            // note: menu items have been warmed up via the restaurant->menu
+            // relation; therefore it
+            // is not needed to warm these objects via this relation
+        }
+    }
+
+    public void submitBill() throws StateException, EmptyBillException {
+        currentBill.submit();
+        currentBill = new Bill();
+        currentBill.setDiningTable(this);
+        bills.add(currentBill);
+    }
 
 }

@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Profile;
 
 // @Configuration enables configuration using java classes (as an alternative to xml or annotations)
 @Configuration
-// defines that this configuration should be used when the test profile is "active"
+// defines that this configuration should be used when the test profile is
+// "active"
 @Profile("test")
 public class ControllerTestConfig {
 

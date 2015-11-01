@@ -27,157 +27,157 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * @author Erco
  */
 @Entity
-//optional
+// optional
 @Table(name = "BILLS")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id") 
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"billStatus", "currentOrder", "orders"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = { "billStatus", "currentOrder", "orders" })
 public class Bill extends DomainObject {
-	private static final long serialVersionUID = 1L;
-	
-	public enum BillStatus {
-		CREATED, SUBMITTED, PAID
-	}
-	
-	// represented in database as integer
-	@Enumerated(EnumType.ORDINAL)
-	private BillStatus billStatus;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date submittedTime;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date paidTime;
+    private static final long serialVersionUID = 1L;
 
-	// unidirectional one-to-one relationship
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
-	private Order currentOrder;
-	
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "bill")
-	private Collection<Order> orders = new ArrayList<Order>();
-	
-	// bidirectional one-to-many relationship
-	@ManyToOne()
-	private DiningTable diningTable;
+    public enum BillStatus {
+        CREATED, SUBMITTED, PAID
+    }
 
-	// bidirectional one-to-many relationship
-	@ManyToOne(cascade = javax.persistence.CascadeType.ALL)
-	private Customer customer;
-	
-	public Bill() {
-		billStatus = BillStatus.CREATED;
-		currentOrder = new Order();
-		currentOrder.setBill(this);
-		orders.add(currentOrder);
-	}
+    // represented in database as integer
+    @Enumerated(EnumType.ORDINAL)
+    private BillStatus billStatus;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date submittedTime;
 
-	/* business logic */
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paidTime;
 
-	@Transient
-	public Collection<Order> getSubmittedOrders() {
-		Collection<Order> submittedOrders = new ArrayList<Order>();
-		Iterator<Order> orderIterator = orders.iterator();
-		while (orderIterator.hasNext()) {
-			Order tmp = orderIterator.next();
-			if (tmp.isSubmittedOrSuccessiveState()) {
-				submittedOrders.add(tmp);
-			}
-		}
-		return submittedOrders;
-	}
+    // unidirectional one-to-one relationship
+    @OneToOne(cascade = javax.persistence.CascadeType.ALL)
+    private Order currentOrder;
 
-	/**
-	 * price of *all* orders, so submitted orders and current (not
-	 * yet submitted) order
-	 * @return
-	 */
-	@Transient
-	public int getPriceAllOrders() {
-		int price = 0;
-		Iterator<Order> orderIterator = orders.iterator();
-		while (orderIterator.hasNext()) {
-			price += orderIterator.next().getPrice();
-		}
-		return price;
-	}
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "bill")
+    private Collection<Order> orders = new ArrayList<Order>();
 
-	/**
-	 * price of the *submitted or successive state* orders only
-	 * @return
-	 */
-	@Transient
-	public int getPriceSubmittedOrSuccessiveStateOrders() {
-		int price = 0;
-		Iterator<Order> orderIterator = orders.iterator();
-		while (orderIterator.hasNext()) {
-			Order tmp = orderIterator.next();
-			if (tmp.isSubmittedOrSuccessiveState()) {
-				price += tmp.getPrice();
-			}
-		}
-		return price;
-	}
+    // bidirectional one-to-many relationship
+    @ManyToOne()
+    private DiningTable diningTable;
 
-	public void submitOrder() throws StateException {
-		currentOrder.submit();
-		currentOrder = new Order();
-		currentOrder.setBill(this);
-		orders.add(currentOrder);
-	}
+    // bidirectional one-to-many relationship
+    @ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+    private Customer customer;
 
-	/*
-	 * as the table gets a new bill, there is no risk that a customer keeps
-	 * ordering on the submitted or paid bill
-	 */
-	public void submit() throws StateException, EmptyBillException {
-		boolean allEmpty = true;
-		Iterator<Order> orderIterator = orders.iterator();
-		while (orderIterator.hasNext()) {
-			Order order = orderIterator.next();
-			if (!order.isEmpty()) {
-				allEmpty = false;
-				break;
-			}
-		}
-		if (allEmpty) {
-			throw new EmptyBillException("not allowed to submit an empty bill");
-		}
+    public Bill() {
+        billStatus = BillStatus.CREATED;
+        currentOrder = new Order();
+        currentOrder.setBill(this);
+        orders.add(currentOrder);
+    }
 
-		if (!currentOrder.isEmpty() && currentOrder.getOrderStatus() == Order.OrderStatus.CREATED) {
-			// the currentOrder is not empty, but not yet submitted
-			throw new StateException("not allowed to submit an with currentOrder in created state");
-		}
+    /* business logic */
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		// TODO better to use another exception, because now GUI show wrong
-		// error message
-		if (billStatus != BillStatus.CREATED) {
-			throw new StateException(
-			        "not allowed to submit an already submitted bill");
-		}
+    @Transient
+    public Collection<Order> getSubmittedOrders() {
+        Collection<Order> submittedOrders = new ArrayList<Order>();
+        Iterator<Order> orderIterator = orders.iterator();
+        while (orderIterator.hasNext()) {
+            Order tmp = orderIterator.next();
+            if (tmp.isSubmittedOrSuccessiveState()) {
+                submittedOrders.add(tmp);
+            }
+        }
+        return submittedOrders;
+    }
 
-		submittedTime = new Date();
-		billStatus = BillStatus.SUBMITTED;
-	}
+    /**
+     * price of *all* orders, so submitted orders and current (not yet
+     * submitted) order
+     * 
+     * @return
+     */
+    @Transient
+    public int getPriceAllOrders() {
+        int price = 0;
+        Iterator<Order> orderIterator = orders.iterator();
+        while (orderIterator.hasNext()) {
+            price += orderIterator.next().getPrice();
+        }
+        return price;
+    }
 
-	@Transient
-	public boolean isSubmitted() {
-		return billStatus == BillStatus.SUBMITTED;
-	}
+    /**
+     * price of the *submitted or successive state* orders only
+     * 
+     * @return
+     */
+    @Transient
+    public int getPriceSubmittedOrSuccessiveStateOrders() {
+        int price = 0;
+        Iterator<Order> orderIterator = orders.iterator();
+        while (orderIterator.hasNext()) {
+            Order tmp = orderIterator.next();
+            if (tmp.isSubmittedOrSuccessiveState()) {
+                price += tmp.getPrice();
+            }
+        }
+        return price;
+    }
 
-	public void paid() throws StateException {
+    public void submitOrder() throws StateException {
+        currentOrder.submit();
+        currentOrder = new Order();
+        currentOrder.setBill(this);
+        orders.add(currentOrder);
+    }
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (billStatus != BillStatus.SUBMITTED) {
-			throw new StateException(
-			        "not allowed to pay an bill that is not in the submitted state");
-		}
+    /*
+     * as the table gets a new bill, there is no risk that a customer keeps
+     * ordering on the submitted or paid bill
+     */
+    public void submit() throws StateException, EmptyBillException {
+        boolean allEmpty = true;
+        Iterator<Order> orderIterator = orders.iterator();
+        while (orderIterator.hasNext()) {
+            Order order = orderIterator.next();
+            if (!order.isEmpty()) {
+                allEmpty = false;
+                break;
+            }
+        }
+        if (allEmpty) {
+            throw new EmptyBillException("not allowed to submit an empty bill");
+        }
 
-		paidTime = new Date();
-		billStatus = BillStatus.PAID;
-	}
+        if (!currentOrder.isEmpty() && currentOrder.getOrderStatus() == Order.OrderStatus.CREATED) {
+            // the currentOrder is not empty, but not yet submitted
+            throw new StateException("not allowed to submit an with currentOrder in created state");
+        }
+
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        // TODO better to use another exception, because now GUI show wrong
+        // error message
+        if (billStatus != BillStatus.CREATED) {
+            throw new StateException("not allowed to submit an already submitted bill");
+        }
+
+        submittedTime = new Date();
+        billStatus = BillStatus.SUBMITTED;
+    }
+
+    @Transient
+    public boolean isSubmitted() {
+        return billStatus == BillStatus.SUBMITTED;
+    }
+
+    public void paid() throws StateException {
+
+        // this can only happen by directly invoking HTTP requests, so not via
+        // GUI
+        if (billStatus != BillStatus.SUBMITTED) {
+            throw new StateException("not allowed to pay an bill that is not in the submitted state");
+        }
+
+        paidTime = new Date();
+        billStatus = BillStatus.PAID;
+    }
 
 }

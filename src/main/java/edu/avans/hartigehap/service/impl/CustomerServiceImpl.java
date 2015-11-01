@@ -19,88 +19,81 @@ import edu.avans.hartigehap.service.*;
 
 import com.google.common.collect.Lists;
 
-
 @Service("customerService")
 @Repository
 @Transactional
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
-	@Autowired
-	private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
-	@Transactional(readOnly=true)
-	public List<Customer> findAll() {
-		return Lists.newArrayList(customerRepository.findAll());
-	}
+    @Transactional(readOnly = true)
+    public List<Customer> findAll() {
+        return Lists.newArrayList(customerRepository.findAll());
+    }
 
-	@Transactional(readOnly=true)
-	public Customer findById(Long id) {
-		return customerRepository.findOne(id);
-	}
+    @Transactional(readOnly = true)
+    public Customer findById(Long id) {
+        return customerRepository.findOne(id);
+    }
 
-	@Transactional(readOnly=true)
-	public Customer findByFirstNameAndLastName(String firstName, String lastName) {
-		
-		Customer customer = null;
-		
-		List<Customer> customers = customerRepository.findByFirstNameAndLastName(firstName, lastName);
-		if (!customers.isEmpty()) {
-			customer = customers.get(0);
-		}
-		return customer;
-	}
+    @Transactional(readOnly = true)
+    public Customer findByFirstNameAndLastName(String firstName, String lastName) {
 
+        Customer customer = null;
 
-	@Transactional(readOnly=true)
-	public List<Customer> findCustomersForRestaurant(Restaurant restaurant) {
-		
-		// a query created using a repository method name
-		List<Customer> customersForRestaurants = customerRepository.
-				findByRestaurants(
-						Arrays.asList(new Restaurant[]{restaurant}),
-						new Sort(Sort.Direction.ASC, "lastName"));
+        List<Customer> customers = customerRepository.findByFirstNameAndLastName(firstName, lastName);
+        if (!customers.isEmpty()) {
+            customer = customers.get(0);
+        }
+        return customer;
+    }
 
-		log.info("findCustomersForRestaurant using query created using repository method name");
-		ListIterator<Customer>	it = customersForRestaurants.listIterator();
-		while(it.hasNext()) {
-			Customer customer = it.next();
-			log.info("customer = " + customer);
-		}
-		
-		return customersForRestaurants;
-	}
-	
-	@Transactional(readOnly=true)
-	public Page<Customer> findAllByPage(Pageable pageable) {
-		return customerRepository.findAll(pageable);
-	}	
+    @Transactional(readOnly = true)
+    public List<Customer> findCustomersForRestaurant(Restaurant restaurant) {
 
-	@Transactional(readOnly=true)
-	public Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable) {
-		// a query created using a repository method name
-		Page<Customer> customersForRestaurants = customerRepository.
-				findByRestaurants((Collection<Restaurant>)Arrays.asList(new Restaurant[]{restaurant}), pageable);
+        // a query created using a repository method name
+        List<Customer> customersForRestaurants = customerRepository.findByRestaurants(
+                Arrays.asList(new Restaurant[] { restaurant }), new Sort(Sort.Direction.ASC, "lastName"));
 
-		log.info("findCustomersForRestaurant using query created using repository method name");
-		Iterator<Customer>	it = customersForRestaurants.iterator();
-		while(it.hasNext()) {
-			Customer customer = it.next();
-			log.info("customer = " + customer);
-		}
-		
-		return customersForRestaurants;
-	}	
+        log.info("findCustomersForRestaurant using query created using repository method name");
+        ListIterator<Customer> it = customersForRestaurants.listIterator();
+        while (it.hasNext()) {
+            Customer customer = it.next();
+            log.info("customer = " + customer);
+        }
 
-	
-	public Customer save(Customer customer) {
-		return customerRepository.save(customer);
-	}
+        return customersForRestaurants;
+    }
 
-	public void delete(Long id) {
-		customerRepository.delete(id);
-	}
+    @Transactional(readOnly = true)
+    public Page<Customer> findAllByPage(Pageable pageable) {
+        return customerRepository.findAll(pageable);
+    }
 
-	
+    @Transactional(readOnly = true)
+    public Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable) {
+        // a query created using a repository method name
+        Page<Customer> customersForRestaurants = customerRepository
+                .findByRestaurants((Collection<Restaurant>) Arrays.asList(new Restaurant[] { restaurant }), pageable);
+
+        log.info("findCustomersForRestaurant using query created using repository method name");
+        Iterator<Customer> it = customersForRestaurants.iterator();
+        while (it.hasNext()) {
+            Customer customer = it.next();
+            log.info("customer = " + customer);
+        }
+
+        return customersForRestaurants;
+    }
+
+    public Customer save(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    public void delete(Long id) {
+        customerRepository.delete(id);
+    }
+
 }
-

@@ -12,23 +12,24 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
 public class Drink extends MenuItem {
-	private static final long serialVersionUID = 1L;
-	
-	private Size size;
+    private static final long serialVersionUID = 1L;
 
-	public enum Size {
-		SMALL, MEDIUM, LARGE
-	}
+    private Size size;
 
-	public Drink(String id, String imageFileName, int price, Size size) {
-		super(id, imageFileName, price);
-		this.size = size;
+    public enum Size {
+        SMALL, MEDIUM, LARGE
+    }
 
-	}
+    public Drink(String id, String imageFileName, int price, Size size) {
+        super(id, imageFileName, price);
+        this.size = size;
 
-	// business logic
+    }
+
+    // business logic
 }

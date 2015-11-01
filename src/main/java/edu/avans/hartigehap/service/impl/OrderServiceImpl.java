@@ -18,90 +18,79 @@ import edu.avans.hartigehap.repository.OrderRepository;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
-	@Autowired
-	private OrderRepository orderRepository;
-	
-	@Transactional(readOnly=true)
-	public Order findById(Long orderId) {
-		return orderRepository.findOne(orderId);
-	}
-	
-	
-	// find all submitted orders (so for complete restaurant), ordered by submit time
-	// this method serves as an example of:
-	// * a named query (using entityManager)
-	// * a query created using a repository method name
-	// * a repository with a custom method implementation
-	@Transactional(readOnly=true)
-	public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
-		
-		// a repository with a custom method implementation
-		// the custom method implementation uses a named query which is
-		// invoked using an entityManager
-		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
-		
-		log.info("findSubmittedOrdersForRestaurant using named query");
-		ListIterator<Order>	it = submittedOrdersList.listIterator();
-		while(it.hasNext()) {
-			Order order = it.next();
-			log.info("submittedOrder = " + order.getId() 
-					+ ", for table = " + order.getBill().getDiningTable().getId()
-					+ ", submitted time = " + order.getSubmittedTime());
-		}
-		
-		// a query created using a repository method name
-		List<Order> submittedOrdersListAlternative = orderRepository.
-				findByOrderStatusAndBillDiningTableRestaurant(
-						Order.OrderStatus.SUBMITTED, 
-						restaurant,
-						new Sort(Sort.Direction.ASC, "submittedTime"));
-		
-		log.info("findSubmittedOrdersForRestaurant using query created using repository method name");
-		ListIterator<Order>	italt = submittedOrdersListAlternative.listIterator();
-		while(italt.hasNext()) {
-			Order order = italt.next();
-			log.info("submittedOrder = " + order.getId() 
-					+ ", for table = " + order.getBill().getDiningTable().getId()
-					+ ", submitted time = " + order.getSubmittedTime());
-		}
+    @Autowired
+    private OrderRepository orderRepository;
 
-		return submittedOrdersList;
-	}
-	
-	@Transactional(readOnly=true)
-	public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
-		// a query created using a repository method name
-		List<Order> plannedOrdersList = orderRepository.
-				findByOrderStatusAndBillDiningTableRestaurant(
-						Order.OrderStatus.PLANNED, 
-						restaurant,
-						new Sort(Sort.Direction.ASC, "plannedTime"));
+    @Transactional(readOnly = true)
+    public Order findById(Long orderId) {
+        return orderRepository.findOne(orderId);
+    }
 
-		return plannedOrdersList;
-	
-	}	
-	
-	@Transactional(readOnly=true)
-	public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
-		// a query created using a repository method name
-		List<Order> preparedOrdersList = orderRepository.
-				findByOrderStatusAndBillDiningTableRestaurant(
-						Order.OrderStatus.PREPARED, 
-						restaurant,
-						new Sort(Sort.Direction.ASC, "preparedTime"));
+    // find all submitted orders (so for complete restaurant), ordered by submit
+    // time
+    // this method serves as an example of:
+    // * a named query (using entityManager)
+    // * a query created using a repository method name
+    // * a repository with a custom method implementation
+    @Transactional(readOnly = true)
+    public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
 
-		return preparedOrdersList;	
-	}	
+        // a repository with a custom method implementation
+        // the custom method implementation uses a named query which is
+        // invoked using an entityManager
+        List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
 
-	public void planOrder(Order order) throws StateException {
-		order.plan();
-	}
-	
-	public void orderPrepared(Order order) throws StateException {
-		order.prepared();
-	}
+        log.info("findSubmittedOrdersForRestaurant using named query");
+        ListIterator<Order> it = submittedOrdersList.listIterator();
+        while (it.hasNext()) {
+            Order order = it.next();
+            log.info("submittedOrder = " + order.getId() + ", for table = " + order.getBill().getDiningTable().getId()
+                    + ", submitted time = " + order.getSubmittedTime());
+        }
 
-	public void orderServed(Order order) throws StateException {
-		order.served();
-	}
+        // a query created using a repository method name
+        List<Order> submittedOrdersListAlternative = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
+                Order.OrderStatus.SUBMITTED, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
+
+        log.info("findSubmittedOrdersForRestaurant using query created using repository method name");
+        ListIterator<Order> italt = submittedOrdersListAlternative.listIterator();
+        while (italt.hasNext()) {
+            Order order = italt.next();
+            log.info("submittedOrder = " + order.getId() + ", for table = " + order.getBill().getDiningTable().getId()
+                    + ", submitted time = " + order.getSubmittedTime());
+        }
+
+        return submittedOrdersList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
+        // a query created using a repository method name
+        List<Order> plannedOrdersList = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
+                Order.OrderStatus.PLANNED, restaurant, new Sort(Sort.Direction.ASC, "plannedTime"));
+
+        return plannedOrdersList;
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
+        // a query created using a repository method name
+        List<Order> preparedOrdersList = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
+                Order.OrderStatus.PREPARED, restaurant, new Sort(Sort.Direction.ASC, "preparedTime"));
+
+        return preparedOrdersList;
+    }
+
+    public void planOrder(Order order) throws StateException {
+        order.plan();
+    }
+
+    public void orderPrepared(Order order) throws StateException {
+        order.prepared();
+    }
+
+    public void orderServed(Order order) throws StateException {
+        order.served();
+    }
 }

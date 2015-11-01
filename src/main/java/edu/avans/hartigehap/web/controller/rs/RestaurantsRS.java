@@ -23,79 +23,82 @@ import edu.avans.hartigehap.service.RestaurantService;
 @Slf4j
 public class RestaurantsRS {
 
-	@Autowired
-	private RestaurantService restaurantService;
+    @Autowired
+    private RestaurantService restaurantService;
 
-	@Autowired
-	private View jsonView;
-	
-	private static final String DATA_FIELD = "data";
-	private static final String ERROR_FIELD = "error";
+    @Autowired
+    private View jsonView;
 
-	/**
-	 * list all restaurants.
-	 * 
-	 * This method can be tested by:
-	 * curl -i -X GET -H "Accept:application/json" http://localhost:8080/hh/rest/v1/restaurants
-	 * @return
-	 */
-	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public List<Restaurant> restaurants() {
-		log.debug("");
-		return restaurantService.findAll();
-	}
+    private static final String DATA_FIELD = "data";
+    private static final String ERROR_FIELD = "error";
 
-	/**
-	 * create a new restaurant.
-	 * 
-	 * This method can be tested by:
-	 * curl -i -X POST -H "Content-Type:application/json" -d @restaurantsimple.json http://localhost:8080/hh/rest/v1/restaurants
-	 * 
-	 * where restaurantsimple.json is a file with content:
-	 * {"id":"Braadworstelaars","version":0,"imageFileName":"deHartigeHap.jpg"}
-	 * 
-	 * In the GUI, the new restaurant Braadworstelaars will appear.
-	 */
-	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ModelAndView createRestaurantJson(@RequestBody Restaurant restaurant, HttpServletResponse httpResponse,
-	        WebRequest httpRequest) {
-		log.debug("body: {}", restaurant);
+    /**
+     * list all restaurants.
+     * 
+     * This method can be tested by: curl -i -X GET -H "Accept:application/json"
+     * http://localhost:8080/hh/rest/v1/restaurants
+     * 
+     * @return
+     */
+    @RequestMapping(value = RSConstants.URL_PREFIX
+            + "/restaurants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Restaurant> restaurants() {
+        log.debug("");
+        return restaurantService.findAll();
+    }
 
-		try {
-			Restaurant savedRestaurant = restaurantService.save(restaurant);
-			httpResponse.setStatus(HttpStatus.CREATED.value());
-			httpResponse
-			        .setHeader("Location", httpRequest.getContextPath() + "/restaurants/" + savedRestaurant.getId());
-			return new ModelAndView(jsonView, DATA_FIELD, savedRestaurant);
-		} catch (Exception e) {
-			log.error("Error creating new restaurant", e);
-			String message = "Error creating new restaurant. [%1$s]";
-			return createErrorResponse(String.format(message, e.toString()));
-		}
-	}
+    /**
+     * create a new restaurant.
+     * 
+     * This method can be tested by: curl -i -X POST -H
+     * "Content-Type:application/json" -d @restaurantsimple.json
+     * http://localhost:8080/hh/rest/v1/restaurants
+     * 
+     * where restaurantsimple.json is a file with content:
+     * {"id":"Braadworstelaars","version":0,"imageFileName":"deHartigeHap.jpg"}
+     * 
+     * In the GUI, the new restaurant Braadworstelaars will appear.
+     */
+    @RequestMapping(value = RSConstants.URL_PREFIX
+            + "/restaurants", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ModelAndView createRestaurantJson(@RequestBody Restaurant restaurant, HttpServletResponse httpResponse,
+            WebRequest httpRequest) {
+        log.debug("body: {}", restaurant);
 
-	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants/{restaurantId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public Restaurant findById(
-	        @PathVariable String restaurantId,
-	        HttpServletResponse httpResponse,
-	        WebRequest httpRequest) {
-		log.debug("restaurantId: {}", restaurantId);
-		return restaurantService.findById(restaurantId);
-	}
+        try {
+            Restaurant savedRestaurant = restaurantService.save(restaurant);
+            httpResponse.setStatus(HttpStatus.CREATED.value());
+            httpResponse.setHeader("Location",
+                    httpRequest.getContextPath() + "/restaurants/" + savedRestaurant.getId());
+            return new ModelAndView(jsonView, DATA_FIELD, savedRestaurant);
+        } catch (Exception e) {
+            log.error("Error creating new restaurant", e);
+            String message = "Error creating new restaurant. [%1$s]";
+            return createErrorResponse(String.format(message, e.toString()));
+        }
+    }
 
-	private ModelAndView createErrorResponse(String sMessage) {
-		return new ModelAndView(jsonView, ERROR_FIELD, sMessage);
-	}
+    @RequestMapping(value = RSConstants.URL_PREFIX
+            + "/restaurants/{restaurantId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Restaurant findById(@PathVariable String restaurantId, HttpServletResponse httpResponse,
+            WebRequest httpRequest) {
+        log.debug("restaurantId: {}", restaurantId);
+        return restaurantService.findById(restaurantId);
+    }
 
-	public void setRestaurantService(RestaurantService restaurantService) {
-		this.restaurantService = restaurantService;
-	}
+    private ModelAndView createErrorResponse(String sMessage) {
+        return new ModelAndView(jsonView, ERROR_FIELD, sMessage);
+    }
 
-	public void setJsonView(View jsonView) {
-		this.jsonView = jsonView;
-	}
+    public void setRestaurantService(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
+    }
+
+    public void setJsonView(View jsonView) {
+        this.jsonView = jsonView;
+    }
 
 }

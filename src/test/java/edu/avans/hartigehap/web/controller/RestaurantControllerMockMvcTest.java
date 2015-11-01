@@ -34,86 +34,86 @@ import edu.avans.hartigehap.service.RestaurantService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RestaurantControllerMockMvcTest.class })
 @WebAppConfiguration
-@ImportResource({ "classpath:/test-root-context.xml","classpath:*servlet-context.xml" })
+@ImportResource({ "classpath:/test-root-context.xml", "classpath:*servlet-context.xml" })
 @Slf4j
 public class RestaurantControllerMockMvcTest {
 
-  private static final String RESTAURANT_ID = "De Plak";
+    private static final String RESTAURANT_ID = "De Plak";
 
-  @Autowired
-  private RestaurantController restaurantController;
+    @Autowired
+    private RestaurantController restaurantController;
 
-  @Autowired
-  private WebApplicationContext webApplicationContext;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
-  private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-  @Autowired
-  private RestaurantService restaurantServiceMock;
+    @Autowired
+    private RestaurantService restaurantServiceMock;
 
-  @Before
-  public void setUp() {
-    // Thanks to: Petri Kinulainen:
-    // http://www.petrikainulainen.net/programming/spring-framework/unit-testing-of-spring-mvc-controllers-normal-controllers/
-    // https://github.com/pkainulainen/spring-mvc-test-examples/tree/master/controllers-unittest
-    
-    //We have to reset our mock between tests because the mock objects
-    //are managed by the Spring container. If we would not reset them,
-    //stubbing and verified behavior would "leak" from one test to another.
-    Mockito.reset(restaurantServiceMock);
+    @Before
+    public void setUp() {
+        // Thanks to: Petri Kinulainen:
+        // http://www.petrikainulainen.net/programming/spring-framework/unit-testing-of-spring-mvc-controllers-normal-controllers/
+        // https://github.com/pkainulainen/spring-mvc-test-examples/tree/master/controllers-unittest
 
-    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-  }
+        // We have to reset our mock between tests because the mock objects
+        // are managed by the Spring container. If we would not reset them,
+        // stubbing and verified behavior would "leak" from one test to another.
+        Mockito.reset(restaurantServiceMock);
 
-  @Bean
-  public RestaurantService restaurantService() {
-    return Mockito.mock(RestaurantService.class);
-  }
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
-  /**
-   * verifies the 'wiring' of the test case:
-   * <ul>
-   * <li>autowiring of RestaurantController.</li>
-   * <li>autowiring of RestaurantService mock.</li>
-   * </ul>
-   * @throws Exception
-   */
-  @Test
-  public void dummy() throws Exception {
-    log.debug("test the configuration of the test case, 'the wiring'");
-    assertNotNull(restaurantController);
-    Object restaurantServiceMock = ReflectionTestUtils.getField(restaurantController, "restaurantService");
-    assertTrue(restaurantServiceMock instanceof RestaurantService);
-    String className = restaurantServiceMock.getClass().getName();
-    log.debug("className: {}", className);
-    assertTrue("classname contains 'Mock' since it is a mockito mock", className.indexOf("Mock") >= 0);
-  }
+    @Bean
+    public RestaurantService restaurantService() {
+        return Mockito.mock(RestaurantService.class);
+    }
 
-  /**
-   * verifies the following qualities of the RestaurantController:
-   * <ul>
-   * <li>@RequestMapping annotation.</li>
-   * <li>view resolving: the correct view name is returned.</li>
-   * </ul>
-   * 
-   * @throws Exception
-   */
-  @Test
-  public void listRestaurants() throws Exception {
-    List<Restaurant> restaurants = getRestaurants();
-    Mockito.when(restaurantServiceMock.findAll()).thenReturn(restaurants);
-    mockMvc.perform(get( "/restaurants"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("hartigehap/listrestaurants"))
-        .andExpect(model().attribute("restaurants", hasItems(restaurants.toArray(new Restaurant[]{}))));
-  }
+    /**
+     * verifies the 'wiring' of the test case:
+     * <ul>
+     * <li>autowiring of RestaurantController.</li>
+     * <li>autowiring of RestaurantService mock.</li>
+     * </ul>
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void dummy() throws Exception {
+        log.debug("test the configuration of the test case, 'the wiring'");
+        assertNotNull(restaurantController);
+        Object restaurantServiceMock = ReflectionTestUtils.getField(restaurantController, "restaurantService");
+        assertTrue(restaurantServiceMock instanceof RestaurantService);
+        String className = restaurantServiceMock.getClass().getName();
+        log.debug("className: {}", className);
+        assertTrue("classname contains 'Mock' since it is a mockito mock", className.indexOf("Mock") >= 0);
+    }
 
-  private List<Restaurant> getRestaurants() {
-    LinkedList<Restaurant> retval = new LinkedList<Restaurant>();
-    Restaurant r1 = new Restaurant();
-    r1.setId(RESTAURANT_ID);
-    retval.add(r1);
-    return retval;
-  }
+    /**
+     * verifies the following qualities of the RestaurantController:
+     * <ul>
+     * <li>@RequestMapping annotation.</li>
+     * <li>view resolving: the correct view name is returned.</li>
+     * </ul>
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void listRestaurants() throws Exception {
+        List<Restaurant> restaurants = getRestaurants();
+        Mockito.when(restaurantServiceMock.findAll()).thenReturn(restaurants);
+        mockMvc.perform(get("/restaurants")).andExpect(status().isOk())
+                .andExpect(view().name("hartigehap/listrestaurants"))
+                .andExpect(model().attribute("restaurants", hasItems(restaurants.toArray(new Restaurant[] {}))));
+    }
+
+    private List<Restaurant> getRestaurants() {
+        LinkedList<Restaurant> retval = new LinkedList<Restaurant>();
+        Restaurant r1 = new Restaurant();
+        r1.setId(RESTAURANT_ID);
+        retval.add(r1);
+        return retval;
+    }
 
 }

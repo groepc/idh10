@@ -1,49 +1,48 @@
 package edu.avans.hartigehap.web.form;
 
-
 import java.util.List;
 import edu.avans.hartigehap.domain.*;
 
 public class CustomerGrid {
 
-	private int totalPages;
-	
-	private int currentPage;
-	
-	private long totalRecords;
-	
-	private List<Customer> customerData;
+    private int totalPages;
 
-	public int getTotalPages() {
-		return totalPages;
-	}
+    private int currentPage;
 
-	public void setTotalPages(int totalPages) {
-		this.totalPages = totalPages;
-	}
+    private long totalRecords;
 
-	public int getCurrentPage() {
-		return currentPage;
-	}
+    private List<Customer> customerData;
 
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
+    public int getTotalPages() {
+        return totalPages;
+    }
 
-	public long getTotalRecords() {
-		return totalRecords;
-	}
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
 
-	public void setTotalRecords(long totalRecords) {
-		this.totalRecords = totalRecords;
-	}
+    public int getCurrentPage() {
+        return currentPage;
+    }
 
-	public List<Customer> getCustomerData() {
-		return customerData;
-	}
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
 
-	public void setCustomerData(List<Customer> customerData) {
-		this.customerData = customerData;
-	}
-	
+    public long getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(long totalRecords) {
+        this.totalRecords = totalRecords;
+    }
+
+    public List<Customer> getCustomerData() {
+        return customerData;
+    }
+
+    public void setCustomerData(List<Customer> customerData) {
+        this.customerData = customerData;
+    }
+
 }
