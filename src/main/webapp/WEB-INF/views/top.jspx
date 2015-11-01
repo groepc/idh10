@@ -28,8 +28,6 @@
     <spring:message code="label_kitchen_subsystem" var="labelKitchenSubsystem"/>
     <spring:message code="label_waiter_subsystem" var="labelWaiterSubsystem"/>
     <spring:message code="label_customer_subsystem" var="labelCustomerSubsystem"/>
-    <spring:message code="label_schedule_subsystem" var="labelScheduleSubsystem"/>
-    <spring:message code="label_employee_subsystem_word" var="labelEmployeeSubsystemWord"/>
     <spring:message code="label_dining_tables" var="labelDiningTables"/>
     <spring:message code="label_dining_table" var="labelDiningTable"/>
     <spring:message code="label_language" var="labelLanguage"/>
@@ -86,16 +84,6 @@
 
                                     <spring:url var="customerSubsystem" value="/restaurants/${restaurant.id}/customers" />
                                     <li><a href="${customerSubsystem}">${restaurant.id} ${labelCustomerSubsystem}</a></li>
-
-                                    <sec:authorize access="hasRole('ROLE_MANAGER')">
-                                        <li class="divider"><jsp:text /></li>
-
-                                        <spring:url var="scheduleSubsystem" value="/restaurants/${restaurant.id}/schedule" />
-                                        <li><a href="${scheduleSubsystem}" id="schedule-test">${restaurant.id} ${labelScheduleSubsystem}</a></li>
-
-                                        <spring:url var="employeeSubsystem" value="/restaurants/${restaurant.id}/employees" />
-                                        <li><a href="${employeeSubsystem}">${restaurant.id} ${labelEmployeeSubsystemWord}</a></li>
-                                    </sec:authorize>
                                 </ul>
                             </li>
                         </c:if>

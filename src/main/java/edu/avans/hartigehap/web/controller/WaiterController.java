@@ -140,11 +140,10 @@ public class WaiterController {
             try {
                 billService.billHasBeenPaid(bill);
             } catch (StateException e) {
-                log.error("Internal error has occurred! Order " + Long.valueOf(billId)
-                        + "has not been changed to served state!", e);
+                log.error("Internal error has occurred! Bill " + Long.valueOf(billId)
+                        + "has not been changed to paid state!", e);
                 // StateException triggers a rollback; consequently all entities
-                // are invalidated by Hibernate
-                // So new warmup needed
+                // are invalidated by Hibernate; so new warmup needed
                 warmupRestaurant(bill, uiModel);
                 return "hartigehap/waiter";
             }

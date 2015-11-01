@@ -92,24 +92,7 @@ public class CustomerController {
         redirectAttributes.addFlashAttribute("message",
                 new Message("success", messageSource.getMessage("customer_save_success", new Object[] {}, locale)));
 
-        // Process upload file
-        if (file != null) {
-            log.info("File name: " + file.getName());
-            log.info("File size: " + file.getSize());
-            log.info("File content type: " + file.getContentType());
-            byte[] fileContent = null;
-            try {
-                InputStream inputStream = file.getInputStream();
-                if (inputStream == null) {
-                    log.info("File inputstream is null");
-                }
-                fileContent = IOUtils.toByteArray(inputStream);
-                customer.setPhoto(fileContent);
-            } catch (IOException ex) {
-                log.error("Error saving uploaded file", ex);
-            }
-            customer.setPhoto(fileContent);
-        }
+        processUploadedFile(customer, file);
 
         Customer existingCustomer = customerService.findById(customer.getId());
         assert existingCustomer != null : "customer should exist";
@@ -154,7 +137,20 @@ public class CustomerController {
         redirectAttributes.addFlashAttribute("message",
                 new Message("success", messageSource.getMessage("customer_save_success", new Object[] {}, locale)));
 
-        // Process upload file
+        processUploadedFile(customer, file);
+
+        // relate customer to current restaurant
+        Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
+        customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
+
+        // to get the auto generated id
+        Customer storedCustomer = customerService.save(customer);
+
+        return "redirect:/restaurants/" + restaurantName + "/customers/"
+                + UrlUtil.encodeUrlPathSegment(storedCustomer.getId().toString(), httpServletRequest);
+    }
+
+    private void processUploadedFile(Customer customer, Part file) {
         if (file != null) {
             log.info("File name: " + file.getName());
             log.info("File size: " + file.getSize());
@@ -172,18 +168,9 @@ public class CustomerController {
             }
             customer.setPhoto(fileContent);
         }
-
-        // relate customer to current restaurant
-        Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
-        customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
-
-        // to get the auto generated id
-        Customer storedCustomer = customerService.save(customer);
-
-        return "redirect:/restaurants/" + restaurantName + "/customers/"
-                + UrlUtil.encodeUrlPathSegment(storedCustomer.getId().toString(), httpServletRequest);
     }
-
+    
+    
     @RequestMapping(value = "/restaurants/{restaurantName}/customers/{id}/photo", method = RequestMethod.GET)
     @ResponseBody
     public byte[] downloadPhoto(@PathVariable("id") Long id) {

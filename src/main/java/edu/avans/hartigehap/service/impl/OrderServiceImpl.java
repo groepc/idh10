@@ -66,20 +66,15 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
         // a query created using a repository method name
-        List<Order> plannedOrdersList = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
+        return orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
                 Order.OrderStatus.PLANNED, restaurant, new Sort(Sort.Direction.ASC, "plannedTime"));
-
-        return plannedOrdersList;
-
     }
 
     @Transactional(readOnly = true)
     public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
         // a query created using a repository method name
-        List<Order> preparedOrdersList = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
+        return orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
                 Order.OrderStatus.PREPARED, restaurant, new Sort(Sort.Direction.ASC, "preparedTime"));
-
-        return preparedOrdersList;
     }
 
     public void planOrder(Order order) throws StateException {

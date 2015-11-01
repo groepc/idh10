@@ -83,8 +83,7 @@ public class RestaurantsRS {
     @RequestMapping(value = RSConstants.URL_PREFIX
             + "/restaurants/{restaurantId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Restaurant findById(@PathVariable String restaurantId, HttpServletResponse httpResponse,
-            WebRequest httpRequest) {
+    public Restaurant findById(@PathVariable String restaurantId) {
         log.debug("restaurantId: {}", restaurantId);
         return restaurantService.findById(restaurantId);
     }
