@@ -3,6 +3,7 @@ package edu.avans.hartigehap.service.impl;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.RestaurantPopulatorService;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -81,6 +82,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
     }
 
     private void createMeal(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
+        
         Meal meal = new Meal(name, image, price, recipe);
         // as there is no cascading between FoodCategory and MenuItem (both
         // ways), it is important to first

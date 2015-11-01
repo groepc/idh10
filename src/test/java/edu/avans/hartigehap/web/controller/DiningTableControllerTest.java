@@ -8,16 +8,12 @@ import org.springframework.ui.ExtendedModelMap;
 
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Restaurant;
-import edu.avans.hartigehap.service.RestaurantPopulatorService;
 import edu.avans.hartigehap.service.testutil.AbstractTransactionRollbackTest;
 
 public class DiningTableControllerTest extends AbstractTransactionRollbackTest {
 
     @Autowired
     private DiningTableController diningTableController;
-
-    @Autowired
-    private RestaurantPopulatorService restaurantPopulatorService;
 
     @Test
     public void dummy() {

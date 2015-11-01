@@ -25,6 +25,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class Ingredient extends DomainObject {
     private static final long serialVersionUID = 1L;
 
-    // TODO nog niet af
+    // TODO not finished
 
 }

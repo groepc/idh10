@@ -6,13 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.*;
 import javax.annotation.PostConstruct;
 
 @Controller
+@Slf4j
 public class RestaurantController {
-
+    
     @Autowired
     private RestaurantService restaurantService;
     @Autowired
@@ -48,6 +51,8 @@ public class RestaurantController {
     // called once immediately after bean creation
     @PostConstruct
     public void createRestaurants() {
+        log.info("RestaurantController.createRestaurants() called");
+        log.info("RestaurantPopulatorServiceImpl.createRestaurantsWithInventory() called");
         restaurantPopulatorService.createRestaurantsWithInventory();
     }
 

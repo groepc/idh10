@@ -16,8 +16,6 @@ public class RestaurantServiceTest extends AbstractTransactionRollbackTest {
 
     @Autowired
     private RestaurantService restaurantService;
-    @Autowired
-    private RestaurantPopulatorService restaurantPopulatorService;
 
     @Test
     public void dummy() {
