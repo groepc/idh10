@@ -37,8 +37,8 @@ public class HomePageLoginIT {
         }
 
         log.info("Timeout of 10 seconds");
-        js.executeScript("document.getElementById('dropdown-toggle-login').removeAttribute('display');");
-        js.executeScript("document.getElementById('dropdown-toggle-login').setAttribute('display','block');");
+//        js.executeScript("document.getElementById('dropdown-toggle-login').removeAttribute('display');");
+//        js.executeScript("document.getElementById('dropdown-toggle-login').setAttribute('display','block');");
 
         // Added bootstrap support
         log.info("Timeout of 10 seconds");
