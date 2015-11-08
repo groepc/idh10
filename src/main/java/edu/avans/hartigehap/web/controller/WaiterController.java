@@ -100,7 +100,7 @@ public class WaiterController {
 
         switch (event) {
         case "orderHasBeenServed":
-            orderHasBeenServed(order, uiModel);
+            orderHasBeenServed(order);
             break;
             
         default:
@@ -111,7 +111,7 @@ public class WaiterController {
         return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/waiter";
     }
 
-    private void orderHasBeenServed(Order order, Model uiModel) {
+    private void orderHasBeenServed(Order order) {
         try {
             orderService.orderServed(order);
         } catch (StateException e) {
@@ -128,7 +128,7 @@ public class WaiterController {
 
         switch (event) {
         case "billHasBeenPaid":
-            billHasBeenPaid(bill, uiModel);
+            billHasBeenPaid(bill);
             break;
 
         default:
@@ -139,7 +139,7 @@ public class WaiterController {
         return "redirect:/restaurants/" + bill.getDiningTable().getRestaurant().getId() + "/waiter";
     }
     
-    private void billHasBeenPaid(Bill bill, Model uiModel) {
+    private void billHasBeenPaid(Bill bill) {
         try {
             billService.billHasBeenPaid(bill);
         } catch (StateException e) {

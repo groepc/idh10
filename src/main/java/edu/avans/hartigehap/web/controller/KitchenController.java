@@ -77,11 +77,11 @@ public class KitchenController {
 
         switch (event) {
         case "planOrder":
-            planOrder(order, uiModel);
+            planOrder(order);
             break;
 
         case "orderHasBeenPrepared":
-            orderHasBeenPrepared(order, uiModel);
+            orderHasBeenPrepared(order);
             break;
 
         default:
@@ -92,7 +92,7 @@ public class KitchenController {
         return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/kitchen";
     }
 
-    private void planOrder(Order order, Model uiModel) {
+    private void planOrder(Order order) {
         try {
             orderService.planOrder(order);
         } catch (StateException e) {
@@ -101,7 +101,7 @@ public class KitchenController {
         }
     }
 
-    private void orderHasBeenPrepared(Order order, Model uiModel) {
+    private void orderHasBeenPrepared(Order order) {
         try {
             orderService.orderPrepared(order);
         } catch (StateException e) {
