@@ -144,7 +144,7 @@ public class DiningTableController {
             Model uiModel, Locale locale) {
         log.error("StateException", e);
         uiModel.addAttribute("message", new Message("error",
-                messageSource.getMessage("message_submit_bill_fail", new Object[] {}, locale)));
+                messageSource.getMessage(errorMessage, new Object[] {}, locale)));
 
         // StateException triggers a rollback; consequently all Entities are
         // invalidated by Hibernate

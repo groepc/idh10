@@ -75,14 +75,13 @@ public class WaiterController {
     public String showBillInWaiter(@PathVariable("billId") String billId, Model uiModel, Locale locale) {
 
         // warmup stuff
-        Bill bill = billService.findById(Long.valueOf(billId));
-        Restaurant restaurant = warmupRestaurant(bill, uiModel);
-        uiModel.addAttribute("restaurant", restaurant);
+        Bill bill = warmupRestaurant(billId, uiModel);
+        Restaurant resto = bill.getDiningTable().getRestaurant();
 
-        List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(restaurant);
+        List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(resto);
         uiModel.addAttribute("allPreparedOrders", allPreparedOrders);
 
-        List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(restaurant);
+        List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(resto);
         uiModel.addAttribute("allSubmittedBills", allSubmittedBills);
 
         uiModel.addAttribute("message",
@@ -132,20 +131,14 @@ public class WaiterController {
     @RequestMapping(value = "/waiter/bills/{billId}", method = RequestMethod.PUT)
     public String receiveBillEvent(@PathVariable("billId") String billId, @RequestParam String event, Model uiModel) {
 
-        Bill bill = billService.findById(Long.valueOf(billId));
-        Restaurant restaurant = warmupRestaurant(bill, uiModel);
+        Bill bill = warmupRestaurant(billId, uiModel);
 
         switch (event) {
         case "billHasBeenPaid":
             try {
                 billService.billHasBeenPaid(bill);
             } catch (StateException e) {
-                log.error("Internal error has occurred! Bill " + Long.valueOf(billId)
-                        + "has not been changed to paid state!", e);
-                // StateException triggers a rollback; consequently all entities
-                // are invalidated by Hibernate; so new warmup needed
-                warmupRestaurant(bill, uiModel);
-                return "hartigehap/waiter";
+                handleStateException(e, billId, uiModel);
             }
             break;
 
@@ -154,7 +147,16 @@ public class WaiterController {
             break;
         }
 
-        return "redirect:/restaurants/" + restaurant.getId() + "/waiter";
+        return "redirect:/restaurants/" + bill.getDiningTable().getRestaurant().getId() + "/waiter";
+    }
+    
+    private String handleStateException(StateException e, String billId, Model uiModel) {
+        log.error("Internal error has occurred! Bill " + Long.valueOf(billId)
+        + "has not been changed to paid state!", e);
+        // StateException triggers a rollback; consequently all entities
+        // are invalidated by Hibernate; so new warmup needed
+        warmupRestaurant(billId, uiModel);
+        return "hartigehap/waiter";
     }
 
     private Restaurant warmupRestaurant(Order order, Model uiModel) {
@@ -166,11 +168,12 @@ public class WaiterController {
         return restaurant;
     }
 
-    private Restaurant warmupRestaurant(Bill bill, Model uiModel) {
+    private Bill warmupRestaurant(String billId, Model uiModel) {
+        Bill bill = billService.findById(Long.valueOf(billId));
         Collection<Restaurant> restaurants = restaurantService.findAll();
         uiModel.addAttribute("restaurants", restaurants);
         Restaurant restaurant = restaurantService.fetchWarmedUp(bill.getDiningTable().getRestaurant().getId());
         uiModel.addAttribute("restaurant", restaurant);
-        return restaurant;
+        return bill;
     }
 }
