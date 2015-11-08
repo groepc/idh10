@@ -93,7 +93,7 @@ public class DiningTableController {
         try {
             diningTableService.submitOrder(diningTable);
         } catch (StateException e) {
-            handleStateException(e, "message_submit_order_fail", diningTableId, uiModel, locale);
+            return handleStateException(e, "message_submit_order_fail", diningTableId, uiModel, locale);
         }
         
         // store the message temporarily in the session to allow displaying
@@ -118,7 +118,7 @@ public class DiningTableController {
                     messageSource.getMessage("message_submit_empty_bill_fail", new Object[] {}, locale)));
             return "hartigehap/diningtable";
         } catch (StateException e) {
-            handleStateException(e, "message_submit_bill_fail", diningTableId, uiModel, locale);
+            return handleStateException(e, "message_submit_bill_fail", diningTableId, uiModel, locale);
         }
         
         // store the message temporarily in the session to allow displaying

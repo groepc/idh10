@@ -50,14 +50,13 @@ public class WaiterController {
     public String showOrderInWaiter(@PathVariable("orderId") String orderId, Model uiModel, Locale locale) {
 
         // warmup stuff
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Restaurant restaurant = warmupRestaurant(order, uiModel);
-        uiModel.addAttribute("restaurant", restaurant);
+        Order order = warmupRestaurantByOrder(orderId, uiModel);
+        Restaurant resto = order.getBill().getDiningTable().getRestaurant();
 
-        List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(restaurant);
+        List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(resto);
         uiModel.addAttribute("allPreparedOrders", allPreparedOrders);
 
-        List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(restaurant);
+        List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(resto);
         uiModel.addAttribute("allSubmittedBills", allSubmittedBills);
 
         String orderContent = "";
@@ -97,36 +96,30 @@ public class WaiterController {
     public String receiveOrderEvent(@PathVariable("orderId") String orderId, @RequestParam String event,
             Model uiModel) {
 
+        Order order = warmupRestaurantByOrder(orderId, uiModel);
+
         switch (event) {
         case "orderHasBeenServed":
-            return orderHasBeenServed(orderId, uiModel);
-        // break unreachable
-
+            orderHasBeenServed(order, uiModel);
+            break;
+            
         default:
             log.error("Internal error: event " + event + " not recognized");
-            Order order = orderService.findById(Long.valueOf(orderId));
-            Restaurant restaurant = warmupRestaurant(order, uiModel);
-            return "redirect:/restaurants/" + restaurant.getId();
+            break;
         }
+        
+        return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/waiter";
     }
 
-    private String orderHasBeenServed(String orderId, Model uiModel) {
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Restaurant restaurant = warmupRestaurant(order, uiModel);
+    private void orderHasBeenServed(Order order, Model uiModel) {
         try {
             orderService.orderServed(order);
         } catch (StateException e) {
-            log.error("Internal error has occurred! Order " + Long.valueOf(orderId)
+            log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
                     + "has not been changed to served state!", e);
-
-            // StateException triggers a rollback; consequently all Entities are
-            // invalidated by Hibernate
-            // So new warmup needed
-            warmupRestaurant(order, uiModel);
-            return "hartigehap/waiter";
         }
-        return "redirect:/restaurants/" + restaurant.getId() + "/waiter";
     }
+    
 
     @RequestMapping(value = "/waiter/bills/{billId}", method = RequestMethod.PUT)
     public String receiveBillEvent(@PathVariable("billId") String billId, @RequestParam String event, Model uiModel) {
@@ -135,11 +128,7 @@ public class WaiterController {
 
         switch (event) {
         case "billHasBeenPaid":
-            try {
-                billService.billHasBeenPaid(bill);
-            } catch (StateException e) {
-                handleStateException(e, billId, uiModel);
-            }
+            billHasBeenPaid(bill, uiModel);
             break;
 
         default:
@@ -150,22 +139,24 @@ public class WaiterController {
         return "redirect:/restaurants/" + bill.getDiningTable().getRestaurant().getId() + "/waiter";
     }
     
-    private String handleStateException(StateException e, String billId, Model uiModel) {
-        log.error("Internal error has occurred! Bill " + Long.valueOf(billId)
-        + "has not been changed to paid state!", e);
-        // StateException triggers a rollback; consequently all entities
-        // are invalidated by Hibernate; so new warmup needed
-        warmupRestaurant(billId, uiModel);
-        return "hartigehap/waiter";
+    private void billHasBeenPaid(Bill bill, Model uiModel) {
+        try {
+            billService.billHasBeenPaid(bill);
+        } catch (StateException e) {
+            log.error("Internal error has occurred! Order " + Long.valueOf(bill.getId())
+                    + "has not been changed to served state!", e);
+        }
     }
 
-    private Restaurant warmupRestaurant(Order order, Model uiModel) {
+    
+    private Order warmupRestaurantByOrder(String orderId, Model uiModel) {
+        Order order = orderService.findById(Long.valueOf(orderId));
         Collection<Restaurant> restaurants = restaurantService.findAll();
         uiModel.addAttribute("restaurants", restaurants);
         Restaurant restaurant = restaurantService
                 .fetchWarmedUp(order.getBill().getDiningTable().getRestaurant().getId());
         uiModel.addAttribute("restaurant", restaurant);
-        return restaurant;
+        return order;
     }
 
     private Bill warmupRestaurant(String billId, Model uiModel) {

@@ -71,40 +71,7 @@ public class CustomerController {
         log.info("updatingCustomerForm(" + customer.getFirstName() + ", " + customer.getLastName() + ")");
         return "hartigehap/editcustomer";
     }
-
-    @RequestMapping(value = "/restaurants/{restaurantName}/customers/{id}", params = "form", method = RequestMethod.PUT)
-    public String updateCustomer(
-            // the path variable {id} is not used; data binding retrieves its
-            // info from
-            // query string parameters and form fields, so customer includes id
-            // as well
-            @PathVariable("restaurantName") String restaurantName, @Valid Customer customer,
-            BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
-            RedirectAttributes redirectAttributes, Locale locale, @RequestParam(required = false) Part file) {
-
-        if (bindingResult.hasErrors()) {
-            uiModel.addAttribute("message",
-                    new Message("error", messageSource.getMessage("customer_save_fail", new Object[] {}, locale)));
-            uiModel.addAttribute("customer", customer);
-            return "hartigehap/editcustomer";
-        }
-        uiModel.asMap().clear();
-        redirectAttributes.addFlashAttribute("message",
-                new Message("success", messageSource.getMessage("customer_save_success", new Object[] {}, locale)));
-
-        processUploadedFile(customer, file);
-
-        Customer existingCustomer = customerService.findById(customer.getId());
-        assert existingCustomer != null : "customer should exist";
-
-        // update user-editable fields
-        existingCustomer.updateEditableFields(customer);
-
-        customerService.save(existingCustomer);
-        return "redirect:/restaurants/" + restaurantName + "/customers/"
-                + UrlUtil.encodeUrlPathSegment(customer.getId().toString(), httpServletRequest);
-    }
-
+    
     @RequestMapping(value = "/restaurants/{restaurantName}/customers", params = "form", method = RequestMethod.GET)
     public String createCustomerForm(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
 
@@ -117,16 +84,9 @@ public class CustomerController {
         return "hartigehap/editcustomer";
     }
 
-    @RequestMapping(value = "/restaurants/{restaurantName}/customers", params = "form", method = RequestMethod.POST)
-    public String createCustomer(@PathVariable("restaurantName") String restaurantName, @Valid Customer customer,
-            BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
-            RedirectAttributes redirectAttributes, Locale locale,
-            @RequestParam(value = "file", required = false) Part file) {
-
-        log.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
-        log.info("Binding Result target: " + (Customer) bindingResult.getTarget());
-        log.info("Binding Result: " + bindingResult);
-
+    private String handleCreateOrUpdateCustomer(boolean isCreate, String restaurantName, Customer customer, BindingResult bindingResult, Model uiModel,
+            HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes, Locale locale, Part file) {
+        
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("message",
                     new Message("error", messageSource.getMessage("customer_save_fail", new Object[] {}, locale)));
@@ -139,15 +99,49 @@ public class CustomerController {
 
         processUploadedFile(customer, file);
 
-        // relate customer to current restaurant
-        Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
-        customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
+        if(isCreate) {
+            // relate customer to current restaurant
+            Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
+            customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
+            // to get the auto generated id
+            customer = customerService.save(customer);
+        } else { // update
+            Customer existingCustomer = customerService.findById(customer.getId());
+            assert existingCustomer != null : "customer should exist";
 
-        // to get the auto generated id
-        Customer storedCustomer = customerService.save(customer);
-
+            // update user-editable fields
+            existingCustomer.updateEditableFields(customer);
+            customerService.save(existingCustomer);
+        }
+        
         return "redirect:/restaurants/" + restaurantName + "/customers/"
-                + UrlUtil.encodeUrlPathSegment(storedCustomer.getId().toString(), httpServletRequest);
+                + UrlUtil.encodeUrlPathSegment(customer.getId().toString(), httpServletRequest);
+    }
+
+    @RequestMapping(value = "/restaurants/{restaurantName}/customers/{id}", params = "form", method = RequestMethod.PUT)
+    public String updateCustomer(
+            // the path variable {id} is not used; data binding retrieves its info from
+            // query string parameters and form fields, so customer includes id as well
+            @PathVariable("restaurantName") String restaurantName, @Valid Customer customer,
+            BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
+            RedirectAttributes redirectAttributes, Locale locale, @RequestParam(required = false) Part file) {
+
+        return handleCreateOrUpdateCustomer(false, restaurantName, customer, bindingResult, uiModel,
+                httpServletRequest, redirectAttributes, locale, file);
+        }
+
+    @RequestMapping(value = "/restaurants/{restaurantName}/customers", params = "form", method = RequestMethod.POST)
+    public String createCustomer(@PathVariable("restaurantName") String restaurantName, @Valid Customer customer,
+            BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
+            RedirectAttributes redirectAttributes, Locale locale,
+            @RequestParam(value = "file", required = false) Part file) {
+
+        log.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
+        log.info("Binding Result target: " + (Customer) bindingResult.getTarget());
+        log.info("Binding Result: " + bindingResult);
+
+        return handleCreateOrUpdateCustomer(true, restaurantName, customer, bindingResult, uiModel,
+                httpServletRequest, redirectAttributes, locale, file);
     }
 
     private void processUploadedFile(Customer customer, Part file) {
@@ -163,6 +157,7 @@ public class CustomerController {
                 }
                 fileContent = IOUtils.toByteArray(inputStream);
                 customer.setPhoto(fileContent);
+                log.info("****erco " + customer.getPhoto().length);
             } catch (IOException ex) {
                 log.error("Error saving uploaded file", ex);
             }

@@ -28,6 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+
 /**
  * 
  * @author Erco
@@ -88,14 +89,24 @@ public class Customer extends DomainObject {
         this.photo = photo.clone();
     }
 
-    // TODO this method only updates user-editable fields
+    // This method only updates user-editable fields
     // id, version, restaurants, bills are considered not user-editable
     public void updateEditableFields(Customer customer) {
         firstName = customer.firstName;
         lastName = customer.lastName;
         birthDate = customer.birthDate;
         description = customer.description;
-        photo = customer.photo;
+        // hack
+        // the "if" is a hack
+        // when you change a customer without changing the photo, the customer
+        // object passed to the server by editcustomer has the non-changed fields
+        // filled in, except for the photo.
+        // result is that changing only one field of a customer effectively deletes the photo
+        // hack: only update the photo when a new photo is passed
+        // downside of this hack: it is not possible any more to delete the photo
+        if(customer.photo.length != 0) {
+            photo = customer.photo;
+        }
         partySize = customer.partySize;
     }
 

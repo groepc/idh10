@@ -48,14 +48,14 @@ public class KitchenController {
     public String showOrderInKitchen(@PathVariable("orderId") String orderId, Model uiModel, Locale locale) {
 
         // warmup stuff
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Restaurant restaurant = warmupRestaurant(order, uiModel);
-        uiModel.addAttribute("restaurant", restaurant);
+        Order order = warmupRestaurant(orderId, uiModel);
+        Restaurant resto = order.getBill().getDiningTable().getRestaurant();
 
-        List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(restaurant);
+
+        List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(resto);
         uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
 
-        List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(restaurant);
+        List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(resto);
         uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
 
         String orderContent = "";
@@ -73,65 +73,50 @@ public class KitchenController {
     public String receiveOrderEvent(@PathVariable("orderId") String orderId, @RequestParam String event,
             Model uiModel) {
 
+        Order order = warmupRestaurant(orderId, uiModel);
+
         switch (event) {
         case "planOrder":
-            return planOrder(orderId, uiModel);
-        // break unreachable
+            planOrder(order, uiModel);
+            break;
 
         case "orderHasBeenPrepared":
-            return orderHasBeenPrepared(orderId, uiModel);
-        // break unreachable
+            orderHasBeenPrepared(order, uiModel);
+            break;
 
         default:
             log.error("Internal error: event " + event + " not recognized");
-            Order order = orderService.findById(Long.valueOf(orderId));
-            Restaurant restaurant = warmupRestaurant(order, uiModel);
-            return "redirect:/restaurants/" + restaurant.getId();
+            break;
         }
+        
+        return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/kitchen";
     }
 
-    private String planOrder(String orderId, Model uiModel) {
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Restaurant restaurant = warmupRestaurant(order, uiModel);
+    private void planOrder(Order order, Model uiModel) {
         try {
             orderService.planOrder(order);
         } catch (StateException e) {
-            log.error("Internal error has occurred! Order " + Long.valueOf(orderId)
+            log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
                     + "has not been changed to planned state!", e);
-
-            // StateException triggers a rollback; consequently all Entities are
-            // invalidated by Hibernate
-            // So new warmup needed
-            warmupRestaurant(order, uiModel);
-            return "hartigehap/kitchen";
         }
-        return "redirect:/restaurants/" + restaurant.getId() + "/kitchen";
     }
 
-    private String orderHasBeenPrepared(String orderId, Model uiModel) {
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Restaurant restaurant = warmupRestaurant(order, uiModel);
+    private void orderHasBeenPrepared(Order order, Model uiModel) {
         try {
             orderService.orderPrepared(order);
         } catch (StateException e) {
-            log.error("Internal error has occurred! Order " + Long.valueOf(orderId)
+            log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
                     + "has not been changed to prepared state!", e);
-
-            // StateException triggers a rollback; consequently all Entities are
-            // invalidated by Hibernate
-            // So new warmup needed
-            warmupRestaurant(order, uiModel);
-            return "hartigehap/kitchen";
         }
-        return "redirect:/restaurants/" + restaurant.getId() + "/kitchen";
     }
 
-    private Restaurant warmupRestaurant(Order order, Model uiModel) {
+    private Order warmupRestaurant(String orderId, Model uiModel) {
+        Order order = orderService.findById(Long.valueOf(orderId));
         Collection<Restaurant> restaurants = restaurantService.findAll();
         uiModel.addAttribute("restaurants", restaurants);
         Restaurant restaurant = restaurantService
                 .fetchWarmedUp(order.getBill().getDiningTable().getRestaurant().getId());
         uiModel.addAttribute("restaurant", restaurant);
-        return restaurant;
+        return order;
     }
 }
