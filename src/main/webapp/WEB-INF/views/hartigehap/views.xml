@@ -32,4 +32,8 @@
 	<definition extends="default" name="hartigehap/editcustomer">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/editcustomer.jspx" />
 	</definition>
+	
+	<definition extends="onlineorder" name="hartigehap/onlineorder/step1">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/step1.jspx" />
+	</definition>
 </tiles-definitions>
