@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:sec="http://www.springframework.org/security/tags"
+	 version="2.0">
+
+	<!-- Add elvariables to help our IDE for code completion -->
+	<!--@elvariable id="message" type="edu.avans.hartigehap.web.form.Message"-->
+
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<h1 style="text-align: center;">De Hartige Hap</h1>
+			<h3 style="text-align: center;">Online bestellen</h3>
+			
+			<p>Bedankt voor je bestelling!</p>
+			
+			<table class="table table-condensed">
+				<tbody>
+					<tr>
+						<td>
+							Pizza Margarita<br />
+							Extra kaas
+						</td>
+						<td>
+							7,10
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Pizza Funghi<br />
+							Extra champignon
+						</td>
+						<td>
+							7,40
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<p>Je bestelling word om 10:00 op 24-02-2016 geleverd. Er is een mail ter bevestiging gestuurd naar <i>emailadres</i></p>
+		</div>
+	</div>
+</div>

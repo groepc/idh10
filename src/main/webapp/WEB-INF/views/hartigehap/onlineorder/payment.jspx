@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:sec="http://www.springframework.org/security/tags"
+	 version="2.0">
+
+	<!-- Add elvariables to help our IDE for code completion -->
+	<!--@elvariable id="message" type="edu.avans.hartigehap.web.form.Message"-->
+
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<h1 style="text-align: center;">Bank X</h1>
+			<h3 style="text-align: center;">Order #12345</h3>
+			
+			<p>Bedrag: 15,40</p>
+			
+			<a href="/hh/online-order/receipt" class="btn btn-success">Betalen</a>
+		</div>
+	</div>
+</div>

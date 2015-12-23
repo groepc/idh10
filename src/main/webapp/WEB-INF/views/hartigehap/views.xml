@@ -33,7 +33,16 @@
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/editcustomer.jspx" />
 	</definition>
 	
-	<definition extends="onlineorder" name="hartigehap/onlineorder/step1">
-		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/step1.jspx" />
+	<definition extends="onlineorder" name="hartigehap/onlineorder/customer-details">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/customer-details.jspx" />
+	</definition>
+	<definition extends="onlineorder" name="hartigehap/onlineorder/select-meals">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/select-meals.jspx" />
+	</definition>
+	<definition extends="onlineorder" name="hartigehap/onlineorder/payment">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/payment.jspx" />
+	</definition>
+	<definition extends="onlineorder" name="hartigehap/onlineorder/receipt">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/onlineorder/receipt.jspx" />
 	</definition>
 </tiles-definitions>

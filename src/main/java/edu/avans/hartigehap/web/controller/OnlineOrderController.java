@@ -25,12 +25,48 @@ import javax.servlet.http.*;
 @Slf4j
 public class OnlineOrderController {
 	
-    @RequestMapping(value = { "/online-order", "/online-order/step1" }, method = RequestMethod.GET)
-    public String onlineOrder() {
-    	
-    	log.info("Online order step 1");
-    	
-        return "hartigehap/onlineorder/step1";
+	/**
+	 * STEP 1
+	 * @param model
+	 * @return
+	 */
+    @RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
+    public String onlineOrderCustomerDetails(Model model) {
+    	log.info("Online order step 1, customer details");
+        return "hartigehap/onlineorder/customer-details";
+    }
+    
+    /**
+	 * STEP 2
+	 * @param model
+	 * @return
+	 */
+    @RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
+    public String onlineOrderSelectMeals(Model model) {
+    	log.info("Online order step 2, select meals");
+        return "hartigehap/onlineorder/select-meals";
+    }
+    
+    /**
+   	 * STEP 3
+   	 * @param model
+   	 * @return
+   	 */
+    @RequestMapping(value = "/online-order/payment", method = RequestMethod.GET)
+    public String onlineOrderPayment(Model model) {
+    	log.info("Online order step 3, payment");
+        return "hartigehap/onlineorder/payment";
+    }
+    
+    /**
+   	 * STEP 4
+   	 * @param model
+   	 * @return
+   	 */
+    @RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
+    public String onlineOrderReceipt(Model model) {
+    	log.info("Online order step 4, receipt");
+        return "hartigehap/onlineorder/receipt";
     }
     
 }
