@@ -70,13 +70,14 @@ public class DiningTable extends DomainObject {
     /* business logic */
 
     public void warmup() {
-        Iterator<OrderItem> orderItemIterator = currentBill.getCurrentOrder().getOrderItems().iterator();
-        while (orderItemIterator.hasNext()) {
-            orderItemIterator.next().getId();
-            // note: menu items have been warmed up via the restaurant->menu
-            // relation; therefore it
-            // is not needed to warm these objects via this relation
-        }
+    	Iterator<BaseOrderItem> orderItemIterator = currentBill.getCurrentOrder()
+				.getOrderItems().iterator();
+		while (orderItemIterator.hasNext()) {
+			orderItemIterator.next().getId();
+			// note: menu items have been warmed up via the restaurant->menu
+			// relation; therefore it
+			// is not needed to warm these objects via this relation
+		}
     }
 
     public void submitBill() throws StateException, EmptyBillException {
