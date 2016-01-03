@@ -33,7 +33,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private List<Meal> meals = new ArrayList<Meal>();
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
 	private List<Drink> drinks = new ArrayList<Drink>();
-	private List<Meal> mealOptions = new ArrayList<Meal>();
+	private List<MealOption> mealOptions = new ArrayList<MealOption>();
 	private List<Customer> customers = new ArrayList<Customer>();
 
 		
@@ -105,13 +105,13 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	}
 	
 	private void createMealOption(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
-		Meal meal = new Meal(name, image, price, recipe);
+		MealOption mealOption = new MealOption(name, image, price, recipe);
 		// as there is no cascading between FoodCategory and MenuItem (both ways), it is important to first 
 		// save foodCategory and menuItem before relating them to each other, otherwise you get errors
 		// like "object references an unsaved transient instance - save the transient instance before flushing:"
-		meal.addFoodCategories(foodCats);
-		meal = menuItemRepository.save(meal);
-		mealOptions.add(meal);
+		mealOption.addFoodCategories(foodCats);
+		mealOption = menuItemRepository.save(mealOption);
+		mealOptions.add(mealOption);
 	}
 	
 	private void createDrink(String name, String image, int price, Drink.Size size, List<FoodCategory> foodCats) {
@@ -162,7 +162,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		}
 		
 		// for the moment every restaurant has the same meal options 
-		for(Meal mealOption : mealOptions) {
+		for(MealOption mealOption : mealOptions) {
 			restaurant.getMenu().getMealOptions().add(mealOption);
 		}
 		
