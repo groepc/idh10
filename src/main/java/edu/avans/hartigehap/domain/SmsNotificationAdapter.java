@@ -7,7 +7,6 @@ public class SmsNotificationAdapter implements NotificationAdapter {
 	/**
 	 * Singleton pattern
 	 */
-	@Autowired
 	private SmsNotificationImpl smsNotificationImpl = SmsNotificationImpl.getInstance();
 
 	@Override
