@@ -82,9 +82,9 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(6)}));
 		
 		byte[] photo = new byte[]{127,-128,0};
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
+		createCustomer("piet", "bakker", "test1@example.com", "1000AA", "10B", "", new DateTime(), 1, "description", photo);
+		createCustomer("piet", "bakker", "test2@example.com", "2000BB", "10B", "",  new DateTime(), 1, "description", photo);
+		createCustomer("piet", "bakker", "test3@example.com", "3000CC", "10B", "",  new DateTime(), 1, "description", photo);
 
 	}
 
@@ -121,9 +121,9 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		drinks.add(drink);
 	}
 	
-	private void createCustomer(String firstName, String lastName, DateTime birthDate,
+	private void createCustomer(String firstName, String lastName,  String email, String postalCode, String houseNumber, String phoneNumber, DateTime birthDate,
 		int partySize, String description, byte[] photo) {
-		Customer customer = new Customer(firstName, lastName, birthDate, partySize, description, photo); 
+		Customer customer = new Customer(firstName, lastName, email, postalCode, houseNumber, phoneNumber, birthDate, partySize, description, photo); 
 		customers.add(customer);
 		customerRepository.save(customer);
 	}

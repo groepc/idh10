@@ -50,7 +50,22 @@ public class Customer extends DomainObject {
     @NotEmpty(message = "{validation.lastname.NotEmpty.message}")
     @Size(min = 1, max = 40, message = "{validation.lastname.Size.message}")
     private String lastName;
+    
+    @NotEmpty(message = "{validation.email.NotEmpty.message}")
+    @Size(min = 6, max = 255, message = "{validation.email.Size.message}")
+    private String email;
 
+    @NotEmpty(message = "{validation.postalcode.NotEmpty.message}")
+    @Size(min = 1, max = 7, message = "{validation.postalcode.Size.message}")
+    private String postalCode;
+    
+    @NotEmpty(message = "{validation.housenumber.NotEmpty.message}")
+    @Size(min = 1, max = 7, message = "{validation.housenumber.Size.message}")
+    private String houseNumber;
+    
+ 
+    private String phoneNumber;
+    
     // works with hibernate 3.x
     // @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
     // to allow using Joda's DateTime with hibernate 4.x use:
@@ -79,7 +94,7 @@ public class Customer extends DomainObject {
     private Collection<Bill> bills = new ArrayList<Bill>();
 
     // TODO not complete (bills)
-    public Customer(String firstName, String lastName, DateTime birthDate, int partySize, String description,
+    public Customer(String firstName, String lastName, String email, String postalCode, String houseNumber, String phoneNumber, DateTime birthDate, int partySize, String description,
             byte[] photo) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -87,6 +102,10 @@ public class Customer extends DomainObject {
         this.partySize = partySize;
         this.description = description;
         this.photo = photo.clone();
+        this.email= email;
+        this.postalCode = postalCode;
+        this.houseNumber = houseNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     // This method only updates user-editable fields
@@ -96,6 +115,10 @@ public class Customer extends DomainObject {
         lastName = customer.lastName;
         birthDate = customer.birthDate;
         description = customer.description;
+        email= customer.email;
+        postalCode = customer.postalCode;
+        houseNumber = customer.houseNumber;
+        phoneNumber = customer.phoneNumber;
         // hack
         // the "if" is a hack
         // when you change a customer without changing the photo, the customer
