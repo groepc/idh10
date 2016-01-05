@@ -60,9 +60,9 @@ public class WaiterController {
         uiModel.addAttribute("allSubmittedBills", allSubmittedBills);
 
         String orderContent = "";
-        for (OrderItem orderItem : order.getOrderItems()) {
-            orderContent += orderItem.getMenuItem().getId() + " (" + orderItem.getQuantity() + "x)" + "; ";
-        }
+        for(BaseOrderItem orderItem : order.getOrderItems()) {
+			orderContent += orderItem.getMenuItem().getId() + " (" + orderItem.getQuantity() + "x)" + "; ";
+		}
 
         uiModel.addAttribute("message", new Message("info",
                 messageSource.getMessage("label_order_content", new Object[] {}, locale) + ": " + orderContent));

@@ -9,4 +9,6 @@
         <put-attribute name="top" value="/WEB-INF/views/top.jspx"/>
         <put-attribute name="footer" value="/WEB-INF/views/footer.jspx"/>
     </definition>
+    <definition name="onlineorder" template="/WEB-INF/layouts/online-order.jspx">
+    </definition>
 </tiles-definitions>

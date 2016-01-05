@@ -54,3 +54,4 @@ downloads
 attic
 TMP
 
+src/main/resources/datasource-tx-jpa.xml
