@@ -8,8 +8,8 @@ public class EmailNotificationAdapter implements NotificationAdapter {
 	private EmailNotificationImpl emailNotificationImpl;
 
 	@Override
-	public void request(String receiver, String body) {
-		emailNotificationImpl.doMakeEmailRequest(receiver, body);
+	public Boolean request(String receiver, String body) {
+		return emailNotificationImpl.doMakeEmailRequest(receiver, body);
 	}
 
 }

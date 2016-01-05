@@ -8,7 +8,12 @@ public class NotificationAdapterTest {
 	
 	@Test
 	public void testAutowire() {
-		assertEquals(true, false);
+		
+		NotificationAdapter notifAdapter = NotificationFactory.getNotification("sms");
+		
+		Boolean status = notifAdapter.request("06 10 01 10 10", "Hallo wereld!");
+		
+		assertEquals(status, true);
 	}
 
 }

@@ -14,7 +14,9 @@ public class SmsNotificationImpl {
 		return instance;
 	}
 	
-	public void createSmsNotification(String number, String content) {
+	public Boolean createSmsNotification(String number, String content) {
 		System.out.println("Sending SMS notification to " + number + " with message " + content);
+		
+		return true;
 	}
 }

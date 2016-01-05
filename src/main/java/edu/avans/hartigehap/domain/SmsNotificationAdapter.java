@@ -11,7 +11,7 @@ public class SmsNotificationAdapter implements NotificationAdapter {
 	private SmsNotificationImpl smsNotificationImpl = SmsNotificationImpl.getInstance();
 
 	@Override
-	public void request(String receiver, String body) {
-		smsNotificationImpl.createSmsNotification(receiver, body);
+	public Boolean request(String receiver, String body) {
+		return smsNotificationImpl.createSmsNotification(receiver, body);
 	}
 }
