@@ -15,6 +15,7 @@
     <spring:message code="label_welcome" var="labelWelcome"/>
     <spring:url value="/" var="homeUrl"/>
     <spring:url value="/restaurants" var="indexRestaurantsUrl"/>
+    <spring:url value="/online-order" var="onlineOrder"/>
     <spring:url value="/j_spring_security_logout" var="logoutUrl"/>
     <spring:message code="label_employee_area" var="labelEmployeeArea"/>
     <spring:message code="label_admin_area" var="labelAdminArea"/>
@@ -55,6 +56,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="${homeUrl}">Home</a></li>
+                    <li><a href="${onlineOrder}">Online bestellen</a></li>
                     <sec:authorize access="hasRole('ROLE_EMPLOYEE')">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">${labelRestaurants} <span class="caret"><jsp:text /></span></a>
