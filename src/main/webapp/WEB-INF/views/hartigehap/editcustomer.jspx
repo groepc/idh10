@@ -18,7 +18,10 @@
 	<spring:message code="label_customer_update" var="labelCustomerUpdate" />
 	<spring:message code="label_customer_first_name" var="labelCustomerFirstName" />
 	<spring:message code="label_customer_last_name" var="labelCustomerLastName" />
-	<spring:message code="label_customer_birth_date" var="labelCustomerBirthDate" />
+	<spring:message code="label_customer_postal_code" var="labelCustomerPostalCode" />
+	<spring:message code="label_customer_house_number" var="labelCustomerHouseNumber" />
+	<spring:message code="label_customer_email" var="labelCustomerEmail" />
+	<spring:message code="label_customer_phone_number" var="labelCustomerPhoneNumber" />
 	<spring:message code="label_customer_description" var="labelCustomerDescription" />
 	<spring:message code="label_customer_photo" var="labelCustomerPhoto" />
 	<spring:message code="text_clear" var="textClear" />
@@ -71,6 +74,47 @@
 					</div>
 
 					<p />
+
+					<div class="input-group input-group-100">
+						<span class="input-group-addon input-group-min-width" id="postalCode" path="postalCode">${labelCustomerPostalCode}</span>
+						<form:input path="postalCode" class="form-control capitalise" placeholder="${labelCustomerPostalCode}" aria-describedby="PostalCode" />
+						<div>
+							<form:errors path="postalCode" cssClass="error" />
+						</div>
+					</div>
+
+					<p />
+
+					<div class="input-group input-group-100">
+						<span class="input-group-addon input-group-min-width" id="houseNumber" path="houseNumber">${labelCustomerHouseNumber}</span>
+						<form:input path="houseNumber" class="form-control capitalise" placeholder="${labelCustomerHouseNumber}" aria-describedby="HouseNumber" />
+						<div>
+							<form:errors path="houseNumber" cssClass="error" />
+						</div>
+					</div>
+
+					<p />
+					
+					<div class="input-group input-group-100">
+						<span class="input-group-addon input-group-min-width" id="email" path="email">${labelCustomerEmail}</span>
+						<form:input path="email" class="form-control capitalise" placeholder="${labelCustomerEmail}" aria-describedby="email" />
+						<div>
+							<form:errors path="email" cssClass="error" />
+						</div>
+					</div>
+					
+					<p />
+					
+					<div class="input-group input-group-100">
+						<span class="input-group-addon input-group-min-width" id="phoneNumber" path="phoneNumber">${labelCustomerPhoneNumber}</span>
+						<form:input path="phoneNumber" class="form-control capitalise" placeholder="${labelCustomerPhoneNumber}" aria-describedby="phoneNumber" />
+						<div>
+							<form:errors path="phoneNumber" cssClass="error" />
+						</div>
+					</div>
+					
+					<p />
+					
 
 					<div class="input-group input-group-100">
 						<span class="input-group-addon input-group-min-width" id="birthDate" path="birthDate">${labelCustomerBirthDate}</span>

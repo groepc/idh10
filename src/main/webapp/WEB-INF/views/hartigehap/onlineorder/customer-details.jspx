@@ -17,7 +17,7 @@
 			<h1 style="text-align: center;">De Hartige Hap</h1>
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
-			<form name="onlineOrderCustomerDetails" action="/hh/online-order/select-meals" method="get">
+			<form name="onlineOrderCustomerDetails" method="post">
   
 				<div class="form-group">
 					<label for="email">Emailadres</label>
@@ -45,10 +45,21 @@
 					<label for="date">Bezorgtijd</label>
 					<div class="row">
 						<div class="col-xs-8">
-							<input type="date" class="form-control" id="date"></input>
+							Vandaag om
 						</div>
 						<div class="col-xs-4">
-							<input type="time" class="form-control" id="time"></input>
+							<select>
+							<option value="1">Zo snel mogelijk</option>
+							<option value="16:00">16:00</option>
+							<option value="16:30">16:30</option>
+							<option value="17:00">17:00</option>
+							<option value="17:30">17:30</option>
+							<option value="18:00">18:00</option>
+							<option value="18:30">18:30</option>
+							<option value="19:00">19:00</option>
+							<option value="19:30">19:30</option>
+							<option value="20:00">20:00</option>
+							</select>
 						</div>
 					</div>
 				</div>
