@@ -25,8 +25,11 @@ public class OnlineOrderController {
     private CustomerService customerService;
     @Autowired
     private RestaurantService restaurantService;
-	
-	/**
+
+    @Autowired
+    private BaseFoodService baseFoodService;
+    
+    /**
 	 * STEP 1
 	 * @param model
 	 * @return
@@ -79,6 +82,8 @@ public class OnlineOrderController {
     @RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
     public String onlineOrderSelectMeals(Model model) {
     	log.info("Online order step 2, select meals");
+    	Collection<BaseFood> baseFoods = baseFoodService.findAll();
+        model.addAttribute("foods", baseFoods);
         return "hartigehap/onlineorder/select-meals";
     }
     
