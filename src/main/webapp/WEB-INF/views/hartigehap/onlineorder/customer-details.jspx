@@ -20,7 +20,7 @@
 			<form name="onlineOrderCustomerDetails" method="post">
   
 				<div class="form-group">
-					<label for="email">Emailadres</label>
+					<label for="email">E-mailadres</label>
 					<input type="email" name="email" class="form-control" id="email"></input>
 				</div>
 				
