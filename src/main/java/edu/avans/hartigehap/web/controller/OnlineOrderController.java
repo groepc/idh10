@@ -31,6 +31,13 @@ import javax.servlet.http.*;
 @Slf4j
 public class OnlineOrderController {
 	
+	@Autowired
+    private MessageSource messageSource;
+	@Autowired
+    private CustomerService customerService;
+    @Autowired
+    private RestaurantService restaurantService;
+	
 	/**
 	 * STEP 1
 	 * @param model
@@ -48,7 +55,24 @@ public class OnlineOrderController {
 	 * @return
 	 */
     @RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.POST)
-    public String onlineOrderCustomerDetailsProcess(Model model, HttpSession session) {
+    public String onlineOrderCustomerDetailsProcess(@Valid Customer customer,
+            BindingResult bindingResult, Model uiModel, Locale locale) {
+    	
+    	System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
+    	System.out.println("Binding Result target: " + (Customer) bindingResult.getTarget());
+    	System.out.println("Binding Result: " + bindingResult);
+    	
+    	if (bindingResult.hasErrors()) {
+    		 System.out.println(bindingResult.toString());
+            uiModel.addAttribute("message",
+                    new Message("error", messageSource.getMessage("customer_save_fail", new Object[] {}, locale)));
+            uiModel.addAttribute("customer", customer);
+            return "hartigehap/onlineorder/customer-details";
+        }
+    	
+    	Restaurant restaurant = restaurantService.fetchWarmedUp("HartigeHap");
+    	customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
+    	customer = customerService.save(customer);
     	log.info("Online order step 1, customer details Process");
     	
     	

@@ -10,36 +10,69 @@
 
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
-
+	<spring:message code="label_customer_first_name" var="labelCustomerFirstName" />
+	<spring:message code="label_customer_last_name" var="labelCustomerLastName" />
+	<spring:message code="label_customer_postal_code" var="labelCustomerPostalCode" />
+	<spring:message code="label_customer_house_number" var="labelCustomerHouseNumber" />
+	<spring:message code="label_customer_email" var="labelCustomerEmail" />
+	<spring:message code="label_customer_phone_number" var="labelCustomerPhoneNumber" />
 	
 	<div class="row">
 		<div class="col-sm-12">
 			<h1 style="text-align: center;">De Hartige Hap</h1>
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
-			<form name="onlineOrderCustomerDetails" method="post">
+			<form modelAttribute="customer" enctype="multipart/form-data" name="onlineOrderCustomerDetails"  method="post">
   
-				<div class="form-group">
-					<label for="email">Emailadres</label>
-					<input type="email" name="email" class="form-control" id="email"></input>
-				</div>
-				
-				<div class="form-group">
-					<label for="zipcode">Postcode</label>
-					<input type="text" name="zipcode" class="form-control" id="zipcode"></input>
-				</div>
-				
-				<div class="form-group">
-					<label for="housenumber">Huisnummer + toevoeging</label>
-					<div class="row">
-						<div class="col-xs-8">
-							<input type="number" name="housenumber" class="form-control" id="housenumber"></input>
+  				<div class="form-group">
+					<span class="input-group-addon input-group-min-width" id="firstName" path="firstName">${labelCustomerFirstName}</span>
+						<input path="firstName" class="form-control capitalise" placeholder="${labelCustomerFirstName}" aria-describedby="firstName" />
+						<div>
+							<errors path="firstName" cssClass="error" />
 						</div>
-						<div class="col-xs-4">
-							<input type="text" name="extension" class="form-control" id="extension"></input>
+				</div>
+				
+				
+				<div class="form-group">
+					<span class="input-group-addon input-group-min-width" id="lastName" path="lastName">${labelCustomerLastName}</span>
+						<input path="lastName" class="form-control capitalise" placeholder="${labelCustomerLastName}" aria-describedby="lastName" />
+						<div>
+							<errors path="lastName" cssClass="error" />
+						</div>
+				</div>
+				
+				<div class="form-group">
+					<span class="input-group-addon input-group-min-width" id="postalCode" path="postalCode">${labelCustomerPostalCode}</span>
+						<input path="postalCode" class="form-control capitalise" placeholder="${labelCustomerPostalCode}" aria-describedby="PostalCode" />
+						<div>
+							<errors path="postalCode" cssClass="error" />
+						</div>
+				</div>
+				
+				<div class="form-group">
+						<span class="input-group-addon input-group-min-width" id="houseNumber" path="houseNumber">${labelCustomerHouseNumber}</span>
+						<input path="houseNumber" class="form-control capitalise" placeholder="${labelCustomerHouseNumber}" aria-describedby="HouseNumber" />
+						<div>
+							<errors path="houseNumber" cssClass="error" />
 						</div>
 					</div>
+				
+								<div class="form-group">
+					<span class="input-group-addon input-group-min-width" id="email" path="email">${labelCustomerEmail}</span>
+						<input path="email" class="form-control capitalise" placeholder="${labelCustomerEmail}" aria-describedby="email" />
+						<div>
+							<errors path="email" cssClass="error" />
+						</div>
 				</div>
+				
+				
+				<div class="form-group">
+						<span class="input-group-addon input-group-min-width" id="phoneNumber" path="phoneNumber">${labelCustomerPhoneNumber}</span>
+						<input path="phoneNumber" class="form-control capitalise" placeholder="${labelCustomerPhoneNumber}" aria-describedby="phoneNumber" />
+						<div>
+							<errors path="phoneNumber" cssClass="error" />
+						</div>
+					</div>
 				
 				<div class="form-group">
 					<label for="date">Bezorgtijd</label>
