@@ -62,7 +62,6 @@ public class Customer extends DomainObject {
     @NotEmpty(message = "{validation.housenumber.NotEmpty.message}")
     @Size(min = 1, max = 7, message = "{validation.housenumber.Size.message}")
     private String houseNumber;
-    
  
     private String phoneNumber;
     
@@ -98,14 +97,14 @@ public class Customer extends DomainObject {
             byte[] photo) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.partySize = partySize;
-        this.description = description;
-        this.photo = photo.clone();
         this.email= email;
         this.postalCode = postalCode;
         this.houseNumber = houseNumber;
         this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+        this.partySize = partySize;
+        this.description = description;
+        this.photo = photo.clone();
     }
 
     // This method only updates user-editable fields
