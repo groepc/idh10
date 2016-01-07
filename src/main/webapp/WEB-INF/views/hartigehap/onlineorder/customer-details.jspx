@@ -64,6 +64,7 @@
 						<div>
 							<form:errors path="email" cssClass="error" />
 						</div>
+					</div>
 				</div>
 				
 				
