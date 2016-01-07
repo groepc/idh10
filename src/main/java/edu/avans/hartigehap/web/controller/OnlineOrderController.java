@@ -1,26 +1,14 @@
 package edu.avans.hartigehap.web.controller;
 
 import javax.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.validation.*;
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
 import edu.avans.hartigehap.web.form.*;
-import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import edu.avans.hartigehap.web.util.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import edu.avans.hartigehap.domain.*;
@@ -43,9 +31,11 @@ public class OnlineOrderController {
 	 * @param model
 	 * @return
 	 */
-    @RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
-    public String onlineOrderCustomerDetails(Model model) {
+    @RequestMapping(value = { "/online-order", "/online-order/customer-details" },  method = RequestMethod.GET)
+    public String onlineOrderCustomerDetails(Model uiModel) {
     	log.info("Online order step 1, customer details");
+    	Customer customer = new Customer();
+        uiModel.addAttribute("customer", customer);
         return "hartigehap/onlineorder/customer-details";
     }
     
@@ -55,8 +45,9 @@ public class OnlineOrderController {
 	 * @return
 	 */
     @RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.POST)
-    public String onlineOrderCustomerDetailsProcess(@Valid Customer customer,
-            BindingResult bindingResult, Model uiModel, Locale locale) {
+    public String onlineOrderCustomerDetailsProcess(@ModelAttribute @Valid Customer customer,
+            BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
+            RedirectAttributes redirectAttributes, Locale locale) {
     	
     	System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
     	System.out.println("Binding Result target: " + (Customer) bindingResult.getTarget());
