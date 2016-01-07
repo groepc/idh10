@@ -29,12 +29,15 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private CustomerRepository customerRepository;
 	@Autowired
 	private BaseOrderItemRepository baseOrderItemRepository;
+	@Autowired
+	private BaseFoodRepository baseFoodRepository;
 	
 	private List<Meal> meals = new ArrayList<Meal>();
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
 	private List<Drink> drinks = new ArrayList<Drink>();
 	private List<MealOption> mealOptions = new ArrayList<MealOption>();
 	private List<Customer> customers = new ArrayList<Customer>();
+	private List<BaseFood> foods = new ArrayList<BaseFood>();
 
 		
 	/**
@@ -43,6 +46,19 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	 *  the restaurant, we save them explicitly anyway
 	 */
 	private void createCommonEntities() {
+		
+		
+		/**
+		 * @author Frans
+		 * 
+		 * Create createFood
+		 */
+		createBaseFood("Pizza Hawaï", 7.0);
+		createBaseFood("Pizza Shoarma", 8.0);	
+		createBaseFood("Pizza Salami", 6.5);	
+		createBaseFood("Pizza Margaritha", 5.0);	
+		createBaseFood("Pizza Funghi", 7.95);	
+		createBaseFood("Pizza Chicken Supreme", 9.95);	
 		
 		createFoodCategory("low fat");
 		createFoodCategory("high energy");
@@ -86,6 +102,12 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createCustomer("piet", "bakker", "test2@example.com", "2000BB", "10B", "",  new DateTime(), 1, "description", photo);
 		createCustomer("piet", "bakker", "test3@example.com", "3000CC", "10B", "",  new DateTime(), 1, "description", photo);
 
+	}
+	
+	private void createBaseFood(String name, Double price) {
+		BaseFood baseFood = new BaseFood(name, price);
+		baseFood = baseFoodRepository.save(baseFood);
+		foods.add(baseFood);
 	}
 
 	private void createFoodCategory(String tag) {
