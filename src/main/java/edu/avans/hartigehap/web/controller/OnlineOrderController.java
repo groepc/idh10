@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,6 @@ public class OnlineOrderController {
     @Autowired
     private RestaurantService restaurantService;
     
-    @Autowired
-    private DiningTableService diningTableService;
 
     @Autowired
     private BaseFoodService baseFoodService;
@@ -96,6 +95,12 @@ public class OnlineOrderController {
 	 */
     @RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
     public String onlineOrderSelectMeals(Model model, HttpSession session) {
+    	
+    	if (session.getAttribute("customerId") == null) {
+    		return "redirect:/online-order/select-meals";
+    	}
+    	
+    	
     	log.info("Online order step 2, select meals");
     	Collection<BaseFood> baseFoods = baseFoodService.findAll();
         model.addAttribute("foods", baseFoods);
