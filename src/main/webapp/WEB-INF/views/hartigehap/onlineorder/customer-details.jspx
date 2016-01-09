@@ -27,54 +27,53 @@
   
   				<div class="form-group">
 					<span class="input-group-addon input-group-min-width" id="firstName" path="firstName">${labelCustomerFirstName}</span>
-						<form:input path="firstName" class="form-control capitalise" placeholder="${labelCustomerFirstName}" aria-describedby="firstName" />
-						<div>
-							<form:errors path="firstName" cssClass="error" />
-						</div>
+					<form:input path="firstName" class="form-control capitalise" placeholder="${labelCustomerFirstName}" aria-describedby="firstName" />
+					<div>
+						<form:errors path="firstName" cssClass="error" />
+					</div>
 				</div>
 				
 				
 				<div class="form-group">
 					<span class="input-group-addon input-group-min-width" id="lastName" path="lastName">${labelCustomerLastName}</span>
-						<form:input path="lastName" class="form-control capitalise" placeholder="${labelCustomerLastName}" aria-describedby="lastName" />
-						<div>
-							<form:errors path="lastName" cssClass="error" />
-						</div>
+					<form:input path="lastName" class="form-control capitalise" placeholder="${labelCustomerLastName}" aria-describedby="lastName" />
+					<div>
+						<form:errors path="lastName" cssClass="error" />
+					</div>
 				</div>
 				
 				<div class="form-group">
 					<span class="input-group-addon input-group-min-width" id="postalCode" path="postalCode">${labelCustomerPostalCode}</span>
-						<form:input path="postalCode" class="form-control capitalise" placeholder="${labelCustomerPostalCode}" aria-describedby="PostalCode" />
-						<div>
-							<form:errors path="postalCode" cssClass="error" />
-						</div>
+					<form:input path="postalCode" class="form-control capitalise" placeholder="${labelCustomerPostalCode}" aria-describedby="PostalCode" />
+					<div>
+						<form:errors path="postalCode" cssClass="error" />
+					</div>
 				</div>
 				
 				<div class="form-group">
-						<span class="input-group-addon input-group-min-width" id="houseNumber" path="houseNumber">${labelCustomerHouseNumber}</span>
-						<form:input path="houseNumber" class="form-control capitalise" placeholder="${labelCustomerHouseNumber}" aria-describedby="HouseNumber" />
-						<div>
-							<form:errors path="houseNumber" cssClass="error" />
-						</div>
+					<span class="input-group-addon input-group-min-width" id="houseNumber" path="houseNumber">${labelCustomerHouseNumber}</span>
+					<form:input path="houseNumber" class="form-control capitalise" placeholder="${labelCustomerHouseNumber}" aria-describedby="HouseNumber" />
+					<div>
+						<form:errors path="houseNumber" cssClass="error" />
 					</div>
+				</div>
 				
-								<div class="form-group">
+				<div class="form-group">
 					<span class="input-group-addon input-group-min-width" id="email" path="email">${labelCustomerEmail}</span>
-						<form:input path="email" class="form-control capitalise" placeholder="${labelCustomerEmail}" aria-describedby="email" />
-						<div>
-							<form:errors path="email" cssClass="error" />
-						</div>
+					<form:input path="email" type="email" class="form-control" placeholder="${labelCustomerEmail}" aria-describedby="email" />
+					<div>
+						<form:errors path="email" cssClass="error" />
 					</div>
 				</div>
 				
 				
 				<div class="form-group">
-						<span class="input-group-addon input-group-min-width" id="phoneNumber" path="phoneNumber">${labelCustomerPhoneNumber}</span>
-						<form:input path="phoneNumber" class="form-control capitalise" placeholder="${labelCustomerPhoneNumber}" aria-describedby="phoneNumber" />
-						<div>
-							<form:errors path="phoneNumber" cssClass="error" />
-						</div>
+					<span class="input-group-addon input-group-min-width" id="phoneNumber" path="phoneNumber">${labelCustomerPhoneNumber}</span>
+					<form:input path="phoneNumber" class="form-control capitalise" placeholder="${labelCustomerPhoneNumber}" aria-describedby="phoneNumber" />
+					<div>
+						<form:errors path="phoneNumber" cssClass="error" />
 					</div>
+				</div>
 				
 				<div class="form-group">
 					<label for="date">Bezorgtijd</label>
