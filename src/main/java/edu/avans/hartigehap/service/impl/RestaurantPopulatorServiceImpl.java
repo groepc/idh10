@@ -150,8 +150,12 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		customerRepository.save(customer);
 	}
 	
-	private void createDiningTables(int numberOfTables, Restaurant restaurant) {
-		for(int i=0; i<numberOfTables; i++) {
+	private void createDiningTables(int numberOfTables, Restaurant restaurant, boolean createOne) {
+		int tables = 0 ;
+		if (createOne == true) {
+			tables = numberOfTables--;
+		}
+		for(int i=tables; i<numberOfTables; i++) {
 			DiningTable diningTable = new DiningTable(i+1);
 			diningTable.setRestaurant(restaurant);
 			restaurant.getDiningTables().add(diningTable);
@@ -166,7 +170,9 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		restaurant = restaurantRepository.save(restaurant);
 
 		// every restaurant has its own dining tables
-		createDiningTables(5, restaurant);
+		createDiningTables(5, restaurant, false);
+		
+		createDiningTables(9999999, restaurant, true);
 
 		// for the moment every restaurant has all available food categories 
 		for(FoodCategory foodCat : foodCats) {

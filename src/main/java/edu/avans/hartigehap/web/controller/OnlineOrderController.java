@@ -25,6 +25,9 @@ public class OnlineOrderController {
     private CustomerService customerService;
     @Autowired
     private RestaurantService restaurantService;
+    
+    @Autowired
+    private DiningTableService diningTableService;
 
     @Autowired
     private BaseFoodService baseFoodService;
@@ -50,7 +53,7 @@ public class OnlineOrderController {
     @RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.POST)
     public String onlineOrderCustomerDetailsProcess(@ModelAttribute @Valid Customer customer,
             BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
-            RedirectAttributes redirectAttributes, Locale locale) {
+            RedirectAttributes redirectAttributes, Locale locale, HttpSession session) {
     	
     	System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
     	System.out.println("Binding Result target: " + (Customer) bindingResult.getTarget());
@@ -69,7 +72,8 @@ public class OnlineOrderController {
     	customer = customerService.save(customer);
     	log.info("Online order step 1, customer details Process");
     	
-    	
+    	session.setAttribute("customerId", customer.getId());
+
     	 
     	return "redirect:/online-order/select-meals";
     }
@@ -80,10 +84,13 @@ public class OnlineOrderController {
 	 * @return
 	 */
     @RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
-    public String onlineOrderSelectMeals(Model model) {
+    public String onlineOrderSelectMeals(Model model, HttpSession session) {
     	log.info("Online order step 2, select meals");
     	Collection<BaseFood> baseFoods = baseFoodService.findAll();
         model.addAttribute("foods", baseFoods);
+        Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
+        Customer customer = customerService.findById(idCustomer);
+        model.addAttribute("customerEmail", customer.getEmail());
         return "hartigehap/onlineorder/select-meals";
     }
     

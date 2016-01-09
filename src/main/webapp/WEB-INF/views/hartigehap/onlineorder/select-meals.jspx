@@ -19,7 +19,7 @@
 			
 			<form name="onlineOrderSelectMeals" action="/hh/online-order/payment" method="get">
 				<div class="form-group">
-					Huidige bestelling voor <i>emailadres</i>
+					Huidige bestelling voor <i>${customerEmail}</i>
 				</div>
 				
 				<hr />
