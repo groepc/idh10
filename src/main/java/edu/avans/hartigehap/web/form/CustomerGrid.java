@@ -1,7 +1,8 @@
 package edu.avans.hartigehap.web.form;
 
 import java.util.List;
-import edu.avans.hartigehap.domain.*;
+
+import edu.avans.hartigehap.domain.Customer;
 
 public class CustomerGrid {
 

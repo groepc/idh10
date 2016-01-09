@@ -1,16 +1,20 @@
 package edu.avans.hartigehap.web.controller;
 
+import java.util.Collection;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import edu.avans.hartigehap.domain.*;
-import edu.avans.hartigehap.service.*;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.bind.annotation.PathVariable;
-import java.util.*;
-import javax.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.service.RestaurantPopulatorService;
+import edu.avans.hartigehap.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j

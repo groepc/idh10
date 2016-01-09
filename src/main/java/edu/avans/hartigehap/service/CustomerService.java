@@ -1,10 +1,12 @@
 package edu.avans.hartigehap.service;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import edu.avans.hartigehap.domain.*;
+import edu.avans.hartigehap.domain.Customer;
+import edu.avans.hartigehap.domain.Restaurant;
 
 public interface CustomerService {
     List<Customer> findAll();

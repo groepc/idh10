@@ -10,7 +10,7 @@ public class NotificationFactory {
 		if(type.equalsIgnoreCase("sms")){
 	         return new SmsNotificationAdapter();
 	    } else if(type.equalsIgnoreCase("email")){
-	         return new EmailNotificationAdapter();
+	         return new EmailNotificationAdapter(new EmailNotificationImpl());
 	    }
 	    
 		return null;
