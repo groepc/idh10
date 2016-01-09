@@ -51,7 +51,7 @@ public class Customer extends DomainObject {
     @Size(min = 1, max = 40, message = "{validation.lastname.Size.message}")
     private String lastName;
     
-    @NotEmpty(message = "{validation.email.NotEmpty.message}")
+    @NotEmpty(message = "{validation.email.NotEmpty.message}") 
     @Size(min = 6, max = 255, message = "{validation.email.Size.message}")
     private String email;
 
