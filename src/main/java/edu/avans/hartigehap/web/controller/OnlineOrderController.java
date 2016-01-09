@@ -97,7 +97,7 @@ public class OnlineOrderController {
     public String onlineOrderSelectMeals(Model model, HttpSession session) {
     	
     	if (session.getAttribute("customerId") == null) {
-    		return "redirect:/onlineorder/customer-details";
+    		return "redirect:/online-order";
     	}
     	
     	
