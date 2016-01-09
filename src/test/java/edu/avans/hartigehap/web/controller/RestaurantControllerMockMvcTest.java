@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.LinkedList;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RestaurantControllerMockMvcTest.class })

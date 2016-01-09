@@ -1,17 +1,24 @@
 package edu.avans.hartigehap.service.impl;
 
-import java.util.*;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import edu.avans.hartigehap.domain.*;
-import edu.avans.hartigehap.repository.*;
-import edu.avans.hartigehap.service.DiningTableService;
+
 import com.google.common.collect.Lists;
+
+import edu.avans.hartigehap.domain.DiningTable;
+import edu.avans.hartigehap.domain.EmptyBillException;
+import edu.avans.hartigehap.domain.MenuItem;
+import edu.avans.hartigehap.domain.StateException;
+import edu.avans.hartigehap.repository.DiningTableRepository;
+import edu.avans.hartigehap.repository.MenuItemRepository;
+import edu.avans.hartigehap.service.DiningTableService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service("diningTableService")
 @Repository

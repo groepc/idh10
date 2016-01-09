@@ -3,16 +3,27 @@ package edu.avans.hartigehap.web.controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import edu.avans.hartigehap.domain.*;
-import edu.avans.hartigehap.service.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import edu.avans.hartigehap.domain.BaseOrderItem;
+import edu.avans.hartigehap.domain.Bill;
+import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.domain.StateException;
+import edu.avans.hartigehap.service.BillService;
+import edu.avans.hartigehap.service.OrderService;
+import edu.avans.hartigehap.service.RestaurantService;
 import edu.avans.hartigehap.web.form.Message;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")

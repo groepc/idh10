@@ -1,25 +1,37 @@
 package edu.avans.hartigehap.web.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.validation.Valid;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.*;
-import org.springframework.validation.*;
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
-import edu.avans.hartigehap.web.form.*;
-import javax.servlet.http.Part;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import edu.avans.hartigehap.web.util.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import edu.avans.hartigehap.domain.Customer;
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.service.CustomerService;
+import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.web.form.Message;
+import edu.avans.hartigehap.web.util.UrlUtil;
 import lombok.extern.slf4j.Slf4j;
-import java.util.*;
-import edu.avans.hartigehap.domain.*;
-import edu.avans.hartigehap.service.*;
-import javax.servlet.http.*;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")

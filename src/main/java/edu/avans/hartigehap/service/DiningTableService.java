@@ -1,9 +1,13 @@
 package edu.avans.hartigehap.service;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import edu.avans.hartigehap.domain.*;
+
+import edu.avans.hartigehap.domain.DiningTable;
+import edu.avans.hartigehap.domain.EmptyBillException;
+import edu.avans.hartigehap.domain.StateException;
 
 public interface DiningTableService {
 

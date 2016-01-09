@@ -1,7 +1,5 @@
 package edu.avans.hartigehap.domain;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class SmsNotificationAdapter implements NotificationAdapter {
 	
 	/**
