@@ -19,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.avans.hartigehap.domain.BaseFood;
 import edu.avans.hartigehap.domain.Customer;
+import edu.avans.hartigehap.domain.NotificationAdapter;
+import edu.avans.hartigehap.domain.NotificationFactory;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.BaseFoodService;
 import edu.avans.hartigehap.service.CustomerService;
@@ -116,6 +118,10 @@ public class OnlineOrderController {
    	 */
     @RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
     public String onlineOrderReceipt(Model model) {
+    	
+    	NotificationAdapter notifier = NotificationFactory.getNotification("email");
+    	notifier.request("vadiemjanssens@gmail.com", "Hallo wereld!");
+    	
     	log.info("Online order step 4, receipt");
         return "hartigehap/onlineorder/receipt";
     }
