@@ -1,8 +1,9 @@
 package edu.avans.hartigehap.web.controller.rs;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 
 // http://briansjavablog.blogspot.nl/2012/08/rest-services-with-spring.html
 @Controller

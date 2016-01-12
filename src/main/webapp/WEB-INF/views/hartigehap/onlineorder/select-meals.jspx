@@ -19,16 +19,18 @@
 			
 			<form name="onlineOrderSelectMeals" action="/hh/online-order/payment" method="get">
 				<div class="form-group">
-					Huidige bestelling voor <i>emailadres</i>
+					Huidige bestelling voor <i>${customerEmail}</i>
 				</div>
 				
 				<hr />
 			
 				<div class="form-group">
 					<label for="choosePizza">Kies een pizza</label>
-					<select name="pizza-type" id="choosePizza" class="form-control">
-						<option>Pizza Margarita (7,-)</option>
-						<option>Pizza Funghi (8,-)</option>
+					
+				    <select name="pizza-type" id="choosePizza" class="form-control">
+				       	<c:forEach items="${foods}" var="food">
+							<option value="${food.name}">${food.name} ${food.price}</option>
+						</c:forEach>
 					</select>
 				</div>
 				

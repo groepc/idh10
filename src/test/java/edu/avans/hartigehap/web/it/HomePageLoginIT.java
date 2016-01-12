@@ -1,11 +1,18 @@
 package edu.avans.hartigehap.web.it;
 
-import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HomePageLoginIT {

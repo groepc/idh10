@@ -2,15 +2,19 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.List;
 import java.util.ListIterator;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import edu.avans.hartigehap.service.*;
-import edu.avans.hartigehap.domain.*;
+
+import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.OrderRepository;
+import edu.avans.hartigehap.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 
 @Service("orderService")
 @Repository

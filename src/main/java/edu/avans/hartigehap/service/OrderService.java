@@ -2,7 +2,9 @@ package edu.avans.hartigehap.service;
 
 import java.util.List;
 
-import edu.avans.hartigehap.domain.*;
+import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.domain.StateException;
 
 public interface OrderService {
     Order findById(Long orderId);

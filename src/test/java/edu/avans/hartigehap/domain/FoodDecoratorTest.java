@@ -10,9 +10,9 @@ public class FoodDecoratorTest {
     public void create() {
 		
 		// set-up base food
-		Food base = new Food("Pizza Margharita", 7.0);
-		Food extraCheese = new Ingredient("Extra cheese", 1.0, base);
-		Food extraOnion = new Ingredient("Extra onion", 1.1, extraCheese);
+		BaseFood base = new BaseFood("Pizza Margharita", 7.0);
+		BaseFood extraCheese = new Ingredient("Extra cheese", 1.0, base);
+		BaseFood extraOnion = new Ingredient("Extra onion", 1.1, extraCheese);
 		
 		assertEquals(extraOnion.getPrice(), new Double(9.1));
     }

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import edu.avans.hartigehap.domain.*;
+
+import edu.avans.hartigehap.domain.Bill;
+import edu.avans.hartigehap.domain.Restaurant;
 
 public interface BillRepository extends PagingAndSortingRepository<Bill, Long> {
 
