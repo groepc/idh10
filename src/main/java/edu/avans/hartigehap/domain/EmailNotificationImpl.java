@@ -29,13 +29,13 @@ public class EmailNotificationImpl {
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		
-		try {
-			helper.setTo("vadiemjanssens@gmail.com");
-			helper.setText("Thank you for ordering!");
-			sender.send(message);
-		} catch (MessagingException ex) {
-			System.err.println(ex.getMessage());
-		}
+//		try {
+//			helper.setTo("vadiemjanssens@gmail.com");
+//			helper.setText("Thank you for ordering!");
+//			sender.send(message);
+//		} catch (MessagingException ex) {
+//			System.err.println(ex.getMessage());
+//		}
 		
 		return true;
 	}	

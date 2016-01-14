@@ -1,4 +1,4 @@
-package edu.avans.hartigehap.domain;
+ package edu.avans.hartigehap.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
