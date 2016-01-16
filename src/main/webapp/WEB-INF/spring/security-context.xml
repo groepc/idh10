@@ -31,7 +31,8 @@
                 <user name="erco" password="erco" authorities="ROLE_CUSTOMER, ROLE_EMPLOYEE" />
                 <user name="employee" password="employee" authorities="ROLE_CUSTOMER, ROLE_EMPLOYEE" />
                 <user name="customer" password="customer" authorities="ROLE_CUSTOMER" />
-                <user name="manager" password="manager" authorities="ROLE_MANAGER, ROLE_EMPLOYEE" />
+                <user name="manager" password="manager" authorities="ROLE_MANAGER, ROLE_EMPLOYEE, ROLE_CUSTOMER, ROLE_DELIVERER" />
+                <user name="deliverer" password="deliverer" authorities="ROLE_DELIVERER" />
             </user-service>
         </authentication-provider>
     </authentication-manager> 
