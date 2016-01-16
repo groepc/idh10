@@ -72,12 +72,6 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		 * 
 		 * Create createFood
 		 */
-		createBaseFood("Pizza Hawaï", 7.0);
-		createBaseFood("Pizza Shoarma", 8.0);	
-		createBaseFood("Pizza Salami", 6.5);	
-		createBaseFood("Pizza Margaritha", 5.0);	
-		createBaseFood("Pizza Funghi", 7.95);	
-		createBaseFood("Pizza Chicken Supreme", 9.95);	
 		
 		createFoodCategory("low fat");
 		createFoodCategory("high energy");
@@ -85,7 +79,15 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createFoodCategory("italian");
 		createFoodCategory("asian");
 		createFoodCategory("alcoholic drinks");
-		createFoodCategory("energizing drinks");		
+		createFoodCategory("energizing drinks");
+		createFoodCategory("online pizzas");
+		
+		createMeal("Pizza Hawaï", null, 7, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
+		createMeal("Pizza Shoarma", null, 10, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
+		createMeal("Pizza Salami", null, 8, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
+		createMeal("Pizza Margaritha", null, 6, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
+		createMeal("Pizza Funghi", null, 8, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
+		createMeal("Pizza Chicken Supreme", null, 9, "online", Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(7)}));
 		
 		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
@@ -100,15 +102,15 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createMeal("ravioli", "ravioli.jpg", 8, "easy",
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1), foodCats.get(2)}));
 
-		createMealOption("bell pepper", "pizza.jpg", 2, "easy",
+		createMealOption("Extra kaas", "pizza.jpg", 2, "easy",
 				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("mushrooms", "pizza.jpg", 3, "easy",
+		createMealOption("Extra ui", "pizza.jpg", 3, "easy",
 				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("mozzarella", "pizza.jpg", 1, "easy",
+		createMealOption("Extra tomaat", "pizza.jpg", 1, "easy",
 				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("shrimps", "pizza.jpg", 5, "easy",
+		createMealOption("Extra mozarella", "pizza.jpg", 5, "easy",
 				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("cream cheese", "pizza.jpg", 5, "easy",
+		createMealOption("Extra ansjovis", "pizza.jpg", 5, "easy",
 				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
 		
 		createDrink("beer", "beer.jpg", 1, Drink.Size.LARGE,
@@ -156,7 +158,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	}
 	
 	private void createDrink(String name, String image, int price, Drink.Size size, List<FoodCategory> foodCats) {
-		Drink drink = new Drink(name, image, price, size);
+		Drink drink = new Drink(name, image, price, "", size);
 		drink = menuItemRepository.save(drink);
 		drink.addFoodCategories(foodCats);
 		drinks.add(drink);
@@ -181,6 +183,13 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		}
 	}
 	
+	// create single dining table with unique id
+	private void createDiningTableWithId(int id, Restaurant restaurant) {
+		DiningTable diningTable = new DiningTable(id);
+		diningTable.setRestaurant(restaurant);
+		restaurant.getDiningTables().add(diningTable);
+	}
+	
 	private Restaurant populateRestaurant(Restaurant restaurant) {
 				
 		// will save everything that is reachable by cascading
@@ -191,7 +200,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		// every restaurant has its own dining tables
 		createDiningTables(5, restaurant, false);
 		
-		createDiningTables(9999999, restaurant, true);
+		createDiningTableWithId(9999999, restaurant);
 
 		// for the moment every restaurant has all available food categories 
 		for(FoodCategory foodCat : foodCats) {

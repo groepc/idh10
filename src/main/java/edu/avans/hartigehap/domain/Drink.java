@@ -25,8 +25,8 @@ public class Drink extends MenuItem {
         SMALL, MEDIUM, LARGE
     }
 
-    public Drink(String id, String imageFileName, int price, Size size) {
-        super(id, imageFileName, price);
+    public Drink(String id, String imageFileName, int price, String recipe, Size size) {
+        super(id, imageFileName, price, recipe);
         this.size = size;
 
     }

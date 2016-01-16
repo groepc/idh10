@@ -86,5 +86,4 @@ public class DiningTable extends DomainObject {
         currentBill.setDiningTable(this);
         bills.add(currentBill);
     }
-
 }
