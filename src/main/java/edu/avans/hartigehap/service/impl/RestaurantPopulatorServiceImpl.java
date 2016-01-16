@@ -85,7 +85,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createFoodCategory("italian");
 		createFoodCategory("asian");
 		createFoodCategory("alcoholic drinks");
-		createFoodCategory("energizing drinks");
+		createFoodCategory("energizing drinks");		
 		
 		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
