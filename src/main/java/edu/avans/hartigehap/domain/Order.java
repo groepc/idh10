@@ -101,6 +101,20 @@ public class Order extends DomainObject {
 			orderItems.add(orderItem);
 		}
 	}
+	
+	public OrderItem addOnlineOrderItem(MenuItem menuItem) {
+		OrderItem orderItem = new OrderItem(menuItem, 1);
+		orderItems.add(orderItem);
+		
+		return orderItem;
+	}
+	
+	public OrderOption addOnlineOrderOption(OrderItem orderItem, MenuItem orderOption) {
+		OrderOption newOrderOption = new OrderOption(orderItem, orderOption, 1);
+		orderItems.add(newOrderOption);
+		
+		return newOrderOption;
+	}
 
 	public void deleteOrderItem(MenuItem menuItem) {
 		Iterator<BaseOrderItem> orderItemIterator = orderItems.iterator();

@@ -1,5 +1,6 @@
 package edu.avans.hartigehap.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 import edu.avans.hartigehap.domain.BaseFood;
+import edu.avans.hartigehap.domain.FoodCategory;
+import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.repository.BaseFoodRepository;
+import edu.avans.hartigehap.repository.FoodCategoryRepository;
+import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.service.BaseFoodService;
 
 @Service("foodService")
@@ -21,6 +26,10 @@ public class BaseFoodServiceImpl implements BaseFoodService {
 
     @Autowired
     private BaseFoodRepository foodRepository;
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+    @Autowired
+    private FoodCategoryRepository foodCategoryRepository;
 
     @Transactional(readOnly = true)
     public List<BaseFood> findAll() {
@@ -29,5 +38,10 @@ public class BaseFoodServiceImpl implements BaseFoodService {
         Sort sort = new Sort(Sort.Direction.ASC, "id");
         return Lists.newArrayList(foodRepository.findAll(sort));
     }
+
+	@Override
+	public Collection<MenuItem> findOnlineMenuItems() {
+		return menuItemRepository.findByRecipe("online");
+	}
 
 }

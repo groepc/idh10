@@ -18,8 +18,25 @@
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
 			<form name="onlineOrderSelectMeals" method="post">
-				<div class="form-group">
-					Huidige bestelling voor <i>${customerEmail}</i>
+				<hr />
+				
+				<div class="form-group clearfix">
+					Huidige bestelling voor <i>${customerEmail}</i>:
+					<br></br>
+					
+					<c:if test="${currentItems.size() == 0}">
+						Selecteer hieronder eerst een pizza.
+					</c:if>
+					
+					<c:forEach items="${currentItems}" var="item">
+						<div>${item.menuItem.id} (if item.orderItem)</div>
+						
+
+					</c:forEach>
+					
+					<c:if test="${currentItems.size() > 0}">
+						<a href="/hh/online-order/payment" class="btn btn-warning pull-right">Direct afrekenen</a>
+					</c:if>
 				</div>
 				
 				<hr />
@@ -28,8 +45,8 @@
 					<label for="choosePizza">Kies een pizza</label>
 					
 				    <select name="order" id="choosePizza" class="form-control">
-				       	<c:forEach items="${foods}" var="food">
-							<option value="${food.name}">${food.name} (€${food.price})</option>
+				       	<c:forEach items="${meals}" var="meal">
+							<option value="${meal.id}">${meal.id} (€${meal.price})</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -40,7 +57,7 @@
 							<label for="${option.id}">${option.id} (+ €0,${option.price}0)</label>
 						</div>
 						<div class="col-xs-4">
-							<input type="text" name="options[${option.id}]" class="form-control" id="${option.id}"></input>
+							<input type="checkbox" name="options[]"  value="${option.id}" id="${option.id}"></input>
 						</div>
 					</div>
 				</c:forEach>
