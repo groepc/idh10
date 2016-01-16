@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.domain.Bill;
+import edu.avans.hartigehap.domain.Customer;
+import edu.avans.hartigehap.domain.DiningTable;
+import edu.avans.hartigehap.domain.MenuItem;
+import edu.avans.hartigehap.domain.OrderItem;
+import edu.avans.hartigehap.domain.OrderOption;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.BillRepository;
+import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.repository.OrderRepository;
 import edu.avans.hartigehap.service.BillService;
 
@@ -24,6 +30,8 @@ public class BillServiceImpl implements BillService {
     private OrderRepository orderRepository;
     @Autowired
     private BillRepository billRepository;
+    @Autowired
+    private MenuItemRepository menuItemRepository;
 
     @Transactional(readOnly = true)
     public Bill findById(Long billId) {
@@ -40,4 +48,27 @@ public class BillServiceImpl implements BillService {
         return billRepository.findByBillStatusAndDiningTableRestaurant(
                 Bill.BillStatus.SUBMITTED, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
     }
+
+	@Override
+	public Bill save(Bill bill) {
+		return billRepository.save(bill);
+	}
+	
+	@Override
+	public OrderItem addOrderItemOnline(Long billId, String menuItemName) {
+    	MenuItem menuItem = menuItemRepository.findOne(menuItemName);
+    	Bill currentBill = this.findById(billId);
+    	OrderItem orderItem = currentBill.getCurrentOrder().addOnlineOrderItem(menuItem);
+    	
+    	return orderItem;
+    }
+	
+	public void addOrderOptionOnline(Long billId, OrderItem orderItem, String orderOption) {
+		MenuItem menuItem = menuItemRepository.findOne(orderOption);
+		
+		Bill currentBill = this.findById(billId);
+    	OrderOption orderOptionReturned = currentBill.getCurrentOrder().addOnlineOrderOption(orderItem, menuItem);
+		
+		
+	}
 }

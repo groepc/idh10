@@ -1,4 +1,4 @@
-package edu.avans.hartigehap.domain;
+ package edu.avans.hartigehap.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -100,6 +100,20 @@ public class Order extends DomainObject {
 			OrderItem orderItem = new OrderItem(menuItem, 1);
 			orderItems.add(orderItem);
 		}
+	}
+	
+	public OrderItem addOnlineOrderItem(MenuItem menuItem) {
+		OrderItem orderItem = new OrderItem(menuItem, 1);
+		orderItems.add(orderItem);
+		
+		return orderItem;
+	}
+	
+	public OrderOption addOnlineOrderOption(OrderItem orderItem, MenuItem orderOption) {
+		OrderOption newOrderOption = new OrderOption(orderItem, orderOption, 1);
+		orderItems.add(newOrderOption);
+		
+		return newOrderOption;
 	}
 
 	public void deleteOrderItem(MenuItem menuItem) {

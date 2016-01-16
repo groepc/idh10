@@ -17,6 +17,9 @@
 	<definition extends="default" name="hartigehap/diningtable">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/diningtable.jspx" />
 	</definition>
+	<definition extends="default" name="hartigehap/deliverer">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/deliverer.jspx" />
+	</definition>
 	<definition extends="default" name="hartigehap/kitchen">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/kitchen.jspx" />
 	</definition>
