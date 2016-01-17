@@ -178,14 +178,15 @@ public class OnlineOrderController {
 		Long billId = (Long) session.getAttribute("billId");
 
 		String menuItemName = httpServletRequest.getParameter("order");
-		OrderItem orderItem = billService.addOrderItemOnline(billId, menuItemName);
+		BaseOrderItem orderThing = billService.addOrderItemOnline(billId, menuItemName);
 
 		// get toppings
 		String[] options = httpServletRequest.getParameterValues("options[]");
-
-		for (String s : options) {
-			billService.addOrderOptionOnline(billId, orderItem, s);
-			System.out.println(s);
+		if(options.length > 0) {
+			for (String orderOption : options) {
+				orderThing = billService.addOrderOptionOnline(billId, orderThing, orderOption);
+				System.out.println(orderThing);
+			}
 		}
 
 		return "redirect:/online-order/select-meals";

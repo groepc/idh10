@@ -15,22 +15,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.domain.BaseFood;
+import edu.avans.hartigehap.domain.BaseOrderItem;
+import edu.avans.hartigehap.domain.Bill;
+import edu.avans.hartigehap.domain.Bill.BillStatus;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Drink;
 import edu.avans.hartigehap.domain.FoodCategory;
 import edu.avans.hartigehap.domain.Meal;
 import edu.avans.hartigehap.domain.MealOption;
+import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.OrderItem;
 import edu.avans.hartigehap.domain.OrderOption;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.BaseFoodRepository;
 import edu.avans.hartigehap.repository.BaseOrderItemRepository;
+import edu.avans.hartigehap.repository.BillRepository;
 import edu.avans.hartigehap.repository.CustomerRepository;
+import edu.avans.hartigehap.repository.DiningTableRepository;
 import edu.avans.hartigehap.repository.FoodCategoryRepository;
 import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.repository.RestaurantRepository;
+import edu.avans.hartigehap.service.BillService;
+import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.RestaurantPopulatorService;
+import edu.avans.hartigehap.service.RestaurantService;
 
 @Service("restaurantPopulatorService")
 @Repository
@@ -50,6 +60,16 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private BaseOrderItemRepository baseOrderItemRepository;
 	@Autowired
 	private BaseFoodRepository baseFoodRepository;
+	@Autowired
+	private BillRepository billRepository;
+	@Autowired
+	private DiningTableRepository diningTableRepository;
+	@Autowired
+	private BillService billService;
+	@Autowired
+	private RestaurantService restaurantService;
+	@Autowired
+	private DiningTableService diningTableService;
 
 	private List<Meal> meals = new ArrayList<Meal>();
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
@@ -199,10 +219,12 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	}
 
 	// create single dining table with unique id
-	private void createDiningTableWithId(int id, Restaurant restaurant) {
+	private DiningTable createDiningTableWithId(int id, Restaurant restaurant) {
 		DiningTable diningTable = new DiningTable(id);
 		diningTable.setRestaurant(restaurant);
 		restaurant.getDiningTables().add(diningTable);
+		
+		return diningTable;
 	}
 
 	private Restaurant populateRestaurant(Restaurant restaurant) {
@@ -214,8 +236,6 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 
 		// every restaurant has its own dining tables
 		createDiningTables(5, restaurant, false);
-
-		createDiningTableWithId(9999999, restaurant);
 
 		// for the moment every restaurant has all available food categories
 		for (FoodCategory foodCat : foodCats) {
@@ -256,6 +276,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 
 		Restaurant restaurant = new Restaurant(HARTIGEHAP_RESTAURANT_NAME, "deHartigeHap.jpg");
 		restaurant = populateRestaurant(restaurant);
+		DiningTable table = createDiningTableWithId(9999999, restaurant);
 
 		restaurant = new Restaurant(PITTIGEPANNEKOEK_RESTAURANT_NAME, "dePittigePannekoek.jpg");
 		restaurant = populateRestaurant(restaurant);
@@ -285,41 +306,77 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		// * All that information goes in one form to the controller and from
 		// there to the service impl.
 		// * The service impl creates the decorators
+		
+		Restaurant restaurantHartigeHap = restaurantService.fetchWarmedUp("HartigeHap");
+		
+		// create test customer
+		Customer customer = new Customer();
+		customer.setFirstName("Perry");
+		customer.setLastName("Faro");
+		customer.setEmail("p.faro@gmail.com");
+		customer.setHouseNumber("7");
+		customer.setPhoneNumber("0000000000");
+		customer.setPostalCode("1111AA");
+		customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurantHartigeHap }));
+		customer = customerRepository.save(customer);
+		
+		// get dining table
+		System.out.println("Table NR:" + table.getTableNr());
 
-		OrderItem orderItem = new OrderItem(meals.get(3), 1); // pizza
-		baseOrderItemRepository.save(orderItem);
-		OrderOption orderOption = new OrderOption(orderItem, mealOptions.get(0), 1); // bell
-																						// pepper
-		baseOrderItemRepository.save(orderOption);
-		OrderOption orderOption2 = new OrderOption(orderOption, mealOptions.get(1), 3); // mushrooms
-		baseOrderItemRepository.save(orderOption2);
-		OrderOption orderOption3 = new OrderOption(orderOption2, mealOptions.get(2), 2); // mozzarella
-		baseOrderItemRepository.save(orderOption3);
-		OrderOption orderOption4 = new OrderOption(orderOption3, mealOptions.get(3), 5); // shrimps
-		baseOrderItemRepository.save(orderOption4);
-		// orderOption5 saved by cascading from Order
-		OrderOption orderOption5 = new OrderOption(orderOption4, mealOptions.get(4), 1); // cream
-																							// cheese
-		logger.info("***************************** description: " + orderOption5.description());
-		logger.info("***************************** price: " + orderOption5.getPrice());
-
-		Collection<DiningTable> diningTables = restaurant.getDiningTables(); // dining
-																				// tables
-																				// of
-																				// the
-																				// hmmm
-																				// burger
-		DiningTable t = null;
-		Iterator<DiningTable> it = diningTables.iterator();
-		if (it.hasNext()) {
-			t = it.next(); // this is dining table 1
-		}
-
-		// add the decorated pizza to the current order ot table 1 of the hmmm
-		// burger
-		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption5);
-		// add a less decorated pizza to the order
-		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption3);
+		// create bill
+		Bill bill = new Bill();
+		bill.setCustomer(customer);
+		bill.setDiningTable(table);
+		bill.setBillStatus(BillStatus.SUBMITTED);
+		bill = billService.save(bill);
+		
+		BaseOrderItem basePizza = billService.addOrderItemOnline(bill.getId(), "Pizza Shoarma");
+		BaseOrderItem pizzaShoarmaWithCheese = billService.addOrderOptionOnline(bill.getId(), basePizza, "Extra kaas" );
+		BaseOrderItem pizzaShoarmaWithCheeseAndTomato = billService.addOrderOptionOnline(bill.getId(), pizzaShoarmaWithCheese, "Extra tomaat" );
+		
+		Order order = bill.getCurrentOrder();
+		order.setOrderStatus(OrderStatus.SUBMITTED);
+		
+		System.out.println("Order ID:" + order.getId());
+		System.out.println("Bill ID:" + bill.getId());
+		System.out.println("Table NR:" + bill.getDiningTable());
+	
+		
+//		OrderItem orderItem = new OrderItem(meals.get(3), 1); // pizza
+//		baseOrderItemRepository.save(orderItem);
+//		OrderOption orderOption = new OrderOption(orderItem, mealOptions.get(0), 1); // bell
+//																						// pepper
+//		baseOrderItemRepository.save(orderOption);
+//		OrderOption orderOption2 = new OrderOption(orderOption, mealOptions.get(1), 3); // mushrooms
+//		baseOrderItemRepository.save(orderOption2);
+//		OrderOption orderOption3 = new OrderOption(orderOption2, mealOptions.get(2), 2); // mozzarella
+//		baseOrderItemRepository.save(orderOption3);
+//		OrderOption orderOption4 = new OrderOption(orderOption3, mealOptions.get(3), 5); // shrimps
+//		baseOrderItemRepository.save(orderOption4);
+//		// orderOption5 saved by cascading from Order
+//		OrderOption orderOption5 = new OrderOption(orderOption4, mealOptions.get(4), 1); // cream
+//																							// cheese
+//		logger.info("***************************** description: " + orderOption5.description());
+//		logger.info("***************************** price: " + orderOption5.getPrice());
+//		
+//
+//		Collection<DiningTable> diningTables = restaurant.getDiningTables(); // dining
+//																				// tables
+//																				// of
+//																				// the
+//																				// hmmm
+//																				// burger
+//		DiningTable t = null;
+//		Iterator<DiningTable> it = diningTables.iterator();
+//		if (it.hasNext()) {
+//			t = it.next(); // this is dining table 1
+//		}
+//
+//		// add the decorated pizza to the current order ot table 1 of the hmmm
+//		// burger
+//		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption5);
+//		// add a less decorated pizza to the order
+//		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption3);
 
 		//////////////////////////////////////////////////////////////////////////////////////////
 

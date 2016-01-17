@@ -109,8 +109,8 @@ public class Order extends DomainObject {
 		return orderItem;
 	}
 
-	public OrderOption addOnlineOrderOption(OrderItem orderItem, MenuItem orderOption) {
-		OrderOption newOrderOption = new OrderOption(orderItem, orderOption, 1);
+	public BaseOrderItem addOnlineOrderOption(BaseOrderItem orderItem, MenuItem orderOption) {
+		BaseOrderItem newOrderOption = new OrderOption(orderItem, orderOption, 1);
 		orderItems.add(newOrderOption);
 
 		return newOrderOption;
