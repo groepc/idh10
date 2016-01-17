@@ -24,12 +24,14 @@ import org.slf4j.LoggerFactory;
 @Repository
 @Transactional
 public class OwnerServiceImpl implements OwnerService {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(OwnerServiceImpl.class);
 
-	@Autowired private OwnerRepository ownerRepository;
-	@Autowired private RestaurantService restaurantService;
-	
+	@Autowired
+	private OwnerRepository ownerRepository;
+	@Autowired
+	private RestaurantService restaurantService;
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Owner> findAll() {
@@ -57,13 +59,14 @@ public class OwnerServiceImpl implements OwnerService {
 
 	@Override
 	public void delete(Long id) {
-		ownerRepository.delete(id);		
+		ownerRepository.delete(id);
 	}
 
 	@Override
 	public List<Owner> findByRestaurant(String restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return ownerRepository.findByRestaurants(Arrays.asList(new Restaurant[]{restaurant}), new Sort(Sort.Direction.ASC, "name"));
+		return ownerRepository.findByRestaurants(Arrays.asList(new Restaurant[] { restaurant }),
+				new Sort(Sort.Direction.ASC, "name"));
 	}
 
 	@Override

@@ -18,12 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BaseFood extends DomainObject {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String name = "";
 	private Double price = 0.0;
 
-    public BaseFood(String name, Double price) {
-        this.name = name;
-        this.price = price;
-    }
+	public BaseFood(String name, Double price) {
+		this.name = name;
+		this.price = price;
+	}
 }

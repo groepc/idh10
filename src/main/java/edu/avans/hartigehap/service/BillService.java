@@ -10,15 +10,15 @@ import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 
 public interface BillService {
-    Bill findById(Long billId);
-    
-    Bill save(Bill bill);
+	Bill findById(Long billId);
 
-    void billHasBeenPaid(Bill bill) throws StateException;
+	Bill save(Bill bill);
 
-    List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant);
-    
-    OrderItem addOrderItemOnline(Long billId, String menuItemName);
-    
-    void addOrderOptionOnline(Long billId, OrderItem orderItem, String orderOption);
+	void billHasBeenPaid(Bill bill) throws StateException;
+
+	List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant);
+
+	OrderItem addOrderItemOnline(Long billId, String menuItemName);
+
+	void addOrderOptionOnline(Long billId, OrderItem orderItem, String orderOption);
 }

@@ -8,6 +8,6 @@ import edu.avans.hartigehap.domain.MenuItem;
 
 public interface BaseFoodService {
 	List<BaseFood> findAll();
-	
+
 	Collection<MenuItem> findOnlineMenuItems();
 }
