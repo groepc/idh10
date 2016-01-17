@@ -50,7 +50,7 @@
 		base-package="edu.avans.hartigehap.repository"
 		entity-manager-factory-ref="emf"
 		transaction-manager-ref="transactionManager" />
-	<!-- 
+	
 	<bean 
 		id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -60,9 +60,9 @@
 		<property name="password" value="boem" />
 		<property name="maxActive" value="0" />
 		<property name="initialSize" value="50" />
-	</bean> -->
+	</bean>
 	
-	<bean 
+	<!--<bean 
 		id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -71,7 +71,7 @@
 		<property name="password" value="1234" />
 		<property name="maxActive" value="0" />
 		<property name="initialSize" value="50" />
-	</bean> 
+	</bean>-->
 
 	<beans profile="dev">
 		<jdbc:embedded-database id="dataSource" type="H2">
