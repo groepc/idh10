@@ -86,8 +86,12 @@ public class OnlineOrderController {
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.POST)
 	public String onlineOrderCustomerDetailsProcess(@ModelAttribute @Valid Customer customer,
-			BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, Locale locale, HttpSession session) {
+			BindingResult bindingResult, 
+			Model uiModel, 
+			HttpServletRequest httpServletRequest,
+			RedirectAttributes redirectAttributes, 
+			Locale locale, 
+			HttpSession session) {
 
 		System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
 		System.out.println("Binding Result target" + (Customer) bindingResult.getTarget());
@@ -130,7 +134,8 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
-	public String onlineOrderSelectMeals(Model model, HttpSession session) {
+	public String onlineOrderSelectMeals(Model model, 
+			HttpSession session) {
 
 		log.info("Online order step 2, select meals");
 
@@ -168,8 +173,11 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.POST)
-	public String onlineOrderSelectMealsProcess(Model uiModel, HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, Locale locale, HttpSession session) {
+	public String onlineOrderSelectMealsProcess(Model uiModel, 
+			HttpServletRequest httpServletRequest,
+			RedirectAttributes redirectAttributes, 
+			Locale locale, 
+			HttpSession session) {
 
 		if (session.getAttribute("customerId") == null) {
 			return "redirect:/online-order";
@@ -182,9 +190,10 @@ public class OnlineOrderController {
 
 		// get toppings
 		String[] options = httpServletRequest.getParameterValues("options[]");
-		if(options.length > 0) {
-			for (String orderOption : options) {
-				orderThing = billService.addOrderOptionOnline(billId, orderThing, orderOption);
+		
+		if(options != null) {
+			for (String orderOptionName : options) {
+				orderThing = billService.addOrderOptionOnline(billId, orderThing, orderOptionName);
 				System.out.println(orderThing);
 			}
 		}
@@ -199,8 +208,27 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/online-order/payment", method = RequestMethod.GET)
-	public String onlineOrderPayment(Model model) {
+	public String onlineOrderPayment(Model model,
+			Locale locale,
+			HttpSession session) {
+		
 		log.info("Online order step 3, payment");
+		
+		if (session.getAttribute("customerId") == null) {
+			return "redirect:/online-order";
+			
+		}
+
+		Long billId = (Long) session.getAttribute("billId");
+		Bill bill = billService.findById(billId);
+		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+		model.addAttribute("currentItems", items);
+		
+		BaseOrderItem firstItem = items.iterator().next();
+		//Double totalPrice = firstItem.getPrice();
+		
+		
+		
 		return "hartigehap/onlineorder/payment";
 	}
 

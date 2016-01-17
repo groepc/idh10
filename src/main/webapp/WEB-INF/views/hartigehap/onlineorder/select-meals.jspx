@@ -29,7 +29,7 @@
 					</c:if>
 					
 					<c:forEach items="${currentItems}" var="item">
-						<div>${item.menuItem.id} (if item.orderItem)</div>
+						<div>${item.menuItem.id} (${item.menuItem.price})</div>
 					</c:forEach>
 					
 					<c:if test="${currentItems.size() > 0}">
