@@ -16,16 +16,15 @@ import lombok.ToString;
  */
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of = {})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
 public class OrderItem extends BaseOrderItem {
 	private static final long serialVersionUID = 1L;
 
-
 	public OrderItem(MenuItem menuItem, int quantity) {
 		super(menuItem, quantity);
 	}
-
 
 }

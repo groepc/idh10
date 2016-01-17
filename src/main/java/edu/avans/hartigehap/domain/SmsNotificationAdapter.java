@@ -1,7 +1,7 @@
 package edu.avans.hartigehap.domain;
 
 public class SmsNotificationAdapter implements NotificationAdapter {
-	
+
 	/**
 	 * Singleton pattern
 	 */

@@ -12,8 +12,9 @@ import lombok.ToString;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of = {})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
 public class OrderOption extends DecoratedOrderItem {
 	private static final long serialVersionUID = 1L;

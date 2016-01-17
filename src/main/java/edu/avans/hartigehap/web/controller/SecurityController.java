@@ -15,15 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SecurityController {
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @RequestMapping("/loginfail")
-    public String loginFail(Model uiModel, Locale locale) {
-        log.info("Login failed detected");
-        uiModel.addAttribute("message",
-                new Message("error", messageSource.getMessage("message_login_fail", new Object[] {}, locale)));
-        return "hartigehap/listrestaurants";
-    }
+	@RequestMapping("/loginfail")
+	public String loginFail(Model uiModel, Locale locale) {
+		log.info("Login failed detected");
+		uiModel.addAttribute("message",
+				new Message("error", messageSource.getMessage("message_login_fail", new Object[] {}, locale)));
+		return "hartigehap/listrestaurants";
+	}
 
 }

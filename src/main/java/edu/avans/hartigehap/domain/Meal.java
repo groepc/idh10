@@ -17,13 +17,10 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
 public class Meal extends MenuItem {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String recipe;
-
-    public Meal(String id, String imageFileName, int price, String recipe) {
-        super(id, imageFileName, price);
-        this.recipe = recipe;
-    }
+	public Meal(String id, String imageFileName, int price, String recipe) {
+		super(id, imageFileName, price, recipe);
+	}
 
 }

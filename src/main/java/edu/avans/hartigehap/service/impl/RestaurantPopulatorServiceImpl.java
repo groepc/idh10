@@ -37,7 +37,7 @@ import edu.avans.hartigehap.service.RestaurantPopulatorService;
 @Transactional
 public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorService {
 	final Logger logger = LoggerFactory.getLogger(RestaurantPopulatorServiceImpl.class);
-	
+
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 	@Autowired
@@ -50,7 +50,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private BaseOrderItemRepository baseOrderItemRepository;
 	@Autowired
 	private BaseFoodRepository baseFoodRepository;
-	
+
 	private List<Meal> meals = new ArrayList<Meal>();
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
 	private List<Drink> drinks = new ArrayList<Drink>();
@@ -58,27 +58,20 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private List<Customer> customers = new ArrayList<Customer>();
 	private List<BaseFood> foods = new ArrayList<BaseFood>();
 
-		
 	/**
-	 *  menu items, food categories and customers are common to all restaurants and should be created only once.
-	 *  Although we can safely assume that the are related to at least one restaurant and therefore are saved via
-	 *  the restaurant, we save them explicitly anyway
+	 * menu items, food categories and customers are common to all restaurants
+	 * and should be created only once. Although we can safely assume that the
+	 * are related to at least one restaurant and therefore are saved via the
+	 * restaurant, we save them explicitly anyway
 	 */
 	private void createCommonEntities() {
-		
-		
+
 		/**
 		 * @author Frans
 		 * 
-		 * Create createFood
+		 *         Create createFood
 		 */
-		createBaseFood("Pizza Hawaï", 7.0);
-		createBaseFood("Pizza Shoarma", 8.0);	
-		createBaseFood("Pizza Salami", 6.5);	
-		createBaseFood("Pizza Margaritha", 5.0);	
-		createBaseFood("Pizza Funghi", 7.95);	
-		createBaseFood("Pizza Chicken Supreme", 9.95);	
-		
+
 		createFoodCategory("low fat");
 		createFoodCategory("high energy");
 		createFoodCategory("vegatarian");
@@ -86,43 +79,60 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createFoodCategory("asian");
 		createFoodCategory("alcoholic drinks");
 		createFoodCategory("energizing drinks");
-		
-		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
-		createMeal("macaroni", "macaroni.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));		
-		createMeal("canneloni", "canneloni.jpg", 9, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
-		createMeal("pizza", "pizza.jpg", 9, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
-		createMeal("carpaccio", "carpaccio.jpg", 7, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(0)}));
-		createMeal("ravioli", "ravioli.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1), foodCats.get(2)}));
+		createFoodCategory("online pizzas");
 
-		createMealOption("bell pepper", "pizza.jpg", 2, "easy",
-				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("mushrooms", "pizza.jpg", 3, "easy",
-				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("mozzarella", "pizza.jpg", 1, "easy",
-				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("shrimps", "pizza.jpg", 5, "easy",
-				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		createMealOption("cream cheese", "pizza.jpg", 5, "easy",
-				Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(2)}));
-		
+		createMeal("Pizza Hawaï", null, 7, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+		createMeal("Pizza Shoarma", null, 10, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+		createMeal("Pizza Salami", null, 8, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+		createMeal("Pizza Margaritha", null, 6, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+		createMeal("Pizza Funghi", null, 8, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+		createMeal("Pizza Chicken Supreme", null, 9, "online",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
+
+		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
+		createMeal("macaroni", "macaroni.jpg", 8, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
+		createMeal("canneloni", "canneloni.jpg", 9, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
+		createMeal("pizza", "pizza.jpg", 9, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
+		createMeal("carpaccio", "carpaccio.jpg", 7, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(0) }));
+		createMeal("ravioli", "ravioli.jpg", 8, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1), foodCats.get(2) }));
+
+		createMealOption("Extra kaas", "pizza.jpg", 2, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
+		createMealOption("Extra ui", "pizza.jpg", 3, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
+		createMealOption("Extra tomaat", "pizza.jpg", 1, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
+		createMealOption("Extra mozarella", "pizza.jpg", 5, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
+		createMealOption("Extra ansjovis", "pizza.jpg", 5, "easy",
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
+
 		createDrink("beer", "beer.jpg", 1, Drink.Size.LARGE,
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(5)}));
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(5) }));
 		createDrink("coffee", "coffee.jpg", 1, Drink.Size.MEDIUM,
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(6)}));
-		
-		byte[] photo = new byte[]{127,-128,0};
-		createCustomer("piet", "bakker", "test1@example.com", "1000AA", "10B", "", new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", "test2@example.com", "2000BB", "10B", "",  new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", "test3@example.com", "3000CC", "10B", "",  new DateTime(), 1, "description", photo);
+				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(6) }));
+
+		byte[] photo = new byte[] { 127, -128, 0 };
+		createCustomer("piet", "bakker", "test1@example.com", "1000AA", "10B", "", new DateTime(), 1, "description",
+				photo);
+		createCustomer("piet", "bakker", "test2@example.com", "2000BB", "10B", "", new DateTime(), 1, "description",
+				photo);
+		createCustomer("piet", "bakker", "test3@example.com", "3000CC", "10B", "", new DateTime(), 1, "description",
+				photo);
 
 	}
-	
+
 	private void createBaseFood(String name, Double price) {
 		BaseFood baseFood = new BaseFood(name, price);
 		baseFood = baseFoodRepository.save(baseFood);
@@ -134,55 +144,69 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		foodCategory = foodCategoryRepository.save(foodCategory);
 		foodCats.add(foodCategory);
 	}
-	
+
 	private void createMeal(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
 		Meal meal = new Meal(name, image, price, recipe);
-		// as there is no cascading between FoodCategory and MenuItem (both ways), it is important to first 
-		// save foodCategory and menuItem before relating them to each other, otherwise you get errors
-		// like "object references an unsaved transient instance - save the transient instance before flushing:"
+		// as there is no cascading between FoodCategory and MenuItem (both
+		// ways), it is important to first
+		// save foodCategory and menuItem before relating them to each other,
+		// otherwise you get errors
+		// like "object references an unsaved transient instance - save the
+		// transient instance before flushing:"
 		meal.addFoodCategories(foodCats);
 		meal = menuItemRepository.save(meal);
 		meals.add(meal);
 	}
-	
+
 	private void createMealOption(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
 		MealOption mealOption = new MealOption(name, image, price, recipe);
-		// as there is no cascading between FoodCategory and MenuItem (both ways), it is important to first 
-		// save foodCategory and menuItem before relating them to each other, otherwise you get errors
-		// like "object references an unsaved transient instance - save the transient instance before flushing:"
+		// as there is no cascading between FoodCategory and MenuItem (both
+		// ways), it is important to first
+		// save foodCategory and menuItem before relating them to each other,
+		// otherwise you get errors
+		// like "object references an unsaved transient instance - save the
+		// transient instance before flushing:"
 		mealOption.addFoodCategories(foodCats);
 		mealOption = menuItemRepository.save(mealOption);
 		mealOptions.add(mealOption);
 	}
-	
+
 	private void createDrink(String name, String image, int price, Drink.Size size, List<FoodCategory> foodCats) {
-		Drink drink = new Drink(name, image, price, size);
+		Drink drink = new Drink(name, image, price, "", size);
 		drink = menuItemRepository.save(drink);
 		drink.addFoodCategories(foodCats);
 		drinks.add(drink);
 	}
-	
-	private void createCustomer(String firstName, String lastName,  String email, String postalCode, String houseNumber, String phoneNumber, DateTime birthDate,
-		int partySize, String description, byte[] photo) {
-		Customer customer = new Customer(firstName, lastName, email, postalCode, houseNumber, phoneNumber, birthDate, partySize, description, photo); 
+
+	private void createCustomer(String firstName, String lastName, String email, String postalCode, String houseNumber,
+			String phoneNumber, DateTime birthDate, int partySize, String description, byte[] photo) {
+		Customer customer = new Customer(firstName, lastName, email, postalCode, houseNumber, phoneNumber, birthDate,
+				partySize, description, photo);
 		customers.add(customer);
 		customerRepository.save(customer);
 	}
-	
+
 	private void createDiningTables(int numberOfTables, Restaurant restaurant, boolean createOne) {
-		int tables = 0 ;
+		int tables = 0;
 		if (createOne == true) {
 			tables = numberOfTables--;
 		}
-		for(int i=tables; i<numberOfTables; i++) {
-			DiningTable diningTable = new DiningTable(i+1);
+		for (int i = tables; i < numberOfTables; i++) {
+			DiningTable diningTable = new DiningTable(i + 1);
 			diningTable.setRestaurant(restaurant);
 			restaurant.getDiningTables().add(diningTable);
 		}
 	}
-	
+
+	// create single dining table with unique id
+	private void createDiningTableWithId(int id, Restaurant restaurant) {
+		DiningTable diningTable = new DiningTable(id);
+		diningTable.setRestaurant(restaurant);
+		restaurant.getDiningTables().add(diningTable);
+	}
+
 	private Restaurant populateRestaurant(Restaurant restaurant) {
-				
+
 		// will save everything that is reachable by cascading
 		// even if it is linked to the restaurant after the save
 		// operation
@@ -190,77 +214,82 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 
 		// every restaurant has its own dining tables
 		createDiningTables(5, restaurant, false);
-		
-		createDiningTables(9999999, restaurant, true);
 
-		// for the moment every restaurant has all available food categories 
-		for(FoodCategory foodCat : foodCats) {
+		createDiningTableWithId(9999999, restaurant);
+
+		// for the moment every restaurant has all available food categories
+		for (FoodCategory foodCat : foodCats) {
 			restaurant.getMenu().getFoodCategories().add(foodCat);
 		}
 
-		// for the moment every restaurant has the same menu 
-		for(Meal meal : meals) {
+		// for the moment every restaurant has the same menu
+		for (Meal meal : meals) {
 			restaurant.getMenu().getMeals().add(meal);
 		}
 
-		// for the moment every restaurant has the same menu 
-		for(Drink drink : drinks) {
+		// for the moment every restaurant has the same menu
+		for (Drink drink : drinks) {
 			restaurant.getMenu().getDrinks().add(drink);
 		}
-		
-		// for the moment every restaurant has the same meal options 
-		for(MealOption mealOption : mealOptions) {
+
+		// for the moment every restaurant has the same meal options
+		for (MealOption mealOption : mealOptions) {
 			restaurant.getMenu().getMealOptions().add(mealOption);
 		}
-		
+
 		// for the moment, every customer has dined in every restaurant
-		// no cascading between customer and restaurant; therefore both restaurant and customer
+		// no cascading between customer and restaurant; therefore both
+		// restaurant and customer
 		// must have been saved before linking them one to another
-		for(Customer customer : customers) {
+		for (Customer customer : customers) {
 			customer.getRestaurants().add(restaurant);
 			restaurant.getCustomers().add(customer);
 		}
-		
+
 		return restaurant;
-		
+
 	}
 
-	
 	public void createRestaurantsWithInventory() {
-		
+
 		createCommonEntities();
 
 		Restaurant restaurant = new Restaurant(HARTIGEHAP_RESTAURANT_NAME, "deHartigeHap.jpg");
 		restaurant = populateRestaurant(restaurant);
-		
+
 		restaurant = new Restaurant(PITTIGEPANNEKOEK_RESTAURANT_NAME, "dePittigePannekoek.jpg");
 		restaurant = populateRestaurant(restaurant);
-		
+
 		restaurant = new Restaurant(HMMMBURGER_RESTAURANT_NAME, "deHmmmBurger.jpg");
 		restaurant = populateRestaurant(restaurant);
-		
-		
-		/////////////////////// ORDER DECORATOR FREEHAND TEST ////////////////////////////////////////
-		
-		
-		// how to ensure in the GUI that only pizza options can be added to pizza's?:
-		// * use food category to distinguish pizza options from other options (use queries
-		//   for showing it in the GUI)
-		// * add a new category to distinguish pizza options from other options (use queries
-		//   for showing it in the GUI)
-		// * add a different collection in Menu for each type of option is a bad idea, because
-		//   it hard-codes specific information
-		
+
+		/////////////////////// ORDER DECORATOR FREEHAND TEST
+		/////////////////////// ////////////////////////////////////////
+
+		// how to ensure in the GUI that only pizza options can be added to
+		// pizza's?:
+		// * use food category to distinguish pizza options from other options
+		// (use queries
+		// for showing it in the GUI)
+		// * add a new category to distinguish pizza options from other options
+		// (use queries
+		// for showing it in the GUI)
+		// * add a different collection in Menu for each type of option is a bad
+		// idea, because
+		// it hard-codes specific information
+
 		// easy option to show the options in the GUI:
-		// * Show on one page the menu item with its options as a radio box and a quantity
-		//   for each option.
-		// * All that information goes in one form to the controller and from there to the service impl.
+		// * Show on one page the menu item with its options as a radio box and
+		// a quantity
+		// for each option.
+		// * All that information goes in one form to the controller and from
+		// there to the service impl.
 		// * The service impl creates the decorators
 
-		
 		OrderItem orderItem = new OrderItem(meals.get(3), 1); // pizza
 		baseOrderItemRepository.save(orderItem);
-		OrderOption orderOption = new OrderOption(orderItem, mealOptions.get(0), 1); // bell pepper
+		OrderOption orderOption = new OrderOption(orderItem, mealOptions.get(0), 1); // bell
+																						// pepper
 		baseOrderItemRepository.save(orderOption);
 		OrderOption orderOption2 = new OrderOption(orderOption, mealOptions.get(1), 3); // mushrooms
 		baseOrderItemRepository.save(orderOption2);
@@ -269,24 +298,30 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		OrderOption orderOption4 = new OrderOption(orderOption3, mealOptions.get(3), 5); // shrimps
 		baseOrderItemRepository.save(orderOption4);
 		// orderOption5 saved by cascading from Order
-		OrderOption orderOption5 = new OrderOption(orderOption4, mealOptions.get(4), 1); // cream cheese
+		OrderOption orderOption5 = new OrderOption(orderOption4, mealOptions.get(4), 1); // cream
+																							// cheese
 		logger.info("***************************** description: " + orderOption5.description());
 		logger.info("***************************** price: " + orderOption5.getPrice());
-		
-		Collection<DiningTable> diningTables = restaurant.getDiningTables(); // dining tables of the hmmm burger
+
+		Collection<DiningTable> diningTables = restaurant.getDiningTables(); // dining
+																				// tables
+																				// of
+																				// the
+																				// hmmm
+																				// burger
 		DiningTable t = null;
 		Iterator<DiningTable> it = diningTables.iterator();
-		if(it.hasNext()) {
+		if (it.hasNext()) {
 			t = it.next(); // this is dining table 1
 		}
-		
-		// add the decorated pizza to the current order ot table 1 of the hmmm burger
+
+		// add the decorated pizza to the current order ot table 1 of the hmmm
+		// burger
 		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption5);
 		// add a less decorated pizza to the order
-		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption3);		
-		
-		
+		t.getCurrentBill().getCurrentOrder().getOrderItems().add(orderOption3);
+
 		//////////////////////////////////////////////////////////////////////////////////////////
 
-	}	
+	}
 }

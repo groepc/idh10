@@ -17,9 +17,26 @@
 			<h1 style="text-align: center;">De Hartige Hap</h1>
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
-			<form name="onlineOrderSelectMeals" action="/hh/online-order/payment" method="get">
-				<div class="form-group">
-					Huidige bestelling voor <i>${customerEmail}</i>
+			<form name="onlineOrderSelectMeals" method="post">
+				<hr />
+				
+				<div class="form-group clearfix">
+					Huidige bestelling voor <i>${customerEmail}</i>:
+					<br></br>
+					
+					<c:if test="${currentItems.size() == 0}">
+						Selecteer hieronder eerst een pizza.
+					</c:if>
+					
+					<c:forEach items="${currentItems}" var="item">
+						<div>${item.menuItem.id} (if item.orderItem)</div>
+						
+
+					</c:forEach>
+					
+					<c:if test="${currentItems.size() > 0}">
+						<a href="/hh/online-order/payment" class="btn btn-warning pull-right">Direct afrekenen</a>
+					</c:if>
 				</div>
 				
 				<hr />
@@ -27,39 +44,23 @@
 				<div class="form-group">
 					<label for="choosePizza">Kies een pizza</label>
 					
-				    <select name="pizza-type" id="choosePizza" class="form-control">
-				       	<c:forEach items="${foods}" var="food">
-							<option value="${food.name}">${food.name} ${food.price}</option>
+				    <select name="order" id="choosePizza" class="form-control">
+				       	<c:forEach items="${meals}" var="meal">
+							<option value="${meal.id}">${meal.id} (€${meal.price})</option>
 						</c:forEach>
 					</select>
 				</div>
 				
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<label for="extraCheese">Extra kaas (+ 0,20)</label>
+				<c:forEach items="${mealOptions}" var="option">
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<label for="${option.id}">${option.id} (+ €0,${option.price}0)</label>
+						</div>
+						<div class="col-xs-4">
+							<input type="checkbox" name="options[]"  value="${option.id}" id="${option.id}"></input>
+						</div>
 					</div>
-					<div class="col-xs-4">
-						<input type="number" name="extraCheese" class="form-control" id="extraCheese"></input>
-					</div>
-				</div>
-				
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<label for="extraChampignon">Extra champignon (+ 0,40)</label>
-					</div>
-					<div class="col-xs-4">
-						<input type="number" name="extraChampignon" class="form-control" id="extraChampignon"></input>
-					</div>
-				</div>
-				
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<label for="extraPaprika">Extra paprika (+ 0,30)</label>
-					</div>
-					<div class="col-xs-4">
-						<input type="number" name="extraPaprika" class="form-control" id="extraPaprika"></input>
-					</div>
-				</div>
+				</c:forEach>
 		
 				<hr />
 

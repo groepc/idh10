@@ -9,19 +9,19 @@ import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.Restaurant;
 
 public interface CustomerService {
-    List<Customer> findAll();
+	List<Customer> findAll();
 
-    Customer findById(Long id);
+	Customer findById(Long id);
 
-    Customer findByFirstNameAndLastName(String firstName, String lastName);
+	Customer findByFirstNameAndLastName(String firstName, String lastName);
 
-    List<Customer> findCustomersForRestaurant(Restaurant restaurant);
+	List<Customer> findCustomersForRestaurant(Restaurant restaurant);
 
-    Page<Customer> findAllByPage(Pageable pageable);
+	Page<Customer> findAllByPage(Pageable pageable);
 
-    Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable);
+	Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable);
 
-    Customer save(Customer customer);
+	Customer save(Customer customer);
 
-    void delete(Long id);
+	void delete(Long id);
 }
