@@ -8,10 +8,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.MenuItem;
+import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.OrderItem;
 import edu.avans.hartigehap.domain.OrderOption;
 import edu.avans.hartigehap.domain.Restaurant;
@@ -58,16 +61,24 @@ public class BillServiceImpl implements BillService {
 	public OrderItem addOrderItemOnline(Long billId, String menuItemName) {
 		MenuItem menuItem = menuItemRepository.findOne(menuItemName);
 		Bill currentBill = this.findById(billId);
-		OrderItem orderItem = currentBill.getCurrentOrder().addOnlineOrderItem(menuItem);
+		Order order = currentBill.getCurrentOrder();
+		OrderItem orderItem = order.addOnlineOrderItem(menuItem);
+		
+		order.setOrderStatus(OrderStatus.CREATED);
 
 		return orderItem;
 	}
 
-	public void addOrderOptionOnline(Long billId, OrderItem orderItem, String orderOption) {
+	public BaseOrderItem addOrderOptionOnline(Long billId, BaseOrderItem orderItem, String orderOption) {
 		MenuItem menuItem = menuItemRepository.findOne(orderOption);
 
 		Bill currentBill = this.findById(billId);
-		OrderOption orderOptionReturned = currentBill.getCurrentOrder().addOnlineOrderOption(orderItem, menuItem);
+		Order order = currentBill.getCurrentOrder();
+		BaseOrderItem orderOptionReturned = order.addOnlineOrderOption(orderItem, menuItem);
+		
+		order.setOrderStatus(OrderStatus.CREATED);
+		
+		return orderOptionReturned;
 
 	}
 }

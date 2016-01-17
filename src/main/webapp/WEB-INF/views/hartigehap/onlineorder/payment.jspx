@@ -15,9 +15,11 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<h1 style="text-align: center;">Bank X</h1>
-			<h3 style="text-align: center;">Order #12345</h3>
+			<h3 style="text-align: center;">Order #1234</h3>
 			
-			<p>Bedrag: 15,40</p>
+			<c:forEach items="${currentItems}" var="item">
+				<div>${item.menuItem.id} (${item.menuItem.price})</div>
+			</c:forEach>
 			
 			<a href="/hh/online-order/receipt" class="btn btn-success">Betalen</a>
 		</div>

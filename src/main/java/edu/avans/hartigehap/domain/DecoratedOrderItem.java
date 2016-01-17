@@ -26,7 +26,7 @@ public abstract class DecoratedOrderItem extends BaseOrderItem {
 	private BaseOrderItem orderItem;
 
 	public DecoratedOrderItem(BaseOrderItem orderItem, MenuItem menuItem, int quantity) {
-		super(menuItem, quantity);
+		super(menuItem, quantity, menuItem.getPrice());
 		this.orderItem = orderItem;
 	}
 
