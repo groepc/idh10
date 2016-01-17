@@ -31,65 +31,65 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true, of = { "menu", "diningTables", "customers" })
 @NoArgsConstructor
 public class Restaurant extends DomainObjectNaturalId {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String imageFileName;
+	private String imageFileName;
 
-    // unidirectional one-to-one
-    @OneToOne(cascade = CascadeType.ALL)
-    private Menu menu = new Menu();
+	// unidirectional one-to-one
+	@OneToOne(cascade = CascadeType.ALL)
+	private Menu menu = new Menu();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
-    private Collection<DiningTable> diningTables = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
+	private Collection<DiningTable> diningTables = new ArrayList<>();
 
-    // no cascading
-    @ManyToMany(mappedBy = "restaurants")
-    private Collection<Customer> customers = new ArrayList<>();
-    
-    // no cascading
-    @ManyToMany(mappedBy="restaurants")
+	// no cascading
+	@ManyToMany(mappedBy = "restaurants")
+	private Collection<Customer> customers = new ArrayList<>();
+
+	// no cascading
+	@ManyToMany(mappedBy = "restaurants")
 	private Collection<Owner> owners = new ArrayList<Owner>();
 
-    public Restaurant(String name, String imageFileName) {
-        super(name);
-        this.imageFileName = imageFileName;
-    }
+	public Restaurant(String name, String imageFileName) {
+		super(name);
+		this.imageFileName = imageFileName;
+	}
 
-    // business methods
-    public void warmup() {
-        Iterator<DiningTable> diningTableIterator = diningTables.iterator();
-        while (diningTableIterator.hasNext()) {
-            diningTableIterator.next().getId();
-        }
+	// business methods
+	public void warmup() {
+		Iterator<DiningTable> diningTableIterator = diningTables.iterator();
+		while (diningTableIterator.hasNext()) {
+			diningTableIterator.next().getId();
+		}
 
-        Iterator<MenuItem> mealsIterator = menu.getMeals().iterator();
-        while (mealsIterator.hasNext()) {
-            MenuItem mi = mealsIterator.next();
-            mi.getId();
-            Iterator<FoodCategory> fcIterator = mi.getFoodCategories().iterator();
-            while (fcIterator.hasNext()) {
-                fcIterator.next().getId();
-            }
-        }
+		Iterator<MenuItem> mealsIterator = menu.getMeals().iterator();
+		while (mealsIterator.hasNext()) {
+			MenuItem mi = mealsIterator.next();
+			mi.getId();
+			Iterator<FoodCategory> fcIterator = mi.getFoodCategories().iterator();
+			while (fcIterator.hasNext()) {
+				fcIterator.next().getId();
+			}
+		}
 
-        Iterator<MenuItem> drinksIterator = menu.getDrinks().iterator();
-        while (drinksIterator.hasNext()) {
-            MenuItem mi = drinksIterator.next();
-            mi.getId();
-            Iterator<FoodCategory> fcIterator = mi.getFoodCategories().iterator();
-            while (fcIterator.hasNext()) {
-                fcIterator.next().getId();
-            }
-        }
+		Iterator<MenuItem> drinksIterator = menu.getDrinks().iterator();
+		while (drinksIterator.hasNext()) {
+			MenuItem mi = drinksIterator.next();
+			mi.getId();
+			Iterator<FoodCategory> fcIterator = mi.getFoodCategories().iterator();
+			while (fcIterator.hasNext()) {
+				fcIterator.next().getId();
+			}
+		}
 
-        Iterator<FoodCategory> foodCategoryIterator = menu.getFoodCategories().iterator();
-        while (foodCategoryIterator.hasNext()) {
-            FoodCategory fc = foodCategoryIterator.next();
-            Iterator<MenuItem> miIterator = fc.getMenuItems().iterator();
-            while (miIterator.hasNext()) {
-                miIterator.next().getId();
-            }
-        }
+		Iterator<FoodCategory> foodCategoryIterator = menu.getFoodCategories().iterator();
+		while (foodCategoryIterator.hasNext()) {
+			FoodCategory fc = foodCategoryIterator.next();
+			Iterator<MenuItem> miIterator = fc.getMenuItems().iterator();
+			while (miIterator.hasNext()) {
+				miIterator.next().getId();
+			}
+		}
 
-    }
+	}
 }

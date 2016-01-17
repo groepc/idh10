@@ -2,9 +2,9 @@ package edu.avans.hartigehap.domain;
 
 public class Ingredient extends FoodDecorator {
 	private static final long serialVersionUID = 1L;
-	
+
 	private BaseFood baseFood;
-	
+
 	private String name;
 	private Double price;
 
@@ -13,7 +13,7 @@ public class Ingredient extends FoodDecorator {
 		this.name = name;
 		this.price = price;
 	}
-	
+
 	@Override
 	public Double getPrice() {
 		return baseFood.getPrice() + this.price;

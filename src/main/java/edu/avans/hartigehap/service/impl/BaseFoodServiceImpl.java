@@ -24,20 +24,20 @@ import edu.avans.hartigehap.service.BaseFoodService;
 @Transactional
 public class BaseFoodServiceImpl implements BaseFoodService {
 
-    @Autowired
-    private BaseFoodRepository foodRepository;
-    @Autowired
-    private MenuItemRepository menuItemRepository;
-    @Autowired
-    private FoodCategoryRepository foodCategoryRepository;
+	@Autowired
+	private BaseFoodRepository foodRepository;
+	@Autowired
+	private MenuItemRepository menuItemRepository;
+	@Autowired
+	private FoodCategoryRepository foodCategoryRepository;
 
-    @Transactional(readOnly = true)
-    public List<BaseFood> findAll() {
-        // MySQL and H2 return the restaurants of findAll() in different order
-        // sorting the result makes the behavior less database vendor dependent
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
-        return Lists.newArrayList(foodRepository.findAll(sort));
-    }
+	@Transactional(readOnly = true)
+	public List<BaseFood> findAll() {
+		// MySQL and H2 return the restaurants of findAll() in different order
+		// sorting the result makes the behavior less database vendor dependent
+		Sort sort = new Sort(Sort.Direction.ASC, "id");
+		return Lists.newArrayList(foodRepository.findAll(sort));
+	}
 
 	@Override
 	public Collection<MenuItem> findOnlineMenuItems() {

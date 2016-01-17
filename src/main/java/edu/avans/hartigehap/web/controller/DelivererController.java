@@ -18,18 +18,18 @@ import edu.avans.hartigehap.service.RestaurantService;
 public class DelivererController {
 
 	@Autowired
-    private RestaurantService restaurantService;
-	
+	private RestaurantService restaurantService;
+
 	@RequestMapping(value = "/restaurants/{restaurantName}/deliverer", method = RequestMethod.GET)
-    public String showDeliverer(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
+	public String showDeliverer(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
 
-        // warmup stuff
-        Collection<Restaurant> restaurants = restaurantService.findAll();
-        uiModel.addAttribute("restaurants", restaurants);
-        Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
-        uiModel.addAttribute("restaurant", restaurant);
+		// warmup stuff
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
+		uiModel.addAttribute("restaurant", restaurant);
 
-        return "hartigehap/deliverer";
-    }
-	
+		return "hartigehap/deliverer";
+	}
+
 }
