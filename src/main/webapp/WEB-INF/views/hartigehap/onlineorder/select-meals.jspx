@@ -33,7 +33,7 @@
 					</c:forEach>
 					
 					<c:if test="${currentItems.size() > 0}">
-						<a href="/hh/online-order/payment" class="btn btn-warning pull-right">Direct afrekenen</a>
+						<a href="/hh/online-order/payment" class="btn btn-warning pull-right">Direct betalen</a>
 					</c:if>
 				</div>
 				
