@@ -10,10 +10,10 @@ import edu.avans.hartigehap.domain.Restaurant;
 
 public interface BillRepository extends PagingAndSortingRepository<Bill, Long> {
 
-    // Spring creates an implementation based one the method name
-    // in this case all orders for which:
-    // bill.getBillStatus() == billStatus
-    // AND
-    // bill.getDiningTable().getRestaurant() == restaurant
-    List<Bill> findByBillStatusAndDiningTableRestaurant(Bill.BillStatus billStatus, Restaurant restaurant, Sort sort);
+	// Spring creates an implementation based one the method name
+	// in this case all orders for which:
+	// bill.getBillStatus() == billStatus
+	// AND
+	// bill.getDiningTable().getRestaurant() == restaurant
+	List<Bill> findByBillStatusAndDiningTableRestaurant(Bill.BillStatus billStatus, Restaurant restaurant, Sort sort);
 }

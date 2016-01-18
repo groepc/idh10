@@ -1,13 +1,18 @@
- package edu.avans.hartigehap.domain;
+package edu.avans.hartigehap.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -19,10 +24,10 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.avans.hartigehap.domain.OrderStatus.OrderStatusId;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 
 /**
  * 
@@ -31,20 +36,32 @@ import lombok.ToString;
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
 		+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
-		+ "AND o.bill.diningTable.restaurant = :restaurant "
-		+ "ORDER BY o.submittedTime")
+		+ "AND o.bill.diningTable.restaurant = :restaurant " + "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"orderStatus", "orderItems"})
+@Getter
+@Setter
+@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
+
 public class Order extends DomainObject {
 	private static final long serialVersionUID = 1L;
-	
-	public enum OrderStatus {
-		CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
-	}
 
+	//public enum OrderStatus {
+	//	CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
+	//}
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ORDER_ID")
+	private Long id;
+	
+	// unidirectional one-to-many relationship.
+	@OneToMany(cascade = javax.persistence.CascadeType.ALL)
+	// additional control over database column names (optional) 
+	@JoinColumn(name = "ORDERITEM_ORDER_ID", referencedColumnName = "ORDER_ID")
+	private Collection<OrderItem> orderItemsList = new ArrayList<OrderItem>();
+	
 	@Enumerated(EnumType.ORDINAL)
 	// represented in database as integer
 	private OrderStatus orderStatus;
@@ -69,17 +86,18 @@ public class Order extends DomainObject {
 	private Bill bill;
 
 	public Order() {
-		orderStatus = OrderStatus.CREATED;
+		orderStatus = new OrderCreatedState(this);
 	}
 
 	/* business logic */
 
 	@Transient
 	public boolean isSubmittedOrSuccessiveState() {
-		return orderStatus != OrderStatus.CREATED;
+		return orderStatus.getOrderStatusId() != OrderStatus.OrderStatusId.CREATED;
 	}
 
-	// transient annotation, because methods starting with are recognized by JPA as properties
+	// transient annotation, because methods starting with are recognized by JPA
+	// as properties
 	@Transient
 	public boolean isEmpty() {
 		return orderItems.isEmpty();
@@ -101,18 +119,18 @@ public class Order extends DomainObject {
 			orderItems.add(orderItem);
 		}
 	}
-	
+
 	public OrderItem addOnlineOrderItem(MenuItem menuItem) {
 		OrderItem orderItem = new OrderItem(menuItem, 1);
 		orderItems.add(orderItem);
-		
+
 		return orderItem;
 	}
-	
-	public OrderOption addOnlineOrderOption(OrderItem orderItem, MenuItem orderOption) {
-		OrderOption newOrderOption = new OrderOption(orderItem, orderOption, 1);
+
+	public BaseOrderItem addOnlineOrderOption(BaseOrderItem orderItem, MenuItem orderOption) {
+		BaseOrderItem newOrderOption = new OrderOption(orderItem, orderOption, 1);
 		orderItems.add(newOrderOption);
-		
+
 		return newOrderOption;
 	}
 
@@ -138,57 +156,19 @@ public class Order extends DomainObject {
 	}
 
 	public void submit() throws StateException {
-		if (isEmpty()) {
-			throw new StateException("not allowed to submit an empty order");
-		}
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.CREATED) {
-			throw new StateException(
-					"not allowed to submit an already submitted order");
-		}
-		submittedTime = new Date();
-		orderStatus = OrderStatus.SUBMITTED;
+		orderStatus.submit();
 	}
 
 	public void plan() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.SUBMITTED) {
-			throw new StateException(
-					"not allowed to plan an order that is not in the submitted state");
-		}
-
-		plannedTime = new Date();
-		orderStatus = OrderStatus.PLANNED;
+		orderStatus.plan();
 	}
 
 	public void prepared() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PLANNED) {
-			throw new StateException(
-					"not allowed to change order state to prepared, if it is not in the planned state");
-		}
-
-		preparedTime = new Date();
-		orderStatus = OrderStatus.PREPARED;
+		orderStatus.prepare();
 	}
 
 	public void served() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PREPARED) {
-			throw new StateException(
-					"not allowed to change order state to served, if it is not in the prepared state");
-		}
-
-		servedTime = new Date();
-		orderStatus = OrderStatus.SERVED;
+		orderStatus.serve();
 	}
 
 	@Transient

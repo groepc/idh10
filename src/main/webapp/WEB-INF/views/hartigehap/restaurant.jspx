@@ -49,7 +49,7 @@
 		</div>
 	</sec:authorize>
 	
-	<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+	
 		<div class="row">
 			<h2 class="restaurant muted">${labelOrderingSubsystem}</h2>
 		</div>
@@ -67,7 +67,8 @@
 				</ul>
 			</div>
 		</div>
-
+	
+	<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 		<div class="row">
 			<h2 class="restaurant muted">${labelEmployeeSubsystem}</h2>
 		</div>

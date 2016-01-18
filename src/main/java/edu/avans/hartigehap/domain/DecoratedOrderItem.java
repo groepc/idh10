@@ -14,9 +14,10 @@ import lombok.ToString;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(callSuper=true, includeFieldNames=true)
+@ToString(callSuper = true, includeFieldNames = true)
 public abstract class DecoratedOrderItem extends BaseOrderItem {
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +26,7 @@ public abstract class DecoratedOrderItem extends BaseOrderItem {
 	private BaseOrderItem orderItem;
 
 	public DecoratedOrderItem(BaseOrderItem orderItem, MenuItem menuItem, int quantity) {
-		super(menuItem, quantity);
+		super(menuItem, quantity, menuItem.getPrice());
 		this.orderItem = orderItem;
 	}
 

@@ -28,104 +28,103 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KitchenController {
 
-    @Autowired
-    private MessageSource messageSource;
-    @Autowired
-    private RestaurantService restaurantService;
-    @Autowired
-    private OrderService orderService;
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
+	private RestaurantService restaurantService;
+	@Autowired
+	private OrderService orderService;
 
-    @RequestMapping(value = "/restaurants/{restaurantName}/kitchen", method = RequestMethod.GET)
-    public String showKitchen(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
+	@RequestMapping(value = "/restaurants/{restaurantName}/kitchen", method = RequestMethod.GET)
+	public String showKitchen(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
 
-        // warmup stuff
-        Collection<Restaurant> restaurants = restaurantService.findAll();
-        uiModel.addAttribute("restaurants", restaurants);
-        Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
-        uiModel.addAttribute("restaurant", restaurant);
+		// warmup stuff
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
+		uiModel.addAttribute("restaurant", restaurant);
 
-        List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(restaurant);
-        uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
+		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(restaurant);
+		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
 
-        List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(restaurant);
-        uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
+		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(restaurant);
+		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
 
-        return "hartigehap/kitchen";
-    }
+		return "hartigehap/kitchen";
+	}
 
-    @RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.GET)
-    public String showOrderInKitchen(@PathVariable("orderId") String orderId, Model uiModel, Locale locale) {
+	@RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.GET)
+	public String showOrderInKitchen(@PathVariable("orderId") String orderId, Model uiModel, Locale locale) {
 
-        // warmup stuff
-        Order order = warmupRestaurant(orderId, uiModel);
-        Restaurant resto = order.getBill().getDiningTable().getRestaurant();
+		// warmup stuff
+		Order order = warmupRestaurant(orderId, uiModel);
+		Restaurant resto = order.getBill().getDiningTable().getRestaurant();
 
+		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(resto);
+		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
 
-        List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(resto);
-        uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
+		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(resto);
+		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
 
-        List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(resto);
-        uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
-
-        String orderContent = "";
-        for(BaseOrderItem orderItem : order.getOrderItems()) {
+		String orderContent = "";
+		for (BaseOrderItem orderItem : order.getOrderItems()) {
 			orderContent += orderItem.getMenuItem().getId() + " (" + orderItem.getQuantity() + "x)" + "; ";
 		}
 
-        uiModel.addAttribute("message", new Message("info",
-                messageSource.getMessage("label_order_content", new Object[] {}, locale) + ": " + orderContent));
+		uiModel.addAttribute("message", new Message("info",
+				messageSource.getMessage("label_order_content", new Object[] {}, locale) + ": " + orderContent));
 
-        return "hartigehap/kitchen";
-    }
+		return "hartigehap/kitchen";
+	}
 
-    @RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.PUT)
-    public String receiveOrderEvent(@PathVariable("orderId") String orderId, @RequestParam String event,
-            Model uiModel) {
+	@RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.PUT)
+	public String receiveOrderEvent(@PathVariable("orderId") String orderId, @RequestParam String event,
+			Model uiModel) {
 
-        Order order = warmupRestaurant(orderId, uiModel);
+		Order order = warmupRestaurant(orderId, uiModel);
 
-        switch (event) {
-        case "planOrder":
-            planOrder(order);
-            break;
+		switch (event) {
+		case "planOrder":
+			planOrder(order);
+			break;
 
-        case "orderHasBeenPrepared":
-            orderHasBeenPrepared(order);
-            break;
+		case "orderHasBeenPrepared":
+			orderHasBeenPrepared(order);
+			break;
 
-        default:
-            log.error("Internal error: event " + event + " not recognized");
-            break;
-        }
-        
-        return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/kitchen";
-    }
+		default:
+			log.error("Internal error: event " + event + " not recognized");
+			break;
+		}
 
-    private void planOrder(Order order) {
-        try {
-            orderService.planOrder(order);
-        } catch (StateException e) {
-            log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
-                    + "has not been changed to planned state!", e);
-        }
-    }
+		return "redirect:/restaurants/" + order.getBill().getDiningTable().getRestaurant().getId() + "/kitchen";
+	}
 
-    private void orderHasBeenPrepared(Order order) {
-        try {
-            orderService.orderPrepared(order);
-        } catch (StateException e) {
-            log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
-                    + "has not been changed to prepared state!", e);
-        }
-    }
+	private void planOrder(Order order) {
+		try {
+			orderService.planOrder(order);
+		} catch (StateException e) {
+			log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
+					+ "has not been changed to planned state!", e);
+		}
+	}
 
-    private Order warmupRestaurant(String orderId, Model uiModel) {
-        Order order = orderService.findById(Long.valueOf(orderId));
-        Collection<Restaurant> restaurants = restaurantService.findAll();
-        uiModel.addAttribute("restaurants", restaurants);
-        Restaurant restaurant = restaurantService
-                .fetchWarmedUp(order.getBill().getDiningTable().getRestaurant().getId());
-        uiModel.addAttribute("restaurant", restaurant);
-        return order;
-    }
+	private void orderHasBeenPrepared(Order order) {
+		try {
+			orderService.orderPrepared(order);
+		} catch (StateException e) {
+			log.error("Internal error has occurred! Order " + Long.valueOf(order.getId())
+					+ "has not been changed to prepared state!", e);
+		}
+	}
+
+	private Order warmupRestaurant(String orderId, Model uiModel) {
+		Order order = orderService.findById(Long.valueOf(orderId));
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		Restaurant restaurant = restaurantService
+				.fetchWarmedUp(order.getBill().getDiningTable().getRestaurant().getId());
+		uiModel.addAttribute("restaurant", restaurant);
+		return order;
+	}
 }
