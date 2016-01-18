@@ -71,8 +71,9 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
-	public String onlineOrderCustomerDetails(Model uiModel) {
+	public String onlineOrderCustomerDetails(Model uiModel, HttpSession session) {
 		log.info("Online order step 1, customer details");
+		
 		Customer customer = new Customer();
 		uiModel.addAttribute("customer", customer);
 		return "hartigehap/onlineorder/customer-details";
@@ -172,6 +173,7 @@ public class OnlineOrderController {
 	 * @param model
 	 * @return
 	 */
+	
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.POST)
 	public String onlineOrderSelectMealsProcess(Model uiModel, 
 			HttpServletRequest httpServletRequest,
@@ -216,36 +218,59 @@ public class OnlineOrderController {
 		
 		if (session.getAttribute("customerId") == null) {
 			return "redirect:/online-order";
-			
 		}
-
+		
 		Long billId = (Long) session.getAttribute("billId");
+		
+		// get current customer email
+		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
+		Customer customer = customerService.findById(idCustomer);
+		model.addAttribute("customerEmail", customer.getEmail());
+				
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
 		
 		BaseOrderItem firstItem = items.iterator().next();
-		//Double totalPrice = firstItem.getPrice();
-		
-		
+		Double totalPrice = firstItem.getPrice();
+		model.addAttribute("totalPrice", totalPrice);
 		
 		return "hartigehap/onlineorder/payment";
 	}
 
 	/**
-	 * STEP 4
+	 * STEP 4 Receipt and order confirmation
 	 * 
 	 * @param model
 	 * @return
 	 */
+	
 	@RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
-	public String onlineOrderReceipt(Model model) {
+	public String onlineOrderReceipt(Model model, HttpSession session) {
 
 		NotificationAdapter notifier = NotificationFactory.getNotification("email");
 		notifier.request("vadiemjanssens@gmail.com", "Hallo wereld!");
 
 		log.info("Online order step 4, receipt");
-		return "hartigehap/onlineorder/receipt";
-	}
+				
+		if (session.getAttribute("customerId") == null) {
+			return "redirect:/online-order";
+		}
+		
+		Long billId = (Long) session.getAttribute("billId");
 
+		// get existing items in this order
+		Bill bill = billService.findById(billId);
+		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+		model.addAttribute("currentItems", items);
+
+		// get current customer email
+		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
+		Customer customer = customerService.findById(idCustomer);
+		model.addAttribute("customerEmail", customer.getEmail());
+
+		return "hartigehap/onlineorder/receipt";
+		
+	}
+	
 }
