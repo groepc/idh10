@@ -148,10 +148,10 @@ public class OwnerServiceTest extends AbstractTransactionRollbackTest {
 		List<Owner> rest3_owners = ownerService.findByRestaurant(restaurant3.getId());
 		assertEquals("restaurant3 owners", "Benny", rest3_owners.get(0).getName());
 		assertEquals("owner1 restaurants",
-				"[Restaurant(super=DomainObjectNaturalId(id=HmmmBurg, version=0), menu=Menu(super=DomainObject(id=2, version=0), meals=[], drinks=[], foodCategories=[]), diningTables=[], customers=[], owners=[Owner(super=DomainObject(id=4, version=0), name=Anna)])]",
+				"[Restaurant(super=DomainObjectNaturalId(id=HmmmBurg, version=0), menu=Menu(super=DomainObject(id=5, version=0), meals=[], mealOptions=[], drinks=[], foodCategories=[]), diningTables=[], customers=[])]",
 				"" + owner1.getRestaurants());
 		assertEquals("owner2 restaurants",
-				"[Restaurant(super=DomainObjectNaturalId(id=HartHap, version=0), menu=Menu(super=DomainObject(id=1, version=0), meals=[], drinks=[], foodCategories=[]), diningTables=[], customers=[], owners=[Owner(super=DomainObject(id=4, version=0), name=Anna), Owner(super=DomainObject(id=5, version=0), name=Benny)]), Restaurant(super=DomainObjectNaturalId(id=PitPankoek, version=0), menu=Menu(super=DomainObject(id=3, version=0), meals=[], drinks=[], foodCategories=[]), diningTables=[], customers=[], owners=[Owner(super=DomainObject(id=5, version=0), name=Benny)])]",
+				"[Restaurant(super=DomainObjectNaturalId(id=HartHap, version=0), menu=Menu(super=DomainObject(id=4, version=0), meals=[], mealOptions=[], drinks=[], foodCategories=[]), diningTables=[], customers=[]), Restaurant(super=DomainObjectNaturalId(id=PitPankoek, version=0), menu=Menu(super=DomainObject(id=6, version=0), meals=[], mealOptions=[], drinks=[], foodCategories=[]), diningTables=[], customers=[])]",
 				"" + owner2.getRestaurants());
 	}
 

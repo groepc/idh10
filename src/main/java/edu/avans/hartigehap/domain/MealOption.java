@@ -19,7 +19,7 @@ import lombok.ToString;
 public class MealOption extends MenuItem {
 	private static final long serialVersionUID = 1L;
 
-	public MealOption(String id, String imageFileName, int price, String recipe) {
+	public MealOption(String id, String imageFileName, Double price, String recipe) {
 		super(id, imageFileName, price, recipe);
 	}
 

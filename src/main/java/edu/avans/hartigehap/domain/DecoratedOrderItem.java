@@ -31,7 +31,7 @@ public abstract class DecoratedOrderItem extends BaseOrderItem {
 	}
 
 	@Transient
-	public int getPrice() {
+	public Double getPrice() {
 		return getMenuItem().getPrice() * getQuantity() + orderItem.getPrice();
 	}
 
