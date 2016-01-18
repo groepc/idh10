@@ -38,7 +38,6 @@ public interface OwnerService {
 
 	/**
 	 * removes the association between an Owner and a Restaurant.
-	 * 
 	 * The entities itself are not deleted.
 	 * 
 	 * @param ownerId
@@ -46,5 +45,6 @@ public interface OwnerService {
 	 * @param restaurantId
 	 *            identifier of the Restaurant.
 	 */
+	
 	Owner removeRestaurantFromOwner(Long ownerId, String restaurantId);
 }
