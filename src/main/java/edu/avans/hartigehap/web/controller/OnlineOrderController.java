@@ -243,7 +243,7 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	
-	@RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
+	@RequestMapping(value = "/online-order/c", method = RequestMethod.GET)
 	public String onlineOrderReceipt(Model model, HttpSession session) {
 
 		NotificationAdapter notifier = NotificationFactory.getNotification("email");

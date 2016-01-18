@@ -22,30 +22,15 @@
 			
 			<p>Bedankt voor je bestelling!</p>
 			
-			<table class="table table-condensed">
-				<tbody>
-					<tr>
-						<td>
-							Pizza Margarita<br />
-							Extra kaas
-						</td>
-						<td>
-							7,10
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Pizza Funghi<br />
-							Extra champignon
-						</td>
-						<td>
-							7,40
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<hr />
+							
+			<c:forEach items="${currentItems}" var="item">
+				<div>${item.menuItem.id} (${item.menuItem.price})</div>
+			</c:forEach>
 			
-			Je bestelling word om 10:00 op 24-02-2016 geleverd. Er is een e-mail ter bevestiging gestuurd naar <i>${customerEmail}</i>.
+			<hr />
+			
+			Jouw bestelling wordt om 10:00 op 24-02-2016 geleverd. Er is een e-mail ter bevestiging gestuurd naar <i>${customerEmail}</i>.
 			</form>
 		</div>
 	</div>
