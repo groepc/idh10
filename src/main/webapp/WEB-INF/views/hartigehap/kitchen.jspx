@@ -18,7 +18,13 @@
 	<spring:message code="label_prepared_order_button" var="labelPreparedOrderButton" />
 	<spring:message code="text_there_are_no_orders" var="textThereAreNoOrders" />
 	<spring:message code="text_there_are_no_planned_orders" var="textThereAreNoPlannedOrders" />
-
+	<spring:message code="label_all_online_submitted_orders" var="labelAllOnlineSubmittedOrders" />
+	<spring:message code="text_there_are_no_online_orders" var="textThereAreNoOnlineOrders" />
+	<spring:message code="label_online_submitted_order" var="labelOnlineSubmittedOrder" />
+	<spring:message code="label_all_online_planned_orders" var="labelAllOnlinePlannedOrders" />
+	<spring:message code="label_online_planned_order" var="labelOnlinePlannedOrder" />
+	<spring:message code="text_there_are_no_online_planned_orders" var="textThereAreNoOnlinePlannedOrders" />
+	
 	<spring:url var="showRestaurant" value="/restaurants/${restaurant.id}" />
 
 	<div class="row">
@@ -33,69 +39,63 @@
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Alle online bestellingen</h3>
+					<h3 class="panel-title">${labelAllOnlineSubmittedOrders}</h3>
 				</div>
-				<div class="panel-body">
-					<span>Er zijn geen bestellingen gevonden</span>
-				</div>
-				<table class="table">
-					<tbody>
-						<tr>
-							<td><a href="#">Online bestelling 1</a></td>
-							<td>Bezorgtijd: 17:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Plan" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Online bestelling 2</a></td>
-							<td>Bezorgtijd: 18:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Plan" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Online bestelling 3</a></td>
-							<td>Bezorgtijd: 19:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Plan" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Online bestelling 4</a></td>
-							<td>Zo snel mogelijk</td>
-							<td style="text-align:right;"><input type="submit" value="Plan" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-					</tbody>
-				</table>
+				<c:if test="${empty allOnlineSubmittedOrders}">
+					<div class="panel-body">
+						<span>${textThereAreNoOnlineOrders}</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty allOnlineSubmittedOrders}">
+					<table class="table">
+						<tbody>
+							<c:forEach items="${allOnlineSubmittedOrders}" var="submittedOnlineOrder">
+								<tr>
+									<spring:url var="showOrder" value="/kitchen/orders/${submittedOnlineOrder.id}" />
+									<td><a href="${showOrder}">${labelOnlineSubmittedOrder} ${submittedOnlineOrder.id}</a> ${submittedOnlineOrder.orderType}</td>
+									<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+										<spring:url var="planOrderUrl" value="/kitchen/orders/${submittedOnlineOrder.id}" />
+										<form:form name="planOrderForm" action="${planOrderUrl}" method="put">
+											<input type="hidden" name="event" value="planOrder" />
+											<td style="text-align:right;"><input type="submit" value="${labelPlanOrderButton}" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
+										</form:form>
+									</sec:authorize>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:if>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Alle geplande online bestellingen</h3>
+					<h3 class="panel-title">${labelAllOnlinePlannedOrders}</h3>
 				</div>
-				<div class="panel-body">
-					<span>Er zijn geen geplande online bestellingen gevonden.</span>
-				</div>
-				<table class="table">
-					<tbody>
-						<tr>
-							<td><a href="#">Geplande Online bestelling 1</a></td>
-							<td>Bezorgtijd: 17:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Bestelling gereed" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Geplande Online bestelling 2</a></td>
-							<td>Bezorgtijd: 18:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Bestelling gereed" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Geplande Online bestelling 3</a></td>
-							<td>Bezorgtijd: 19:00 uur</td>
-							<td style="text-align:right;"><input type="submit" value="Bestelling gereed" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-						<tr>
-							<td><a href="#">Geplande Online bestelling 4</a></td>
-							<td>Zo snel mogelijk</td>
-							<td style="text-align:right;"><input type="submit" value="Bestelling gereed" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
-						</tr>
-					</tbody>
-				</table>
+				<c:if test="${empty allOnlinePlannedOrders}">
+					<div class="panel-body">
+						<span>${textThereAreNoOnlinePlannedOrders}</span>
+					</div>
+				</c:if>
+				<c:if test="${not empty allOnlinePlannedOrders}">
+					<table class="table">
+						<tbody>
+						<c:forEach items="${allOnlinePlannedOrders}" var="plannedOrder">
+							<tr>
+								<spring:url var="showOrder" value="/kitchen/orders/${plannedOrder.id}" />
+								<td><a href="${showOrder}">${labelOnlinePlannedOrder} ${plannedOrder.id}</a></td>
+								<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+									<spring:url var="preparedOrderUrl" value="/kitchen/orders/${plannedOrder.id}" />
+									<form:form name="preparedOrderForm" action="${preparedOrderUrl}" method="put">
+										<input type="hidden" name="event" value="orderHasBeenPrepared" />
+										<td style="text-align:right;"><input type="submit" value="${labelPreparedOrderButton}" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
+									</form:form>
+								</sec:authorize>
+							</tr>
+						</c:forEach>
+						</tbody>
+					</table>
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -117,7 +117,7 @@
 							<c:forEach items="${allSubmittedOrders}" var="submittedOrder">
 								<tr>
 									<spring:url var="showOrder" value="/kitchen/orders/${submittedOrder.id}" />
-									<td><a href="${showOrder}">${labelSubmittedOrder} ${submittedOrder.bill.diningTable.tableNr}</a></td>
+									<td><a href="${showOrder}">${labelSubmittedOrder} ${submittedOrder.bill.diningTable.tableNr}</a>${submittedOrder.orderType}</td>
 									<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 										<spring:url var="planOrderUrl" value="/kitchen/orders/${submittedOrder.id}" />
 										<form:form name="planOrderForm" action="${planOrderUrl}" method="put">

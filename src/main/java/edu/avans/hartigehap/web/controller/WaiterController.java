@@ -19,6 +19,7 @@ import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
+import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.service.BillService;
 import edu.avans.hartigehap.service.OrderService;
 import edu.avans.hartigehap.service.RestaurantService;

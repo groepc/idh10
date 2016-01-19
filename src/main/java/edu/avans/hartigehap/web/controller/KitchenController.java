@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.service.OrderService;
 import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.service.impl.OrderServiceImpl;
 import edu.avans.hartigehap.web.form.Message;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,8 +45,11 @@ public class KitchenController {
 		uiModel.addAttribute("restaurants", restaurants);
 		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
 		uiModel.addAttribute("restaurant", restaurant);
-
-		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(restaurant);
+		
+		List<Order> allOnlineSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.ONLINE, restaurant);
+		uiModel.addAttribute("allOnlineSubmittedOrders", allOnlineSubmittedOrders);
+		
+		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.RESTAURANT, restaurant);
 		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
 
 		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(restaurant);
@@ -60,12 +65,15 @@ public class KitchenController {
 		Order order = warmupRestaurant(orderId, uiModel);
 		Restaurant resto = order.getBill().getDiningTable().getRestaurant();
 
-		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(resto);
+		List<Order> allOnlineSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.ONLINE, resto);
+		uiModel.addAttribute("allOnlineSubmittedOrders", allOnlineSubmittedOrders);
+		
+		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.RESTAURANT, resto);
 		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
-
+	
 		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(resto);
 		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
-
+		
 		String orderContent = "";
 		for (BaseOrderItem orderItem : order.getOrderItems()) {
 			orderContent += orderItem.getMenuItem().getId() + " (" + orderItem.getQuantity() + "x)" + "; ";

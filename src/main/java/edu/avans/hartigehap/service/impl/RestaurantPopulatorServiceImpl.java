@@ -19,6 +19,7 @@ import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Bill.BillStatus;
 import edu.avans.hartigehap.domain.Order.OrderStatus;
+import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Drink;
@@ -336,8 +337,10 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		
 		Order order = bill.getCurrentOrder();
 		order.setOrderStatus(OrderStatus.SUBMITTED);
+		order.setOrderType(OrderType.ONLINE);
 		
 		System.out.println("Order ID:" + order.getId());
+		System.out.println("Order TYPE:" + order.getOrderType());
 		System.out.println("Bill ID:" + bill.getId());
 		System.out.println("Table NR:" + bill.getDiningTable());
 	

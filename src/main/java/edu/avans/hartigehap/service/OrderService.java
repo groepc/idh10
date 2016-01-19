@@ -5,12 +5,13 @@ import java.util.List;
 import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
+import edu.avans.hartigehap.domain.Order.OrderType;
 
 public interface OrderService {
 	Order findById(Long orderId);
-
-	List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant);
-
+	
+	List<Order> findSubmittedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant);
+	
 	List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant);
 
 	List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant);

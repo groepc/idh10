@@ -15,6 +15,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Long>
 	// order.getOrderStatus() == orderStatus
 	// AND
 	// order.getBill().getDiningTable().getRestaurant() == restaurant
+	
 	List<Order> findByOrderStatusAndBillDiningTableRestaurant(Order.OrderStatus orderStatus, Restaurant restaurant,
 			Sort sort);
 

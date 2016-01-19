@@ -29,25 +29,35 @@ import lombok.ToString;
  */
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
-		+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
-		+ "AND o.bill.diningTable.restaurant = :restaurant " + "ORDER BY o.submittedTime")
+				+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
+				//+ "AND o.orderType = edu.avans.hartigehap.domain.Order$OrderType.ONLINE "
+				+ "AND o.bill.diningTable.restaurant = :restaurant "
+				+ "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter
 @Setter
-@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
+@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderType" , "orderItems" })
 public class Order extends DomainObject {
 	private static final long serialVersionUID = 1L;
 
 	public enum OrderStatus {
 		CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
 	}
+	
+	public enum OrderType {
+		ONLINE, RESTAURANT
+	}
 
 	@Enumerated(EnumType.ORDINAL)
 	// represented in database as integer
 	private OrderStatus orderStatus;
-
+	
+	@Enumerated(EnumType.ORDINAL)
+	// represented in database as integer
+	private OrderType orderType;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date submittedTime;
 
