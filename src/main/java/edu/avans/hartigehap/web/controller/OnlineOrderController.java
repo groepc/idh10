@@ -252,9 +252,6 @@ public class OnlineOrderController {
 	@RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
 	public String onlineOrderReceipt(Model model, HttpSession session) {
 
-		NotificationAdapter notifier = NotificationFactory.getNotification("email");
-		notifier.request("vadiemjanssens@gmail.com", "Hallo wereld!");
-
 		log.info("Online order step 4, receipt");
 				
 		if (session.getAttribute("customerId") == null) {
@@ -279,6 +276,9 @@ public class OnlineOrderController {
 		BaseOrderItem firstItem = items.iterator().next();
 		Double totalPrice = firstItem.getPrice();
 		model.addAttribute("totalPrice", totalPrice);
+		
+		NotificationAdapter notifier = NotificationFactory.getNotification("email");
+		notifier.request("vadiemjanssens@gmail.com", "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
 
 		return "hartigehap/onlineorder/receipt";
 		
