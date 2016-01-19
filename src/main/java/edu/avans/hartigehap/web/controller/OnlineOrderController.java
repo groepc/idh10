@@ -110,6 +110,9 @@ public class OnlineOrderController {
 		Restaurant restaurant = restaurantService.fetchWarmedUp("HartigeHap");
 		customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
 		customer = customerService.save(customer);
+		
+		// get delivery time
+		String deliveryTime = httpServletRequest.getParameter("deliveryTime");
 
 		// get dining table
 		DiningTable table = diningTableService.findById(Long.parseLong("9999999"));
@@ -118,6 +121,7 @@ public class OnlineOrderController {
 		Bill bill = new Bill();
 		bill.setCustomer(customer);
 		bill.setDiningTable(table);
+		bill.setDeliveryTime(deliveryTime);
 		bill = billService.save(bill);
 
 		log.info("Online order step 1, customer details Process");
@@ -248,9 +252,6 @@ public class OnlineOrderController {
 	@RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
 	public String onlineOrderReceipt(Model model, HttpSession session) {
 
-		NotificationAdapter notifier = NotificationFactory.getNotification("email");
-		notifier.request("vadiemjanssens@gmail.com", "Hallo wereld!");
-
 		log.info("Online order step 4, receipt");
 				
 		if (session.getAttribute("customerId") == null) {
@@ -268,6 +269,16 @@ public class OnlineOrderController {
 		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
 		Customer customer = customerService.findById(idCustomer);
 		model.addAttribute("customerEmail", customer.getEmail());
+		
+		String deliveryTime = bill.getDeliveryTime();
+		model.addAttribute("deliveryTime", deliveryTime);
+		
+		BaseOrderItem firstItem = items.iterator().next();
+		Double totalPrice = firstItem.getPrice();
+		model.addAttribute("totalPrice", totalPrice);
+		
+		NotificationAdapter notifier = NotificationFactory.getNotification("email");
+		notifier.request("vadiemjanssens@gmail.com", "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
 
 		return "hartigehap/onlineorder/receipt";
 		

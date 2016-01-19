@@ -51,6 +51,8 @@ public class Bill extends DomainObject {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date paidTime;
+	
+	private String deliveryTime;
 
 	// unidirectional one-to-one relationship
 	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
