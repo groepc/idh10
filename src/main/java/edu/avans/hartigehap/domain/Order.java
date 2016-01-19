@@ -31,23 +31,27 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * 
  * @author Erco
  */
-
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
-		+ "WHERE o.orderStatus.orderStatusId = edu.avans.hartigehap.domain.OrderStatus$OrderStatusId.SUBMITTED "
+		+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
 		+ "AND o.bill.diningTable.restaurant = :restaurant " + "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter
 @Setter
-//@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
+@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
 
 public class Order extends DomainObject {
 	private static final long serialVersionUID = 1L;
 
+	//public enum OrderStatus {
+	//	CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
+	//}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ORDER_ID")
