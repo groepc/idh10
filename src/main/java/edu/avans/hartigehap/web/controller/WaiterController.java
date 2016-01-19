@@ -49,7 +49,7 @@ public class WaiterController {
 		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
 		uiModel.addAttribute("restaurant", restaurant);
 
-		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(restaurant);
+		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(OrderType.RESTAURANT,restaurant);
 		uiModel.addAttribute("allPreparedOrders", allPreparedOrders);
 
 		List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(restaurant);
@@ -65,7 +65,7 @@ public class WaiterController {
 		Order order = warmupRestaurantByOrder(orderId, uiModel);
 		Restaurant resto = order.getBill().getDiningTable().getRestaurant();
 
-		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(resto);
+		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(OrderType.RESTAURANT,resto);
 		uiModel.addAttribute("allPreparedOrders", allPreparedOrders);
 
 		List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(resto);
@@ -89,7 +89,7 @@ public class WaiterController {
 		Bill bill = warmupRestaurant(billId, uiModel);
 		Restaurant resto = bill.getDiningTable().getRestaurant();
 
-		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(resto);
+		List<Order> allPreparedOrders = orderService.findPreparedOrdersForRestaurant(OrderType.RESTAURANT,resto);
 		uiModel.addAttribute("allPreparedOrders", allPreparedOrders);
 
 		List<Bill> allSubmittedBills = billService.findSubmittedBillsForRestaurant(resto);

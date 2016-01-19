@@ -51,8 +51,11 @@ public class KitchenController {
 		
 		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.RESTAURANT, restaurant);
 		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
+		
+		List<Order> allOnlinePlannedOrders = orderService.findPlannedOrdersForRestaurant(OrderType.ONLINE,restaurant);
+		uiModel.addAttribute("allOnlinePlannedOrders", allOnlinePlannedOrders);
 
-		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(restaurant);
+		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(OrderType.RESTAURANT,restaurant);
 		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
 
 		return "hartigehap/kitchen";
@@ -70,8 +73,11 @@ public class KitchenController {
 		
 		List<Order> allSubmittedOrders = orderService.findSubmittedOrdersForRestaurant(OrderType.RESTAURANT, resto);
 		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
+		
+		List<Order> allOnlinePlannedOrders = orderService.findPlannedOrdersForRestaurant(OrderType.ONLINE,resto);
+		uiModel.addAttribute("allPlannedOrders", allOnlinePlannedOrders);
 	
-		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(resto);
+		List<Order> allPlannedOrders = orderService.findPlannedOrdersForRestaurant(OrderType.RESTAURANT,resto);
 		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
 		
 		String orderContent = "";

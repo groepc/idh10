@@ -148,7 +148,7 @@
 						<c:forEach items="${allPlannedOrders}" var="plannedOrder">
 							<tr>
 								<spring:url var="showOrder" value="/kitchen/orders/${plannedOrder.id}" />
-								<td><a href="${showOrder}">${labelPlannedOrder} ${plannedOrder.bill.diningTable.tableNr}</a></td>
+								<td><a href="${showOrder}">${labelPlannedOrder} ${plannedOrder.bill.diningTable.tableNr}</a> ${submittedOrder.orderType}</td>
 								<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 									<spring:url var="preparedOrderUrl" value="/kitchen/orders/${plannedOrder.id}" />
 									<form:form name="preparedOrderForm" action="${preparedOrderUrl}" method="put">

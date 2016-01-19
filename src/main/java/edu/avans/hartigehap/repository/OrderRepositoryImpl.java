@@ -20,7 +20,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 	// so we need to make our own repository implementation!
 	
 	public List<Order> findSubmittedOrdersForRestaurant(Order.OrderType order, Restaurant restaurant) {
-		return em.createNamedQuery("Order.findSubmittedOrders", Order.class).setParameter("restaurant", restaurant)
+		return em.createNamedQuery("Order.findSubmittedOrders", Order.class).setParameter("orderType", order).setParameter("restaurant", restaurant)
 				.getResultList();
 	}
 

@@ -12,9 +12,9 @@ public interface OrderService {
 	
 	List<Order> findSubmittedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant);
 	
-	List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant);
+	List<Order> findPlannedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant);
 
-	List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant);
+	List<Order> findPreparedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant);
 
 	void planOrder(Order order) throws StateException;
 
