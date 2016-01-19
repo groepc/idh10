@@ -34,8 +34,8 @@ public class RestaurantServiceTest extends AbstractTransactionRollbackTest {
 		assertEquals("HmmmBurger", restaurants.get(1).getId());
 		assertEquals("PittigePannekoek", restaurants.get(2).getId());
 		List<MenuItem> meals = new ArrayList<>(restaurants.get(0).getMenu().getMeals());
-		assertEquals("spaghetti", meals.get(0).getId());
-		assertEquals("macaroni", meals.get(1).getId());
+		assertEquals("spaghetti", meals.get(6).getId());
+		assertEquals("macaroni", meals.get(7).getId());
 		List<MenuItem> drinks = new ArrayList<>(restaurants.get(0).getMenu().getDrinks());
 		assertEquals("beer", drinks.get(0).getId());
 

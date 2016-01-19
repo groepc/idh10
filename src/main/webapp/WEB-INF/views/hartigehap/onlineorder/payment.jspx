@@ -3,6 +3,7 @@
 	 xmlns:c="http://java.sun.com/jsp/jstl/core"
 	 xmlns:spring="http://www.springframework.org/tags"
 	 xmlns:sec="http://www.springframework.org/security/tags"
+	 xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
 	 version="2.0">
 
 	<!-- Add elvariables to help our IDE for code completion -->
@@ -17,9 +18,19 @@
 			<h1 style="text-align: center;">Bank X</h1>
 			<h3 style="text-align: center;">Order #1234</h3>
 			
-			<c:forEach items="${currentItems}" var="item">
-				<div>${item.menuItem.id} (${item.menuItem.price})</div>
-			</c:forEach>
+			<div style="margin-bottom: 20px;">
+				U heeft besteld:
+				<ul>
+					<c:forEach items="${currentItems}" var="item">
+						<li>${item.menuItem.id} (€<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${item.menuItem.price}" />)</li>
+					</c:forEach>
+				</ul>
+			</div>
+			
+			<div style="font-weight: bold;">Totaal:</div>
+			<div style="margin-bottom: 20px;">€<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${totalPrice}" /></div>
+
+			<hr />
 			
 			<a href="/hh/online-order/receipt" class="btn btn-success">Betalen</a>
 		</div>

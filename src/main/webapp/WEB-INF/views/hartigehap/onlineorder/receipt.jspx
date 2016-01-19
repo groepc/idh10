@@ -3,6 +3,7 @@
 	 xmlns:c="http://java.sun.com/jsp/jstl/core"
 	 xmlns:spring="http://www.springframework.org/tags"
 	 xmlns:sec="http://www.springframework.org/security/tags"
+	 xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
 	 version="2.0">
 
 	<!-- Add elvariables to help our IDE for code completion -->
@@ -17,32 +18,21 @@
 			<h1 style="text-align: center;">De Hartige Hap</h1>
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
+			<form name="onlineOrderReceipt" method="get">
+				<hr />
+			
 			<p>Bedankt voor je bestelling!</p>
 			
-			<table class="table table-condensed">
-				<tbody>
-					<tr>
-						<td>
-							Pizza Margarita<br />
-							Extra kaas
-						</td>
-						<td>
-							7,10
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Pizza Funghi<br />
-							Extra champignon
-						</td>
-						<td>
-							7,40
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<hr />
+							
+			<c:forEach items="${currentItems}" var="item">
+				<div>${item.menuItem.id} (<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${item.menuItem.price}" />)</div>
+			</c:forEach>
 			
-			<p>Je bestelling word om 10:00 op 24-02-2016 geleverd. Er is een mail ter bevestiging gestuurd naar <i>emailadres</i></p>
+			<hr />
+			
+			Jouw bestelling wordt om 10:00 op 24-02-2016 geleverd. Er is een e-mail ter bevestiging gestuurd naar <i>${customerEmail}</i>.
+			</form>
 		</div>
 	</div>
 </div>

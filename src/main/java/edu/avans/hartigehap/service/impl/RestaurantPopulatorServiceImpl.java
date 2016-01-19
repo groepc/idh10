@@ -101,46 +101,46 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createFoodCategory("energizing drinks");
 		createFoodCategory("online pizzas");
 
-		createMeal("Pizza Hawaï", null, 7, "online",
+		createMeal("Pizza Hawaï", null, 7.0, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
-		createMeal("Pizza Shoarma", null, 10, "online",
+		createMeal("Pizza Shoarma", null, 10.0, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
-		createMeal("Pizza Salami", null, 8, "online",
+		createMeal("Pizza Salami", null, 8.50, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
-		createMeal("Pizza Margaritha", null, 6, "online",
+		createMeal("Pizza Margaritha", null, 6.25, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
-		createMeal("Pizza Funghi", null, 8, "online",
+		createMeal("Pizza Funghi", null, 8.0, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
-		createMeal("Pizza Chicken Supreme", null, 9, "online",
+		createMeal("Pizza Chicken Supreme", null, 9.0, "online",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(7) }));
 
-		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
+		createMeal("spaghetti", "spaghetti.jpg", 8.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
-		createMeal("macaroni", "macaroni.jpg", 8, "easy",
+		createMeal("macaroni", "macaroni.jpg", 8.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
-		createMeal("canneloni", "canneloni.jpg", 9, "easy",
+		createMeal("canneloni", "canneloni.jpg", 9.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
-		createMeal("pizza", "pizza.jpg", 9, "easy",
+		createMeal("pizza", "pizza.jpg", 9.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1) }));
-		createMeal("carpaccio", "carpaccio.jpg", 7, "easy",
+		createMeal("carpaccio", "carpaccio.jpg", 7.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(0) }));
-		createMeal("ravioli", "ravioli.jpg", 8, "easy",
+		createMeal("ravioli", "ravioli.jpg", 8.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(1), foodCats.get(2) }));
 
-		createMealOption("Extra kaas", "pizza.jpg", 2, "easy",
+		createMealOption("Extra kaas", "pizza.jpg", 0.25, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra ui", "pizza.jpg", 3, "easy",
+		createMealOption("Extra ui", "pizza.jpg", 0.35, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra tomaat", "pizza.jpg", 1, "easy",
+		createMealOption("Extra tomaat", "pizza.jpg", 0.15, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra mozarella", "pizza.jpg", 5, "easy",
+		createMealOption("Extra mozarella", "pizza.jpg", 0.75, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra ansjovis", "pizza.jpg", 5, "easy",
+		createMealOption("Extra ansjovis", "pizza.jpg", 1.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
 
-		createDrink("beer", "beer.jpg", 1, Drink.Size.LARGE,
+		createDrink("beer", "beer.jpg", 1.2, Drink.Size.LARGE,
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(5) }));
-		createDrink("coffee", "coffee.jpg", 1, Drink.Size.MEDIUM,
+		createDrink("coffee", "coffee.jpg", 1.0, Drink.Size.MEDIUM,
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(6) }));
 
 		byte[] photo = new byte[] { 127, -128, 0 };
@@ -165,7 +165,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		foodCats.add(foodCategory);
 	}
 
-	private void createMeal(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
+	private void createMeal(String name, String image, Double price, String recipe, List<FoodCategory> foodCats) {
 		Meal meal = new Meal(name, image, price, recipe);
 		// as there is no cascading between FoodCategory and MenuItem (both
 		// ways), it is important to first
@@ -178,7 +178,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		meals.add(meal);
 	}
 
-	private void createMealOption(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
+	private void createMealOption(String name, String image, Double price, String recipe, List<FoodCategory> foodCats) {
 		MealOption mealOption = new MealOption(name, image, price, recipe);
 		// as there is no cascading between FoodCategory and MenuItem (both
 		// ways), it is important to first
@@ -191,7 +191,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		mealOptions.add(mealOption);
 	}
 
-	private void createDrink(String name, String image, int price, Drink.Size size, List<FoodCategory> foodCats) {
+	private void createDrink(String name, String image, Double price, Drink.Size size, List<FoodCategory> foodCats) {
 		Drink drink = new Drink(name, image, price, "", size);
 		drink = menuItemRepository.save(drink);
 		drink.addFoodCategories(foodCats);
