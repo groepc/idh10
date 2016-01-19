@@ -10,7 +10,7 @@ public class DateTimeDiscountFactory {
 
 		if (type.equalsIgnoreCase("morning")) {
 			return new MorningDiscount();
-		} else if (type.equalsIgnoreCase("email")) {
+		} else if (type.equalsIgnoreCase("afternoon")) {
 			return new AfternoonDiscount();
 		}
 
