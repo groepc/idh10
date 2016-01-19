@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,27 +31,23 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 
  * @author Erco
  */
+
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
-		+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
+		+ "WHERE o.orderStatus.orderStatusId = edu.avans.hartigehap.domain.OrderStatus$OrderStatusId.SUBMITTED "
 		+ "AND o.bill.diningTable.restaurant = :restaurant " + "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter
 @Setter
-@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
+//@ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderItems" })
 
 public class Order extends DomainObject {
 	private static final long serialVersionUID = 1L;
 
-	//public enum OrderStatus {
-	//	CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
-	//}
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ORDER_ID")
@@ -62,8 +59,7 @@ public class Order extends DomainObject {
 	@JoinColumn(name = "ORDERITEM_ORDER_ID", referencedColumnName = "ORDER_ID")
 	private Collection<OrderItem> orderItemsList = new ArrayList<OrderItem>();
 	
-	@Enumerated(EnumType.ORDINAL)
-	// represented in database as integer
+	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
 	private OrderStatus orderStatus;
 
 	@Temporal(TemporalType.TIMESTAMP)
