@@ -18,21 +18,22 @@
 			<h1 style="text-align: center;">De Hartige Hap</h1>
 			<h3 style="text-align: center;">Online bestellen</h3>
 			
-			<form name="onlineOrderReceipt" method="get">
-				<hr />
+			<div style="margin-bottom: 20px;">
+				<p>Bedankt voor je bestelling!</p>
 			
-			<p>Bedankt voor je bestelling!</p>
+				<ul>
+					<c:forEach items="${currentItems}" var="item">
+						<li>${item.menuItem.id} (€<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${item.menuItem.price}" />)</li>
+					</c:forEach>
+				</ul>
+			</div>
 			
+			<div style="font-weight: bold;">Totaal:</div>
+			<div style="margin-bottom: 20px;">€<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${totalPrice}" /></div>
+
 			<hr />
-							
-			<c:forEach items="${currentItems}" var="item">
-				<div>${item.menuItem.id} (<fmt:formatNumber currencySymbol="€" type="number" maxIntegerDigits="2" minFractionDigits="2" value="${item.menuItem.price}" />)</div>
-			</c:forEach>
 			
-			<hr />
-			
-			Jouw bestelling wordt om 10:00 op 24-02-2016 geleverd. Er is een e-mail ter bevestiging gestuurd naar <i>${customerEmail}</i>.
-			</form>
+			Jouw bestelling wordt om ${deliveryTime} geleverd. Er is een e-mail ter bevestiging gestuurd naar <i>${customerEmail}</i>.
 		</div>
 	</div>
 </div>
