@@ -4,10 +4,10 @@ import java.util.Date;
 
 abstract public class DateTimeDiscountTemplate {
 
-	public double calculateNewPrice(double price, Date dateTime) {
-		Double percentage = this.calculateDiscountPercentage(price, dateTime);
-		return price * percentage;
+	public double getPercentage(double price, Date dateTime) {
+		return this.calculateDiscountPercentage(price, dateTime);
 	}
+	
 	protected abstract double calculateDiscountPercentage (double price, Date dateTime);
 
 }

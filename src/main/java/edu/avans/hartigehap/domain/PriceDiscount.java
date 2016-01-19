@@ -3,7 +3,7 @@ package edu.avans.hartigehap.domain;
 public class PriceDiscount implements DiscountInterface {
 
 	@Override
-	public double getNewPrice(double price) {
+	public double getPercentage(double price) {
 		double percentage = 1;
 		if (price > 50.00) {
 		   percentage = 0.79;	
@@ -13,8 +13,7 @@ public class PriceDiscount implements DiscountInterface {
 			percentage = 0.99;
 		}
 		
-		
-		return price * percentage;
+		return percentage;
 	}
 
 }
