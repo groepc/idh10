@@ -71,8 +71,9 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
-	public String onlineOrderCustomerDetails(Model uiModel) {
+	public String onlineOrderCustomerDetails(Model uiModel, HttpSession session) {
 		log.info("Online order step 1, customer details");
+		
 		Customer customer = new Customer();
 		uiModel.addAttribute("customer", customer);
 		return "hartigehap/onlineorder/customer-details";
@@ -86,8 +87,12 @@ public class OnlineOrderController {
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.POST)
 	public String onlineOrderCustomerDetailsProcess(@ModelAttribute @Valid Customer customer,
-			BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, Locale locale, HttpSession session) {
+			BindingResult bindingResult, 
+			Model uiModel, 
+			HttpServletRequest httpServletRequest,
+			RedirectAttributes redirectAttributes, 
+			Locale locale, 
+			HttpSession session) {
 
 		System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
 		System.out.println("Binding Result target" + (Customer) bindingResult.getTarget());
@@ -105,6 +110,9 @@ public class OnlineOrderController {
 		Restaurant restaurant = restaurantService.fetchWarmedUp("HartigeHap");
 		customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurant }));
 		customer = customerService.save(customer);
+		
+		// get delivery time
+		String deliveryTime = httpServletRequest.getParameter("deliveryTime");
 
 		// get dining table
 		DiningTable table = diningTableService.findById(Long.parseLong("9999999"));
@@ -113,6 +121,7 @@ public class OnlineOrderController {
 		Bill bill = new Bill();
 		bill.setCustomer(customer);
 		bill.setDiningTable(table);
+		bill.setDeliveryTime(deliveryTime);
 		bill = billService.save(bill);
 
 		log.info("Online order step 1, customer details Process");
@@ -130,7 +139,8 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.GET)
-	public String onlineOrderSelectMeals(Model model, HttpSession session) {
+	public String onlineOrderSelectMeals(Model model, 
+			HttpSession session) {
 
 		log.info("Online order step 2, select meals");
 
@@ -167,9 +177,13 @@ public class OnlineOrderController {
 	 * @param model
 	 * @return
 	 */
+	
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.POST)
-	public String onlineOrderSelectMealsProcess(Model uiModel, HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, Locale locale, HttpSession session) {
+	public String onlineOrderSelectMealsProcess(Model uiModel, 
+			HttpServletRequest httpServletRequest,
+			RedirectAttributes redirectAttributes, 
+			Locale locale, 
+			HttpSession session) {
 
 		if (session.getAttribute("customerId") == null) {
 			return "redirect:/online-order";
@@ -182,9 +196,10 @@ public class OnlineOrderController {
 
 		// get toppings
 		String[] options = httpServletRequest.getParameterValues("options[]");
-		if(options.length > 0) {
-			for (String orderOption : options) {
-				orderThing = billService.addOrderOptionOnline(billId, orderThing, orderOption);
+		
+		if(options != null) {
+			for (String orderOptionName : options) {
+				orderThing = billService.addOrderOptionOnline(billId, orderThing, orderOptionName);
 				System.out.println(orderThing);
 			}
 		}
@@ -199,25 +214,74 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/online-order/payment", method = RequestMethod.GET)
-	public String onlineOrderPayment(Model model) {
+	public String onlineOrderPayment(Model model,
+			Locale locale,
+			HttpSession session) {
+		
 		log.info("Online order step 3, payment");
+		
+		if (session.getAttribute("customerId") == null) {
+			return "redirect:/online-order";
+		}
+		
+		Long billId = (Long) session.getAttribute("billId");
+		
+		// get current customer email
+		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
+		Customer customer = customerService.findById(idCustomer);
+		model.addAttribute("customerEmail", customer.getEmail());
+				
+		Bill bill = billService.findById(billId);
+		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+		model.addAttribute("currentItems", items);
+		
+		BaseOrderItem firstItem = items.iterator().next();
+		Double totalPrice = firstItem.getPrice();
+		model.addAttribute("totalPrice", totalPrice);
+		
 		return "hartigehap/onlineorder/payment";
 	}
 
 	/**
-	 * STEP 4
+	 * STEP 4 Receipt and order confirmation
 	 * 
 	 * @param model
 	 * @return
 	 */
+	
 	@RequestMapping(value = "/online-order/receipt", method = RequestMethod.GET)
-	public String onlineOrderReceipt(Model model) {
-
-		NotificationAdapter notifier = NotificationFactory.getNotification("email");
-		notifier.request("vadiemjanssens@gmail.com", "Hallo wereld!");
+	public String onlineOrderReceipt(Model model, HttpSession session) {
 
 		log.info("Online order step 4, receipt");
-		return "hartigehap/onlineorder/receipt";
-	}
+				
+		if (session.getAttribute("customerId") == null) {
+			return "redirect:/online-order";
+		}
+		
+		Long billId = (Long) session.getAttribute("billId");
 
+		// get existing items in this order
+		Bill bill = billService.findById(billId);
+		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+		model.addAttribute("currentItems", items);
+
+		// get current customer email
+		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
+		Customer customer = customerService.findById(idCustomer);
+		model.addAttribute("customerEmail", customer.getEmail());
+		
+		String deliveryTime = bill.getDeliveryTime();
+		model.addAttribute("deliveryTime", deliveryTime);
+		
+		BaseOrderItem firstItem = items.iterator().next();
+		Double totalPrice = firstItem.getPrice();
+		model.addAttribute("totalPrice", totalPrice);
+		
+		NotificationAdapter notifier = NotificationFactory.getNotification("email");
+		notifier.request("vadiemjanssens@gmail.com", "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
+
+		return "hartigehap/onlineorder/receipt";
+		
+	}
+	
 }

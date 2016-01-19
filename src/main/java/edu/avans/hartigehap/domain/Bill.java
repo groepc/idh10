@@ -52,6 +52,8 @@ public class Bill extends DomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date paidTime;
 
+	private String deliveryTime;
+
 	// unidirectional one-to-one relationship
 	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
 	private Order currentOrder;
@@ -66,6 +68,8 @@ public class Bill extends DomainObject {
 	// bidirectional one-to-many relationship
 	@ManyToOne(cascade = javax.persistence.CascadeType.ALL)
 	private Customer customer;
+
+	private double discountPercentage = 1;
 
 	public Bill() {
 		billStatus = BillStatus.CREATED;
@@ -91,19 +95,30 @@ public class Bill extends DomainObject {
 	}
 
 	/**
+	 * 
+	 * @param price
+	 * @return
+	 */
+	@Transient
+	public Double discountPercentage(double price) {
+		this.discountPercentage = RandomDiscountFactory.getRandomDiscount().getPercentage(price);
+		return this.discountPercentage;
+	}
+
+	/**
 	 * price of *all* orders, so submitted orders and current (not yet
 	 * submitted) order
 	 * 
 	 * @return
 	 */
 	@Transient
-	public int getPriceAllOrders() {
-		int price = 0;
+	public double getPriceAllOrders() {
+		double price = 0;
 		Iterator<Order> orderIterator = orders.iterator();
 		while (orderIterator.hasNext()) {
 			price += orderIterator.next().getPrice();
 		}
-		return price;
+		return price * this.discountPercentage(price);
 	}
 
 	/**
@@ -112,8 +127,8 @@ public class Bill extends DomainObject {
 	 * @return
 	 */
 	@Transient
-	public int getPriceSubmittedOrSuccessiveStateOrders() {
-		int price = 0;
+	public double getPriceSubmittedOrSuccessiveStateOrders() {
+		double price = 0;
 		Iterator<Order> orderIterator = orders.iterator();
 		while (orderIterator.hasNext()) {
 			Order tmp = orderIterator.next();
@@ -121,7 +136,8 @@ public class Bill extends DomainObject {
 				price += tmp.getPrice();
 			}
 		}
-		return price;
+		;
+		return price * this.discountPercentage(price);
 	}
 
 	public void submitOrder() throws StateException {

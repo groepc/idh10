@@ -27,10 +27,13 @@ public abstract class BaseOrderItem extends DomainObject {
 	private MenuItem menuItem;
 
 	private int quantity = 0;
+	
+	private Double price = 0.0;
 
-	public BaseOrderItem(MenuItem menuItem, int quantity) {
+	public BaseOrderItem(MenuItem menuItem, int quantity, Double price) {
 		this.menuItem = menuItem;
 		this.quantity = quantity;
+		this.price = price;
 	}
 
 	/* business logic */
@@ -45,8 +48,8 @@ public abstract class BaseOrderItem extends DomainObject {
 	}
 
 	@Transient
-	public int getPrice() {
-		return menuItem.getPrice() * quantity;
+	public Double getPrice() {
+		return this.price + menuItem.getPrice();
 	}
 
 	public String description() {

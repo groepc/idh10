@@ -24,7 +24,7 @@ public class OrderItem extends BaseOrderItem {
 	private static final long serialVersionUID = 1L;
 
 	public OrderItem(MenuItem menuItem, int quantity) {
-		super(menuItem, quantity);
+		super(menuItem, quantity, menuItem.getPrice());
 	}
 
 }

@@ -26,12 +26,12 @@ public abstract class DecoratedOrderItem extends BaseOrderItem {
 	private BaseOrderItem orderItem;
 
 	public DecoratedOrderItem(BaseOrderItem orderItem, MenuItem menuItem, int quantity) {
-		super(menuItem, quantity);
+		super(menuItem, quantity, menuItem.getPrice());
 		this.orderItem = orderItem;
 	}
 
 	@Transient
-	public int getPrice() {
+	public Double getPrice() {
 		return getMenuItem().getPrice() * getQuantity() + orderItem.getPrice();
 	}
 
