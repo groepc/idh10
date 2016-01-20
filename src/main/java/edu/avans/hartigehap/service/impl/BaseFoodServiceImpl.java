@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 import edu.avans.hartigehap.domain.BaseFood;
-import edu.avans.hartigehap.domain.FoodCategory;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.repository.BaseFoodRepository;
 import edu.avans.hartigehap.repository.FoodCategoryRepository;
@@ -31,6 +30,7 @@ public class BaseFoodServiceImpl implements BaseFoodService {
 	@Autowired
 	private FoodCategoryRepository foodCategoryRepository;
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<BaseFood> findAll() {
 		// MySQL and H2 return the restaurants of findAll() in different order

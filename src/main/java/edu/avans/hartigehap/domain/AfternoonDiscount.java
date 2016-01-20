@@ -12,6 +12,8 @@ public class AfternoonDiscount extends DateTimeDiscountTemplate {
 			switch (time) {
 			case "18":
 				return 0.95;
+			case "19":
+				return 0.60;
 			case "21":
 				return 0.99;
 			}
