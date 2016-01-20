@@ -74,7 +74,6 @@ public class Bill extends DomainObject {
 		billStatus = BillStatus.CREATED;
 		currentOrder = new Order();
 		currentOrder.setBill(this);
-		//currentOrder.setOrderStatus(OrderStatus.CREATED);
 		orders.add(currentOrder);
 	}
 

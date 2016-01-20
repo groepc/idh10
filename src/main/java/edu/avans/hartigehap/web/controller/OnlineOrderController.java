@@ -16,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Customer;
@@ -64,7 +62,7 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
-	public String onlineOrderCustomerDetails(Model uiModel, HttpSession session) {
+	public String onlineOrderCustomerDetails(Model uiModel) {
 		log.info("Online order step 1, customer details");
 		
 		Customer customer = new Customer();
@@ -83,16 +81,10 @@ public class OnlineOrderController {
 			BindingResult bindingResult, 
 			Model uiModel, 
 			HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, 
 			Locale locale, 
 			HttpSession session) {
 
-		System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
-		System.out.println("Binding Result target" + bindingResult.getTarget());
-		System.out.println("Binding Result: " + bindingResult);
-
 		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult.toString());
 			uiModel.addAttribute("message",
 					new Message("error", messageSource.getMessage("customer_save_fail", new Object[] {}, locale)));
 			uiModel.addAttribute("customer", customer);
@@ -175,10 +167,8 @@ public class OnlineOrderController {
 	 */
 	
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.POST)
-	public String onlineOrderSelectMealsProcess(Model uiModel, 
+	public String onlineOrderSelectMealsProcess(
 			HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, 
-			Locale locale, 
 			HttpSession session) {
 
 		if (session.getAttribute("customerId") == null) {
@@ -211,7 +201,6 @@ public class OnlineOrderController {
 	 */
 	@RequestMapping(value = "/online-order/payment", method = RequestMethod.GET)
 	public String onlineOrderPayment(Model model,
-			Locale locale,
 			HttpSession session) {
 		
 		log.info("Online order step 3, payment");
