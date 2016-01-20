@@ -157,6 +157,7 @@ public class OnlineOrderController {
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
 		Order order = bill.getCurrentOrder();
+		order.setOrderType(Order.OrderType.ONLINE);
 
 
 		// get foods (pizza's)
