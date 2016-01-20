@@ -13,13 +13,13 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * 
@@ -35,39 +35,42 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
 public abstract class MenuItem extends DomainObjectNaturalId {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // image stored in the database
-    @Column(name = "IMAGE", table = "MENUITEM_IMAGES")
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] image;
+	// image stored in the database
+	@Column(name = "IMAGE", table = "MENUITEM_IMAGES")
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] image;
 
-    // filename of image stored in the database
-    @Column(name = "IMAGEFILENAME")
-    private String imageFileName;
+	// filename of image stored in the database
+	@Column(name = "IMAGEFILENAME")
+	private String imageFileName;
 
-    // JPA is case sensitive: the corresponding column name will be in small
-    // caps "price"
-    private int price;
+	// JPA is case sensitive: the corresponding column name will be in small
+	// caps "price"
+	private Double price;
 
-    // no cascade
-    @ManyToMany
-    private Collection<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
+	private String recipe;
 
-    public MenuItem(String id, String imageFileName, int price) {
-        super(id);
-        this.imageFileName = imageFileName;
-        this.price = price;
+	// no cascade
+	@ManyToMany
+	private Collection<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
 
-    }
+	public MenuItem(String id, String imageFileName, Double price, String recipe) {
+		super(id);
+		this.imageFileName = imageFileName;
+		this.price = price;
+		this.recipe = recipe;
 
-    public void addFoodCategories(Collection<FoodCategory> foodCategories) {
-        setFoodCategories(foodCategories);
-        for (FoodCategory foodCategory : foodCategories) {
-            foodCategory.getMenuItems().add(this);
-        }
-    }
+	}
 
-    /* business logic */
+	public void addFoodCategories(Collection<FoodCategory> foodCategories) {
+		setFoodCategories(foodCategories);
+		for (FoodCategory foodCategory : foodCategories) {
+			foodCategory.getMenuItems().add(this);
+		}
+	}
+
+	/* business logic */
 }

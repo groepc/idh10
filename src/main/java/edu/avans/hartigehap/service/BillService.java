@@ -2,12 +2,22 @@ package edu.avans.hartigehap.service;
 
 import java.util.List;
 
-import edu.avans.hartigehap.domain.*;
+import edu.avans.hartigehap.domain.BaseOrderItem;
+import edu.avans.hartigehap.domain.Bill;
+import edu.avans.hartigehap.domain.OrderItem;
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.domain.StateException;
 
 public interface BillService {
-    Bill findById(Long billId);
+	Bill findById(Long billId);
 
-    void billHasBeenPaid(Bill bill) throws StateException;
+	Bill save(Bill bill);
 
-    List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant);
+	void billHasBeenPaid(Bill bill) throws StateException;
+
+	List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant);
+
+	OrderItem addOrderItemOnline(Long billId, String menuItemName);
+
+	BaseOrderItem addOrderOptionOnline(Long billId, BaseOrderItem orderItem, String orderOption);
 }

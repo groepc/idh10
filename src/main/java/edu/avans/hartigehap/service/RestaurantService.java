@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 import edu.avans.hartigehap.domain.Restaurant;
 
 public interface RestaurantService {
-    List<Restaurant> findAll();
+	List<Restaurant> findAll();
 
-    Restaurant findById(String name);
+	Restaurant findById(String name);
 
-    Restaurant save(Restaurant restaurant);
+	Restaurant save(Restaurant restaurant);
 
-    void delete(String name);
+	void delete(String name);
 
-    Page<Restaurant> findAllByPage(Pageable pageable);
+	Page<Restaurant> findAllByPage(Pageable pageable);
 
-    Restaurant fetchWarmedUp(String restaurantName);
+	Restaurant fetchWarmedUp(String restaurantName);
 }

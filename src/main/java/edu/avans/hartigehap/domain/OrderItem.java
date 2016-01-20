@@ -1,56 +1,30 @@
 package edu.avans.hartigehap.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 /**
  * 
  * @author Erco
  */
 @Entity
-@Table(name = "ORDERITEMS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter
 @Setter
-@ToString(callSuper = true, includeFieldNames = true, of = { "menuItem", "quantity" })
+@ToString(callSuper = true, includeFieldNames = true, of = {})
 @NoArgsConstructor
-public class OrderItem extends DomainObject {
-    private static final long serialVersionUID = 1L;
+public class OrderItem extends BaseOrderItem {
+	private static final long serialVersionUID = 1L;
 
-    // unidirectional many-to-one; deliberately no cascade
-    @ManyToOne
-    private MenuItem menuItem;
+	public OrderItem(MenuItem menuItem, int quantity) {
+		super(menuItem, quantity, menuItem.getPrice());
+	}
 
-    private int quantity = 0;
-
-    public OrderItem(MenuItem menuItem, int quantity) {
-        this.menuItem = menuItem;
-        this.quantity = quantity;
-    }
-
-    /* business logic */
-
-    public void incrementQuantity() {
-        this.quantity++;
-    }
-
-    public void decrementQuantity() {
-        assert quantity > 0 : "quantity cannot be below 0";
-        this.quantity--;
-    }
-
-    @Transient
-    public int getPrice() {
-        return menuItem.getPrice() * quantity;
-    }
 }

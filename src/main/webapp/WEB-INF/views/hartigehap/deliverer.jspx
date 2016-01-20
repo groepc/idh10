@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div id="body" xmlns:jsp="http://java.sun.com/JSP/Page"
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:joda="http://www.joda.org/joda/time/tags"
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:form="http://www.springframework.org/tags/form"
+	 xmlns:sec="http://www.springframework.org/security/tags"
+	 version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+	<spring:message code="label_deliverer_subsystem" var="labelDelivererSubsystem" />
+	<spring:message code="label_restaurant" var="labelRestaurant" />
+	<spring:url value="/restaurants/${restaurant.id}" var="showRestaurant" />
+	
+	<div class="row">
+		<h1>${labelDelivererSubsystem}</h1>
+		<h2 class="restaurant muted">${labelRestaurant} <a href="${showRestaurant}">${restaurant.id}</a></h2>
+
+		<c:if test="${not empty message}">
+			<div id="message" class="alert alert-info ${message.type}">${message.message}</div>
+		</c:if>
+	</div>
+
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Alle te bezorgen bestellingen</h3>
+			</div>
+			<c:if test="${empty allOnlinePreparedOrders}">
+				<div class="panel-body">
+					<span>${textThereAreNoOnlineOrders}</span>
+				</div>
+			</c:if>
+			<c:if test="${not empty allOnlinePreparedOrders}">
+				<table class="table">
+					<tbody>
+						<c:forEach items="${allOnlinePreparedOrders}" var="allOnlinePreparedOrders">
+							<tr>
+								<spring:url var="showOrder" value="/deliverer/orders/${allOnlinePreparedOrders.id}" />
+								<td><a href="${showOrder}">Bezorg Online Bestelling ${allOnlinePreparedOrders.id}</a></td>
+								<sec:authorize access="hasRole('ROLE_DELIVERER')">
+									<spring:url var="planOrderUrl" value="/deliverer/orders/${allOnlinePreparedOrders.id}" />
+									<form:form name="planOrderForm" action="${planOrderUrl}" method="put">
+										<input type="hidden" name="event" value="planOrder" />
+										<td style="text-align:right;"><input type="submit" value="Bezorgt" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
+									</form:form>
+								</sec:authorize>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:if>
+		</div>
+	</div>
+</div>

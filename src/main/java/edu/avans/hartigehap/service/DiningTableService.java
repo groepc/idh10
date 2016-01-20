@@ -1,29 +1,33 @@
 package edu.avans.hartigehap.service;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import edu.avans.hartigehap.domain.*;
+
+import edu.avans.hartigehap.domain.DiningTable;
+import edu.avans.hartigehap.domain.EmptyBillException;
+import edu.avans.hartigehap.domain.StateException;
 
 public interface DiningTableService {
 
-    List<DiningTable> findAll();
+	List<DiningTable> findAll();
 
-    DiningTable findById(Long id);
+	DiningTable findById(Long id);
 
-    DiningTable save(DiningTable diningTable);
+	DiningTable save(DiningTable diningTable);
 
-    void delete(Long id);
+	void delete(Long id);
 
-    Page<DiningTable> findAllByPage(Pageable pageable);
+	Page<DiningTable> findAllByPage(Pageable pageable);
 
-    DiningTable fetchWarmedUp(Long diningTableId);
+	DiningTable fetchWarmedUp(Long diningTableId);
 
-    void addOrderItem(DiningTable diningTable, String menuItemName);
+	void addOrderItem(DiningTable diningTable, String menuItemName);
 
-    void deleteOrderItem(DiningTable diningTable, String menuItemName);
+	void deleteOrderItem(DiningTable diningTable, String menuItemName);
 
-    void submitOrder(DiningTable diningTable) throws StateException;
+	void submitOrder(DiningTable diningTable) throws StateException;
 
-    void submitBill(DiningTable diningTable) throws StateException, EmptyBillException;
+	void submitBill(DiningTable diningTable) throws StateException, EmptyBillException;
 }

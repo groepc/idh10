@@ -1,59 +1,63 @@
 package edu.avans.hartigehap.web.controller;
 
+import java.util.Collection;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import edu.avans.hartigehap.domain.*;
-import edu.avans.hartigehap.service.*;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.bind.annotation.PathVariable;
-import java.util.*;
-import javax.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.service.RestaurantPopulatorService;
+import edu.avans.hartigehap.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
 public class RestaurantController {
-    
-    @Autowired
-    private RestaurantService restaurantService;
-    @Autowired
-    private RestaurantPopulatorService restaurantPopulatorService;
 
-    // mapping to "/" is not RESTful, but is for bootstrapping!
-    @RequestMapping(value = { "/", "/restaurants" }, method = RequestMethod.GET)
-    public String listRestaurants(Model uiModel) {
+	@Autowired
+	private RestaurantService restaurantService;
+	@Autowired
+	private RestaurantPopulatorService restaurantPopulatorService;
 
-        Collection<Restaurant> restaurants = restaurantService.findAll();
-        uiModel.addAttribute("restaurants", restaurants);
+	// mapping to "/" is not RESTful, but is for bootstrapping!
+	@RequestMapping(value = { "/", "/restaurants" }, method = RequestMethod.GET)
+	public String listRestaurants(Model uiModel) {
 
-        // use HartigeHap as default restaurant
-        Restaurant restaurant = restaurantService.fetchWarmedUp(RestaurantPopulatorService.HARTIGEHAP_RESTAURANT_NAME);
-        uiModel.addAttribute("restaurant", restaurant);
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
 
-        return "hartigehap/listrestaurants";
-    }
+		// use HartigeHap as default restaurant
+		Restaurant restaurant = restaurantService.fetchWarmedUp(RestaurantPopulatorService.HARTIGEHAP_RESTAURANT_NAME);
+		uiModel.addAttribute("restaurant", restaurant);
 
-    @RequestMapping(value = "/restaurants/{restaurantName}", method = RequestMethod.GET)
-    public String showRestaurant(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
+		return "hartigehap/listrestaurants";
+	}
 
-        // warmup stuff
-        Collection<Restaurant> restaurants = restaurantService.findAll();
-        uiModel.addAttribute("restaurants", restaurants);
+	@RequestMapping(value = "/restaurants/{restaurantName}", method = RequestMethod.GET)
+	public String showRestaurant(@PathVariable("restaurantName") String restaurantName, Model uiModel) {
 
-        Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
-        uiModel.addAttribute("restaurant", restaurant);
+		// warmup stuff
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
 
-        return "hartigehap/restaurant";
-    }
+		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
+		uiModel.addAttribute("restaurant", restaurant);
 
-    // called once immediately after bean creation
-    @PostConstruct
-    public void createRestaurants() {
-        log.info("RestaurantController.createRestaurants() called");
-        log.info("RestaurantPopulatorServiceImpl.createRestaurantsWithInventory() called");
-        // restaurantPopulatorService.createRestaurantsWithInventory();
-    }
+		return "hartigehap/restaurant";
+	}
+
+	// called once immediately after bean creation
+	@PostConstruct
+	public void createRestaurants() {
+		log.info("RestaurantController.createRestaurants() called");
+		log.info("RestaurantPopulatorServiceImpl.createRestaurantsWithInventory() called");
+		restaurantPopulatorService.createRestaurantsWithInventory();
+	}
 
 }

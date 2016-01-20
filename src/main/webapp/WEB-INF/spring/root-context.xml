@@ -9,7 +9,23 @@
 
     <import resource="classpath:datasource-tx-jpa.xml" />
 	<import resource="security-context.xml"/>     	        
+    <import resource="classpath:aop.xml" />
     
-    <context:component-scan base-package="edu.avans.hartigehap.service.impl" />    
+    <context:component-scan base-package="edu.avans.hartigehap.service.impl" />
+    
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    <property name="host" value="mail.hartigehap.nl"/>
+	</bean>
+	
+	<!-- this is a template message that we can pre-load with default state -->
+	<bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+	    <property name="from" value="online-order@hartigehap.nl"/>
+	    <property name="subject" value="Uw bestelling"/>
+	</bean>
+	
+	<bean id="orderManager" class="edu.avans.hartigehap.domain.EmailNotificationImpl">
+	    <property name="mailSender" ref="mailSender"/>
+	    <property name="templateMessage" ref="templateMessage"/>
+	</bean>
  		
 </beans>
