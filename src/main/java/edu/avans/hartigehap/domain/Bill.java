@@ -131,14 +131,10 @@ public class Bill extends DomainObject {
 	 */
 	@Transient
 	public double getPriceCurrentOder() {
-		double price = 0;
-		Iterator<Order> orderIterator = orders.iterator();
-		while (orderIterator.hasNext()) {
-			System.out.println(price);
-			price += orderIterator.next().getPrice();
-		}
-		System.out.println(price);
-		return price * this.discountPercentage(price);
+		Collection<BaseOrderItem> items = this.getCurrentOrder().getOrderItems();
+		BaseOrderItem firstItem = items.iterator().next();
+		Double price = firstItem.getPrice();
+		return price;
 	}
 
 	/**

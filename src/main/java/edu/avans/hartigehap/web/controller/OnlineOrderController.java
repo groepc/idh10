@@ -241,7 +241,7 @@ public class OnlineOrderController {
 
 		model.addAttribute("currentItems", items);
 		
-		model.addAttribute("totalPrice", bill.getPriceAllOrders());
+		model.addAttribute("totalPrice", bill.getPriceCurrentOder());
 		
 		return "hartigehap/onlineorder/payment";
 	}
@@ -280,8 +280,7 @@ public class OnlineOrderController {
 		String deliveryTime = bill.getDeliveryTime();
 		model.addAttribute("deliveryTime", deliveryTime);
 		
-		BaseOrderItem firstItem = items.iterator().next();
-		Double totalPrice = firstItem.getPrice();
+		Double totalPrice = bill.getPriceCurrentOder();
 		model.addAttribute("totalPrice", totalPrice);
 		
 		NotificationAdapter notifier = NotificationFactory.getNotification("email");
