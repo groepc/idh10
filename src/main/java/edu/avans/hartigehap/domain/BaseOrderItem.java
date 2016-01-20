@@ -49,7 +49,7 @@ public abstract class BaseOrderItem extends DomainObject {
 
 	@Transient
 	public Double getPrice() {
-		return this.price + menuItem.getPrice();
+		return menuItem.getPrice();
 	}
 
 	public String description() {
