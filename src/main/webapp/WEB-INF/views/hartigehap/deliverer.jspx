@@ -37,13 +37,13 @@
 					<tbody>
 						<c:forEach items="${allOnlinePreparedOrders}" var="allOnlinePreparedOrders">
 							<tr>
-								<spring:url var="showOrder" value="/kitchen/orders/${allOnlinePreparedOrders.id}" />
-								<td><a href="${showOrder}">${labelOnlineSubmittedOrder} ${allOnlinePreparedOrders.id}</a> ${allOnlinePreparedOrders.orderType}</td>
-								<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
-									<spring:url var="planOrderUrl" value="/kitchen/orders/${allOnlinePreparedOrders.id}" />
+								<spring:url var="showOrder" value="/deliverer/orders/${allOnlinePreparedOrders.id}" />
+								<td><a href="${showOrder}">Bezorg Online Bestelling ${allOnlinePreparedOrders.id}</a></td>
+								<sec:authorize access="hasRole('ROLE_DELIVERER')">
+									<spring:url var="planOrderUrl" value="/deliverer/orders/${allOnlinePreparedOrders.id}" />
 									<form:form name="planOrderForm" action="${planOrderUrl}" method="put">
 										<input type="hidden" name="event" value="planOrder" />
-										<td style="text-align:right;"><input type="submit" value="${labelPlanOrderButton}" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
+										<td style="text-align:right;"><input type="submit" value="Bezorgt" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
 									</form:form>
 								</sec:authorize>
 							</tr>
