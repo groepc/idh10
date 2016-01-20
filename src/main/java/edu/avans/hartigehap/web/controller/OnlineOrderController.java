@@ -33,8 +33,10 @@ import edu.avans.hartigehap.domain.MealOption;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.NotificationAdapter;
 import edu.avans.hartigehap.domain.NotificationFactory;
+import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.OrderItem;
 import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.repository.MealOptionRepository;
 import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.service.BaseFoodService;
@@ -154,6 +156,8 @@ public class OnlineOrderController {
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
+		Order order = bill.getCurrentOrder();
+
 
 		// get foods (pizza's)
 		Collection<MenuItem> menuItems = baseFoodService.findOnlineMenuItems();
@@ -233,11 +237,10 @@ public class OnlineOrderController {
 				
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+
 		model.addAttribute("currentItems", items);
 		
-		BaseOrderItem firstItem = items.iterator().next();
-		Double totalPrice = firstItem.getPrice();
-		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("totalPrice", bill.getPriceAllOrders());
 		
 		return "hartigehap/onlineorder/payment";
 	}
@@ -264,6 +267,9 @@ public class OnlineOrderController {
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
+		
+		Order order = bill.getCurrentOrder();
+		order.setOrderStatus(OrderStatus.SUBMITTED);
 
 		// get current customer email
 		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
