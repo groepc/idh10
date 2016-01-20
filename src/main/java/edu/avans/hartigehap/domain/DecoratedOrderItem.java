@@ -30,11 +30,13 @@ public abstract class DecoratedOrderItem extends BaseOrderItem {
 		this.orderItem = orderItem;
 	}
 
+	@Override
 	@Transient
 	public Double getPrice() {
 		return getMenuItem().getPrice() * getQuantity() + orderItem.getPrice();
 	}
 
+	@Override
 	public String description() {
 		return orderItem.description() + " + extra " + super.description();
 	}

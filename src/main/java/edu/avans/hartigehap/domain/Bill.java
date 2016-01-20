@@ -19,7 +19,6 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import edu.avans.hartigehap.domain.Order.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -75,7 +74,6 @@ public class Bill extends DomainObject {
 		billStatus = BillStatus.CREATED;
 		currentOrder = new Order();
 		currentOrder.setBill(this);
-		//currentOrder.setOrderStatus(OrderStatus.CREATED);
 		orders.add(currentOrder);
 	}
 

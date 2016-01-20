@@ -10,13 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
-import edu.avans.hartigehap.domain.Customer;
-import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.OrderItem;
-import edu.avans.hartigehap.domain.OrderOption;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.BillRepository;
@@ -36,15 +33,18 @@ public class BillServiceImpl implements BillService {
 	@Autowired
 	private MenuItemRepository menuItemRepository;
 
+	@Override
 	@Transactional(readOnly = true)
 	public Bill findById(Long billId) {
 		return billRepository.findOne(billId);
 	}
 
+	@Override
 	public void billHasBeenPaid(Bill bill) throws StateException {
 		bill.paid();
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant) {
 		// a query created using a repository method name
@@ -69,6 +69,7 @@ public class BillServiceImpl implements BillService {
 		return orderItem;
 	}
 
+	@Override
 	public BaseOrderItem addOrderOptionOnline(Long billId, BaseOrderItem orderItem, String orderOption) {
 		MenuItem menuItem = menuItemRepository.findOne(orderOption);
 
