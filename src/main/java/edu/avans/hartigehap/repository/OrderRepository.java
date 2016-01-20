@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.OrderStatus;
 import edu.avans.hartigehap.domain.Restaurant;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Long>, OrderRepositoryCustom {
@@ -16,7 +17,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Long>
 	// AND
 	// order.getBill().getDiningTable().getRestaurant() == restaurant
 	
-	List<Order> findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(Order.OrderStatus orderStatus, Order.OrderType ordeType, Restaurant restaurant,
+	List<Order> findByOrderStatusOrderStatusIdAndOrderTypeAndBillDiningTableRestaurant(OrderStatus.OrderStatusId orderStatus, Order.OrderType ordeType, Restaurant restaurant,
 			Sort sort);
 
 	// compare to:

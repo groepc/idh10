@@ -10,13 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
-import edu.avans.hartigehap.domain.Customer;
-import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.OrderItem;
-import edu.avans.hartigehap.domain.OrderOption;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.BillRepository;
@@ -64,7 +60,7 @@ public class BillServiceImpl implements BillService {
 		Order order = currentBill.getCurrentOrder();
 		OrderItem orderItem = order.addOnlineOrderItem(menuItem);
 		
-		order.setOrderStatus(OrderStatus.CREATED);
+		//order.setOrderStatus(OrderStatus.CREATED);
 
 		return orderItem;
 	}
@@ -76,7 +72,7 @@ public class BillServiceImpl implements BillService {
 		Order order = currentBill.getCurrentOrder();
 		BaseOrderItem orderOptionReturned = order.addOnlineOrderOption(orderItem, menuItem);
 		
-		order.setOrderStatus(OrderStatus.CREATED);
+		//order.setOrderStatus(OrderStatus.CREATED);
 		
 		return orderOptionReturned;
 

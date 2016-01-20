@@ -18,7 +18,7 @@ import edu.avans.hartigehap.domain.BaseFood;
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Bill.BillStatus;
-import edu.avans.hartigehap.domain.Order.OrderStatus;
+import edu.avans.hartigehap.domain.OrderStatus;
 import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
@@ -134,7 +134,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
 		createMealOption("Extra tomaat", "pizza.jpg", 0.15, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra mozarella", "pizza.jpg", 0.75, "easy",
+		createMealOption("Extra mozzarella", "pizza.jpg", 0.75, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
 		createMealOption("Extra ansjovis", "pizza.jpg", 1.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
@@ -308,41 +308,41 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		// there to the service impl.
 		// * The service impl creates the decorators
 		
-		Restaurant restaurantHartigeHap = restaurantService.fetchWarmedUp("HartigeHap");
-		
-		// create test customer
-		Customer customer = new Customer();
-		customer.setFirstName("Perry");
-		customer.setLastName("Faro");
-		customer.setEmail("p.faro@gmail.com");
-		customer.setHouseNumber("7");
-		customer.setPhoneNumber("0000000000");
-		customer.setPostalCode("1111AA");
-		customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurantHartigeHap }));
-		customer = customerRepository.save(customer);
-		
-		// get dining table
-		System.out.println("Table NR:" + table.getTableNr());
-
-		// create bill
-		Bill bill = new Bill();
-		bill.setCustomer(customer);
-		bill.setDiningTable(table);
-		bill.setBillStatus(BillStatus.SUBMITTED);
-		bill = billService.save(bill);
-		
-		BaseOrderItem basePizza = billService.addOrderItemOnline(bill.getId(), "Pizza Shoarma");
-		BaseOrderItem pizzaShoarmaWithCheese = billService.addOrderOptionOnline(bill.getId(), basePizza, "Extra kaas" );
-		BaseOrderItem pizzaShoarmaWithCheeseAndTomato = billService.addOrderOptionOnline(bill.getId(), pizzaShoarmaWithCheese, "Extra tomaat" );
-		
-		Order order = bill.getCurrentOrder();
-		order.setOrderStatus(OrderStatus.SUBMITTED);
-		order.setOrderType(OrderType.ONLINE);
-		
-		System.out.println("Order ID:" + order.getId());
-		System.out.println("Order TYPE:" + order.getOrderType());
-		System.out.println("Bill ID:" + bill.getId());
-		System.out.println("Table NR:" + bill.getDiningTable());
+//		Restaurant restaurantHartigeHap = restaurantService.fetchWarmedUp("HartigeHap");
+//		
+//		// create test customer
+//		Customer customer = new Customer();
+//		customer.setFirstName("Perry");
+//		customer.setLastName("Faro");
+//		customer.setEmail("p.faro@gmail.com");
+//		customer.setHouseNumber("7");
+//		customer.setPhoneNumber("0000000000");
+//		customer.setPostalCode("1111AA");
+//		customer.setRestaurants(Arrays.asList(new Restaurant[] { restaurantHartigeHap }));
+//		customer = customerRepository.save(customer);
+//		
+//		// get dining table
+//		System.out.println("Table NR:" + table.getTableNr());
+//
+//		// create bill
+//		Bill bill = new Bill();
+//		bill.setCustomer(customer);
+//		bill.setDiningTable(table);
+//		bill.setBillStatus(BillStatus.SUBMITTED);
+//		bill = billService.save(bill);
+//		
+//		BaseOrderItem basePizza = billService.addOrderItemOnline(bill.getId(), "Pizza Shoarma");
+//		BaseOrderItem pizzaShoarmaWithCheese = billService.addOrderOptionOnline(bill.getId(), basePizza, "Extra kaas" );
+//		BaseOrderItem pizzaShoarmaWithCheeseAndTomato = billService.addOrderOptionOnline(bill.getId(), pizzaShoarmaWithCheese, "Extra tomaat" );
+//		
+//		Order order = bill.getCurrentOrder();
+//		order.setOrderStatus(OrderStatus.SUBMITTED);
+//		order.setOrderType(OrderType.ONLINE);
+//		
+//		System.out.println("Order ID:" + order.getId());
+//		System.out.println("Order TYPE:" + order.getOrderType());
+//		System.out.println("Bill ID:" + bill.getId());
+//		System.out.println("Table NR:" + bill.getDiningTable());
 	
 		
 //		OrderItem orderItem = new OrderItem(meals.get(3), 1); // pizza
