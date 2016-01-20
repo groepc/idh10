@@ -5,7 +5,6 @@ import java.util.List;
 import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
-import edu.avans.hartigehap.domain.Order.OrderType;
 
 public interface OrderService {
 	Order findById(Long orderId);

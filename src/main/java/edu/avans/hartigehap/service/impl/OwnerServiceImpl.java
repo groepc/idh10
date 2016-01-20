@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.google.common.collect.Lists;
 
 import edu.avans.hartigehap.domain.Owner;
@@ -16,9 +19,6 @@ import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.OwnerRepository;
 import edu.avans.hartigehap.service.OwnerService;
 import edu.avans.hartigehap.service.RestaurantService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service("ownerService")
 @Repository

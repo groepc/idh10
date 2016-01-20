@@ -17,6 +17,7 @@ public class BrowserUtils {
 		if (webDriver == null) {
 			if (!shutdownHookEnabled) {
 				Runtime.getRuntime().addShutdownHook(new Thread() {
+					@Override
 					public void run() {
 						close();
 					}

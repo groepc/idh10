@@ -2,8 +2,6 @@ package edu.avans.hartigehap.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -18,8 +16,6 @@ import edu.avans.hartigehap.domain.BaseFood;
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Bill.BillStatus;
-import edu.avans.hartigehap.domain.Order.OrderStatus;
-import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Drink;
@@ -27,8 +23,8 @@ import edu.avans.hartigehap.domain.FoodCategory;
 import edu.avans.hartigehap.domain.Meal;
 import edu.avans.hartigehap.domain.MealOption;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.OrderItem;
-import edu.avans.hartigehap.domain.OrderOption;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
+import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.BaseFoodRepository;
 import edu.avans.hartigehap.repository.BaseOrderItemRepository;
@@ -271,6 +267,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 
 	}
 
+	@Override
 	public void createRestaurantsWithInventory() {
 
 		createCommonEntities();

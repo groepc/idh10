@@ -1,12 +1,8 @@
 package edu.avans.hartigehap.web.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,25 +16,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.avans.hartigehap.domain.BaseFood;
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
-import edu.avans.hartigehap.domain.Meal;
 import edu.avans.hartigehap.domain.MealOption;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.NotificationAdapter;
 import edu.avans.hartigehap.domain.NotificationFactory;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.OrderItem;
-import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.Order.OrderStatus;
+import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.MealOptionRepository;
-import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.service.BaseFoodService;
 import edu.avans.hartigehap.service.BillService;
 import edu.avans.hartigehap.service.CustomerService;
@@ -97,7 +88,7 @@ public class OnlineOrderController {
 			HttpSession session) {
 
 		System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
-		System.out.println("Binding Result target" + (Customer) bindingResult.getTarget());
+		System.out.println("Binding Result target" + bindingResult.getTarget());
 		System.out.println("Binding Result: " + bindingResult);
 
 		if (bindingResult.hasErrors()) {
