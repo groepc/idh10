@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Order;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.OrderRepository;
 import edu.avans.hartigehap.service.OrderService;
+import edu.avans.hartigehap.web.controller.DiningTableController;
 import lombok.extern.slf4j.Slf4j;
 
 @Service("orderService")
@@ -37,12 +39,12 @@ public class OrderServiceImpl implements OrderService {
 	// * a query created using a repository method name
 	// * a repository with a custom method implementation
 	@Transactional(readOnly = true)
-	public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
+	public List<Order> findSubmittedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant) {
 
 		// a repository with a custom method implementation
 		// the custom method implementation uses a named query which is
 		// invoked using an entityManager
-		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
+		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(orderType,restaurant);
 
 		log.info("findSubmittedOrdersForRestaurant using named query");
 		ListIterator<Order> it = submittedOrdersList.listIterator();
@@ -53,8 +55,8 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		// a query created using a repository method name
-		List<Order> submittedOrdersListAlternative = orderRepository.findByOrderStatusAndBillDiningTableRestaurant(
-				Order.OrderStatus.SUBMITTED, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
+		List<Order> submittedOrdersListAlternative = orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(
+				Order.OrderStatus.SUBMITTED, orderType, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
 
 		log.info("findSubmittedOrdersForRestaurant using query created using repository method name");
 		ListIterator<Order> italt = submittedOrdersListAlternative.listIterator();
@@ -68,16 +70,16 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
+	public List<Order> findPlannedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant) {
 		// a query created using a repository method name
-		return orderRepository.findByOrderStatusAndBillDiningTableRestaurant(Order.OrderStatus.PLANNED, restaurant,
+		return orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(Order.OrderStatus.PLANNED, orderType, restaurant,
 				new Sort(Sort.Direction.ASC, "plannedTime"));
 	}
 
 	@Transactional(readOnly = true)
-	public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
+	public List<Order> findPreparedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant) {
 		// a query created using a repository method name
-		return orderRepository.findByOrderStatusAndBillDiningTableRestaurant(Order.OrderStatus.PREPARED, restaurant,
+		return orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(Order.OrderStatus.PREPARED,orderType, restaurant,
 				new Sort(Sort.Direction.ASC, "preparedTime"));
 	}
 

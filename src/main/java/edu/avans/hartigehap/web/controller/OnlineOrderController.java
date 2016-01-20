@@ -284,7 +284,7 @@ public class OnlineOrderController {
 		model.addAttribute("totalPrice", totalPrice);
 		
 		NotificationAdapter notifier = NotificationFactory.getNotification("email");
-		notifier.request("vadiemjanssens@gmail.com", "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
+		notifier.request(customer.getEmail(), "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
 
 		return "hartigehap/onlineorder/receipt";
 		
