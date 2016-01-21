@@ -32,15 +32,18 @@ public class BillServiceImpl implements BillService {
 	@Autowired
 	private MenuItemRepository menuItemRepository;
 
+	@Override
 	@Transactional(readOnly = true)
 	public Bill findById(Long billId) {
 		return billRepository.findOne(billId);
 	}
 
+	@Override
 	public void billHasBeenPaid(Bill bill) throws StateException {
 		bill.paid();
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant) {
 		// a query created using a repository method name
@@ -65,6 +68,7 @@ public class BillServiceImpl implements BillService {
 		return orderItem;
 	}
 
+	@Override
 	public BaseOrderItem addOrderOptionOnline(Long billId, BaseOrderItem orderItem, String orderOption) {
 		MenuItem menuItem = menuItemRepository.findOne(orderOption);
 

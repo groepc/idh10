@@ -21,7 +21,6 @@ import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.service.OrderService;
 import edu.avans.hartigehap.service.RestaurantService;
-import edu.avans.hartigehap.service.impl.OrderServiceImpl;
 import edu.avans.hartigehap.web.form.Message;
 import lombok.extern.slf4j.Slf4j;
 

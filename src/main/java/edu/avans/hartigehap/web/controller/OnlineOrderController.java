@@ -1,12 +1,8 @@
 package edu.avans.hartigehap.web.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,23 +16,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import edu.avans.hartigehap.domain.BaseFood;
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
-import edu.avans.hartigehap.domain.Meal;
 import edu.avans.hartigehap.domain.MealOption;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.NotificationAdapter;
 import edu.avans.hartigehap.domain.NotificationFactory;
-import edu.avans.hartigehap.domain.OrderItem;
+import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.OrderStatus;
+import edu.avans.hartigehap.domain.OrderSubmittedState;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.MealOptionRepository;
-import edu.avans.hartigehap.repository.MenuItemRepository;
 import edu.avans.hartigehap.service.BaseFoodService;
 import edu.avans.hartigehap.service.BillService;
 import edu.avans.hartigehap.service.CustomerService;
@@ -71,7 +63,7 @@ public class OnlineOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/online-order", "/online-order/customer-details" }, method = RequestMethod.GET)
-	public String onlineOrderCustomerDetails(Model uiModel, HttpSession session) {
+	public String onlineOrderCustomerDetails(Model uiModel) {
 		log.info("Online order step 1, customer details");
 		
 		Customer customer = new Customer();
@@ -90,16 +82,10 @@ public class OnlineOrderController {
 			BindingResult bindingResult, 
 			Model uiModel, 
 			HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, 
 			Locale locale, 
 			HttpSession session) {
 
-		System.out.println("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
-		System.out.println("Binding Result target" + (Customer) bindingResult.getTarget());
-		System.out.println("Binding Result: " + bindingResult);
-
 		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult.toString());
 			uiModel.addAttribute("message",
 					new Message("error", messageSource.getMessage("customer_save_fail", new Object[] {}, locale)));
 			uiModel.addAttribute("customer", customer);
@@ -154,6 +140,9 @@ public class OnlineOrderController {
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
+		Order order = bill.getCurrentOrder();
+		order.setOrderType(Order.OrderType.ONLINE);
+
 
 		// get foods (pizza's)
 		Collection<MenuItem> menuItems = baseFoodService.findOnlineMenuItems();
@@ -179,10 +168,8 @@ public class OnlineOrderController {
 	 */
 	
 	@RequestMapping(value = "/online-order/select-meals", method = RequestMethod.POST)
-	public String onlineOrderSelectMealsProcess(Model uiModel, 
+	public String onlineOrderSelectMealsProcess(
 			HttpServletRequest httpServletRequest,
-			RedirectAttributes redirectAttributes, 
-			Locale locale, 
 			HttpSession session) {
 
 		if (session.getAttribute("customerId") == null) {
@@ -215,7 +202,6 @@ public class OnlineOrderController {
 	 */
 	@RequestMapping(value = "/online-order/payment", method = RequestMethod.GET)
 	public String onlineOrderPayment(Model model,
-			Locale locale,
 			HttpSession session) {
 		
 		log.info("Online order step 3, payment");
@@ -233,11 +219,10 @@ public class OnlineOrderController {
 				
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
+
 		model.addAttribute("currentItems", items);
 		
-		BaseOrderItem firstItem = items.iterator().next();
-		Double totalPrice = firstItem.getPrice();
-		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("totalPrice", bill.getPriceCurrentOder());
 		
 		return "hartigehap/onlineorder/payment";
 	}
@@ -264,6 +249,9 @@ public class OnlineOrderController {
 		Bill bill = billService.findById(billId);
 		Collection<BaseOrderItem> items = bill.getCurrentOrder().getOrderItems();
 		model.addAttribute("currentItems", items);
+		
+		Order order = bill.getCurrentOrder();
+		order.setOrderStatus(new OrderSubmittedState());
 
 		// get current customer email
 		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
@@ -273,12 +261,11 @@ public class OnlineOrderController {
 		String deliveryTime = bill.getDeliveryTime();
 		model.addAttribute("deliveryTime", deliveryTime);
 		
-		BaseOrderItem firstItem = items.iterator().next();
-		Double totalPrice = firstItem.getPrice();
+		Double totalPrice = bill.getPriceCurrentOder();
 		model.addAttribute("totalPrice", totalPrice);
 		
 		NotificationAdapter notifier = NotificationFactory.getNotification("email");
-		notifier.request("vadiemjanssens@gmail.com", "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
+		notifier.request(customer.getEmail(), "Uw bestelling wordt om " + deliveryTime + " bij u geleverd. Eet smakelijk!");
 
 		return "hartigehap/onlineorder/receipt";
 		

@@ -17,7 +17,6 @@ import lombok.Setter;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id") 
 @Getter @Setter
-
 public abstract class OrderStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +28,7 @@ public abstract class OrderStatus implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	protected  OrderStatusId orderStatusId;
+	protected OrderStatusId orderStatusId;
 
 	@OneToOne(cascade = javax.persistence.CascadeType.ALL, mappedBy="orderStatus")Order order;
 	

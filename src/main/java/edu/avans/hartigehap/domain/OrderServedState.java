@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id") 
 @Getter @Setter
-
 public class OrderServedState extends OrderStatus {
 
 	private static final long serialVersionUID = 1L;

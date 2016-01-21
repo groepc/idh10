@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.avans.hartigehap.domain.BaseOrderItem;
-import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.Order.OrderType;
+import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.OrderService;
 import edu.avans.hartigehap.service.RestaurantService;
 import edu.avans.hartigehap.web.form.Message;

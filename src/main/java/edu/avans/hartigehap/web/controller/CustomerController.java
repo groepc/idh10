@@ -152,7 +152,7 @@ public class CustomerController {
 			@RequestParam(value = "file", required = false) Part file) {
 
 		log.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());
-		log.info("Binding Result target: " + (Customer) bindingResult.getTarget());
+		log.info("Binding Result target: " + bindingResult.getTarget());
 		log.info("Binding Result: " + bindingResult);
 
 		return handleCreateOrUpdateCustomer(true, restaurantName, customer, bindingResult, uiModel, httpServletRequest,

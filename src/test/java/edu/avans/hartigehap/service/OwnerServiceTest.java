@@ -4,16 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-
-import edu.avans.hartigehap.service.testutil.AbstractTransactionRollbackTest;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import edu.avans.hartigehap.domain.Owner;
 import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.service.testutil.AbstractTransactionRollbackTest;
 
 public class OwnerServiceTest extends AbstractTransactionRollbackTest {
 	private static final String OWNER1 = "Anna";
