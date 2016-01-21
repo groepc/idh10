@@ -21,8 +21,8 @@ import edu.avans.hartigehap.domain.FoodCategory;
 import edu.avans.hartigehap.domain.Meal;
 import edu.avans.hartigehap.domain.MealOption;
 import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.Order.OrderType;
-import edu.avans.hartigehap.domain.OrderSubmittedState;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.CustomerRepository;
 import edu.avans.hartigehap.repository.FoodCategoryRepository;
@@ -112,7 +112,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
 		createMealOption("Extra tomaat", "pizza.jpg", 0.15, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
-		createMealOption("Extra mozzarella", "pizza.jpg", 0.75, "easy",
+		createMealOption("Extra mozarella", "pizza.jpg", 0.75, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
 		createMealOption("Extra ansjovis", "pizza.jpg", 1.0, "easy",
 				Arrays.<FoodCategory> asList(new FoodCategory[] { foodCats.get(3), foodCats.get(2) }));
@@ -307,7 +307,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		BaseOrderItem pizzaShoarmaWithCheeseAndTomato = billService.addOrderOptionOnline(bill.getId(), pizzaShoarmaWithCheese, "Extra tomaat" );
 		
 		Order order = bill.getCurrentOrder();
-		order.setOrderStatus(new OrderSubmittedState());
+		order.setOrderStatus(OrderStatus.SUBMITTED);
 		order.setOrderType(OrderType.ONLINE);
 
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.OrderStatus;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
 import edu.avans.hartigehap.repository.OrderRepository;
@@ -56,9 +55,9 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		// a query created using a repository method name
-		List<Order> submittedOrdersListAlternative = orderRepository.findByOrderStatusOrderStatusIdAndOrderTypeAndBillDiningTableRestaurant(
-				OrderStatus.OrderStatusId.SUBMITTED, orderType, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
-				
+		List<Order> submittedOrdersListAlternative = orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(
+				Order.OrderStatus.SUBMITTED, orderType, restaurant, new Sort(Sort.Direction.ASC, "submittedTime"));
+
 		log.info("findSubmittedOrdersForRestaurant using query created using repository method name");
 		ListIterator<Order> italt = submittedOrdersListAlternative.listIterator();
 		while (italt.hasNext()) {
@@ -74,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(readOnly = true)
 	public List<Order> findPlannedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant) {
 		// a query created using a repository method name
-		return orderRepository.findByOrderStatusOrderStatusIdAndOrderTypeAndBillDiningTableRestaurant(OrderStatus.OrderStatusId.PLANNED, orderType, restaurant,
+		return orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(Order.OrderStatus.PLANNED, orderType, restaurant,
 				new Sort(Sort.Direction.ASC, "plannedTime"));
 	}
 
@@ -82,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(readOnly = true)
 	public List<Order> findPreparedOrdersForRestaurant(Order.OrderType orderType, Restaurant restaurant) {
 		// a query created using a repository method name
-		return orderRepository.findByOrderStatusOrderStatusIdAndOrderTypeAndBillDiningTableRestaurant(OrderStatus.OrderStatusId.PREPARED,orderType, restaurant,
+		return orderRepository.findByOrderStatusAndOrderTypeAndBillDiningTableRestaurant(Order.OrderStatus.PREPARED,orderType, restaurant,
 				new Sort(Sort.Direction.ASC, "preparedTime"));
 	}
 

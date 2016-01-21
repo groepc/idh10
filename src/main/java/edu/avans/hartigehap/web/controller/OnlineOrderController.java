@@ -25,8 +25,7 @@ import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.NotificationAdapter;
 import edu.avans.hartigehap.domain.NotificationFactory;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.OrderStatus;
-import edu.avans.hartigehap.domain.OrderSubmittedState;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.MealOptionRepository;
 import edu.avans.hartigehap.service.BaseFoodService;
@@ -251,7 +250,7 @@ public class OnlineOrderController {
 		model.addAttribute("currentItems", items);
 		
 		Order order = bill.getCurrentOrder();
-		order.setOrderStatus(new OrderSubmittedState());
+		order.setOrderStatus(OrderStatus.SUBMITTED);
 
 		// get current customer email
 		Long idCustomer = Long.parseLong(session.getAttribute("customerId").toString());
