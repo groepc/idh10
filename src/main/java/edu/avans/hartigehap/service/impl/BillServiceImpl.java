@@ -12,7 +12,6 @@ import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Bill;
 import edu.avans.hartigehap.domain.MenuItem;
 import edu.avans.hartigehap.domain.Order;
-import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.OrderItem;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.domain.StateException;
@@ -64,7 +63,7 @@ public class BillServiceImpl implements BillService {
 		Order order = currentBill.getCurrentOrder();
 		OrderItem orderItem = order.addOnlineOrderItem(menuItem);
 		
-		order.setOrderStatus(OrderStatus.CREATED);
+		//order.setOrderStatus(OrderStatus.CREATED);
 
 		return orderItem;
 	}
@@ -77,7 +76,7 @@ public class BillServiceImpl implements BillService {
 		Order order = currentBill.getCurrentOrder();
 		BaseOrderItem orderOptionReturned = order.addOnlineOrderOption(orderItem, menuItem);
 		
-		order.setOrderStatus(OrderStatus.CREATED);
+		//order.setOrderStatus(OrderStatus.CREATED);
 		
 		return orderOptionReturned;
 

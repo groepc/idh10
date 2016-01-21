@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,10 +30,10 @@ import lombok.ToString;
  */
 @Entity
 @NamedQuery(name = "Order.findSubmittedOrders", query = "SELECT o FROM Order o "
-				+ "WHERE o.orderStatus = edu.avans.hartigehap.domain.Order$OrderStatus.SUBMITTED "
-				+ "AND o.orderType = :orderType "
-				+ "AND o.bill.diningTable.restaurant = :restaurant "
-				+ "ORDER BY o.submittedTime")
+		+ "WHERE o.orderStatus.orderStatusId = edu.avans.hartigehap.domain.OrderStatus$OrderStatusId.SUBMITTED "
+		+ "AND o.orderType = :orderType "
+		+ "AND o.bill.diningTable.restaurant = :restaurant "
+		+ "ORDER BY o.submittedTime")
 // to prevent collision with MySql reserved keyword
 @Table(name = "ORDERS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -41,17 +42,12 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true, of = { "orderStatus", "orderType" , "orderItems" })
 public class Order extends DomainObject {
 	private static final long serialVersionUID = 1L;
-
-	public enum OrderStatus {
-		CREATED, SUBMITTED, PLANNED, PREPARED, SERVED
-	}
 	
 	public enum OrderType {
 		ONLINE, RESTAURANT
 	}
 
-	@Enumerated(EnumType.ORDINAL)
-	// represented in database as integer
+	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
 	private OrderStatus orderStatus;
 	
 	@Enumerated(EnumType.ORDINAL)
@@ -78,14 +74,14 @@ public class Order extends DomainObject {
 	private Bill bill;
 
 	public Order() {
-		orderStatus = OrderStatus.CREATED;
+		orderStatus = new OrderCreatedState(this);
 	}
 
 	/* business logic */
 
 	@Transient
 	public boolean isSubmittedOrSuccessiveState() {
-		return orderStatus != OrderStatus.CREATED;
+		return orderStatus.getOrderStatusId() != OrderStatus.OrderStatusId.CREATED;
 	}
 
 	// transient annotation, because methods starting with are recognized by JPA
@@ -148,56 +144,20 @@ public class Order extends DomainObject {
 	}
 
 	public void submit() throws StateException {
-		if (isEmpty()) {
-			throw new StateException("not allowed to submit an empty order");
-		}
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.CREATED) {
-			throw new StateException("not allowed to submit an already submitted order");
-		}
-		submittedTime = new Date();
-		orderStatus = OrderStatus.SUBMITTED;
-		orderType = OrderType.RESTAURANT;
-	}
+ 		orderStatus.submit();
+ 	}
 
 	public void plan() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.SUBMITTED) {
-			throw new StateException("not allowed to plan an order that is not in the submitted state");
-		}
-
-		plannedTime = new Date();
-		orderStatus = OrderStatus.PLANNED;
-	}
+ 		orderStatus.plan();
+ 	}
 
 	public void prepared() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PLANNED) {
-			throw new StateException(
-					"not allowed to change order state to prepared, if it is not in the planned state");
-		}
-
-		preparedTime = new Date();
-		orderStatus = OrderStatus.PREPARED;
-	}
-
-	public void served() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (orderStatus != OrderStatus.PREPARED) {
-			throw new StateException("not allowed to change order state to served, if it is not in the prepared state");
-		}
-
-		servedTime = new Date();
-		orderStatus = OrderStatus.SERVED;
-	}
+ 		orderStatus.prepare();
+ 	}
+ 
+ 	public void served() throws StateException {
+ 		orderStatus.serve();
+ 	}
 
 	@Transient
 	public int getPrice() {
