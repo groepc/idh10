@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.avans.hartigehap.domain.BaseOrderItem;
 import edu.avans.hartigehap.domain.Order;
+import edu.avans.hartigehap.domain.Order.OrderStatus;
 import edu.avans.hartigehap.domain.Order.OrderType;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.OrderService;
@@ -67,7 +68,13 @@ public class DelivererController {
 
 		return "hartigehap/deliverer";
 	}
-
+	
+	@RequestMapping(value = "/deliverer/orders/delivered", method = RequestMethod.GET)
+	public String updateOrderStatusInDeliverer(Model uiModel) {
+		uiModel.addAttribute("message", new Message("info", "Bestelling bezorgd."));
+		return "hartigehap/deliverer";
+	}
+	
 	private Order warmupRestaurantByOrder(String orderId, Model uiModel) {
 		Order order = orderService.findById(Long.valueOf(orderId));
 		Collection<Restaurant> restaurants = restaurantService.findAll();

@@ -41,9 +41,10 @@
 								<td><a href="${showOrder}">Bezorg Online Bestelling ${allOnlinePreparedOrders.id}</a></td>
 								<sec:authorize access="hasRole('ROLE_DELIVERER')">
 									<spring:url var="planOrderUrl" value="/deliverer/orders/${allOnlinePreparedOrders.id}" />
-									<form:form name="planOrderForm" action="${planOrderUrl}" method="put">
+
+									<form:form name="planOrderForm" action="${planOrderUrl}" method="post">
 										<input type="hidden" name="event" value="planOrder" />
-										<td style="text-align:right;"><input type="submit" value="Bezorgt" class="btn btn-success btn-float-left-margin-right" style="float:right;" role="button" /></td>
+										<td style="text-align:right;"><a href="/hh/deliverer/orders/delivered" class="btn btn-success btn-float-left-margin-right" style="float:right;">Bezorgd</a></td>
 									</form:form>
 								</sec:authorize>
 							</tr>
